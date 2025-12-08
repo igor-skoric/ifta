@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}Login{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+    {% if not request.user.is_authenticated %}
+
+        <div class="min-h-screen flex items-center justify-center bg-gray-100">
+
+        <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-700">
+                IFTA Login
+            </h2>
+
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">
+                        {{ form.username.label }}
+                    </label>
+                    {{ form.username|add_class:"w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500" }}
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">
+                        {{ form.password.label }}
+                    </label>
+                    {{ form.password|add_class:"w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500" }}
+                </div>
+
+                <!-- Button -->
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition">
+                    Login
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    {% endif %}
+
+
+{% endblock %}

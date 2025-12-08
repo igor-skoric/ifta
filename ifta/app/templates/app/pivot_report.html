@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+
+{% block title %}Report Miles{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+
+    {% if totals_per_vehicle %}
+
+        <div class="overflow-x-auto w-full border border-gray-200">
+            <div class="max-h-[calc(100vh-100px)] overflow-y-auto">
+                <table class="min-w-full text-sm text-left border-collapse">
+                    <thead class="bg-gray-100 text-xs uppercase sticky top-0 z-50">
+                        <tr>
+                            <!-- ID -->
+                            <th class="px-2 py-1 border sticky left-0 bg-gray-100 z-30">
+                                ID
+                            </th>
+                            <!-- Total -->
+                            <th class="px-2 py-1 border sticky left-0 bg-gray-100 z-30">
+                                Total (mi / gal)
+                            </th>
+                            <!-- Vehicle -->
+                            <th class="px-2 py-1 border sticky left-[50px] bg-gray-100 z-30">
+                                Vehicle
+                            </th>
+                            <!-- Jurisdictions -->
+                            {% for jurisdiction in jurisdiction_codes %}
+                                {% with total=totals_per_jurisdiction|get_item:jurisdiction %}
+                                <th class="px-2 py-1 border text-center">
+                                    <div class="font-semibold">{{ jurisdiction }}</div>
+                                    <div class="text-blue-600 text-xs">
+                                        {% if total.0 != 0 %}{{ total.0|floatformat:0 }} {% endif %}
+                                        {% if total.1 != 0 %}{{ total.1|floatformat:1 }} {% endif %}
+                                    </div>
+                                </th>
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for vehicle, jurisdictions in pivot.items %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-center font-semibold bg-gray-100">
+                                    {{ forloop.counter }}
+                                </td>
+                                <!-- Total po vozacu -->
+                                {% with total=totals_per_vehicle|get_item:vehicle %}
+                                <td class="px-2 py-1 border text-right font-semibold bg-gray-100 sticky left-0 z-20">
+                                    <div class="text-blue-600">{% if total.0 != 0 %}{{ total.0|floatformat:0 }}{% endif %}</div>
+                                    <div class="text-green-600">{% if total.1 != 0 %}{{ total.1|floatformat:1 }}{% endif %}</div>
+                                </td>
+                                {% endwith %}
+
+                                <!-- Vehicle -->
+                                <td class="px-2 py-1 border font-medium bg-gray-100 sticky left-[50px] z-20">
+                                    {{ vehicle }}
+                                </td>
+
+                                <!-- Po jurisdikcijama -->
+                                {% for jurisdiction in jurisdiction_codes %}
+                                    {% with data=jurisdictions|get_item:jurisdiction %}
+                                    <td class="px-2 py-1 border text-right">
+                                        <div class="text-blue-600">{% if data.0 != 0 %}{{ data.0|floatformat:0 }}{% endif %}</div>
+                                        <div class="text-green-600">{% if data.1 != 0 %}{{ data.1|floatformat:1 }}{% endif %}</div>
+                                    </td>
+                                    {% endwith %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% else %}
+        <div class=" mx-auto container max-w-3xl bg-white border border-gray-300 rounded-xl p-6 text-center">
+
+            <div class="text-gray-500 mb-3 text-xl">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+
+            <h2 class="text-gray-700 text-lg font-medium mb-2">
+                No data available
+            </h2>
+
+            <p class="text-gray-600 mb-4">
+                There is currently no data to display.
+                Please import data using
+                <span class="font-semibold">Upload Files</span>.
+            </p>
+
+            <a href="/upload/"
+               class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                Upload Files
+            </a>
+
+        </div>
+    {% endif %}
+
+
+{% endblock %}

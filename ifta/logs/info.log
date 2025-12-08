@@ -1,0 +1,92 @@
+INFO 2025-12-08 19:32:47,571 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 19:33:05,963 autoreload D:\projects\IFTA\ifta\ifta\settings.py changed, reloading.
+INFO 2025-12-08 19:33:06,817 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 19:33:16,221 autoreload D:\projects\IFTA\ifta\ifta\settings.py changed, reloading.
+INFO 2025-12-08 19:33:17,144 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 19:33:34,717 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-08 19:33:38,388 log Invalid HTTP_HOST header: 'localhost:8000'. You may need to add 'localhost' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'localhost:8000'. You may need to add 'localhost' to ALLOWED_HOSTS.
+WARNING 2025-12-08 19:33:38,426 basehttp "GET / HTTP/1.1" 400 143
+ERROR 2025-12-08 19:33:38,553 log Invalid HTTP_HOST header: 'localhost:8000'. You may need to add 'localhost' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\projects\IFTA\.venv\Lib\site-packages\django\http\request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'localhost:8000'. You may need to add 'localhost' to ALLOWED_HOSTS.
+WARNING 2025-12-08 19:33:38,555 basehttp "GET /favicon.ico HTTP/1.1" 400 143
+INFO 2025-12-08 19:33:57,007 autoreload D:\projects\IFTA\ifta\ifta\settings.py changed, reloading.
+INFO 2025-12-08 19:33:57,947 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 19:34:00,148 basehttp "GET / HTTP/1.1" 302 0
+INFO 2025-12-08 19:34:00,167 basehttp "GET /admin/?next=/ HTTP/1.1" 302 0
+INFO 2025-12-08 19:34:00,199 basehttp "GET /admin/login/?next=/admin/%3Fnext%3D/ HTTP/1.1" 200 2198
+WARNING 2025-12-08 19:34:00,290 log Not Found: /static/css/dist/styles.css
+WARNING 2025-12-08 19:34:00,290 basehttp "GET /static/css/dist/styles.css HTTP/1.1" 404 179
+WARNING 2025-12-08 19:34:01,938 log Not Found: /favicon.ico
+WARNING 2025-12-08 19:34:01,942 basehttp "GET /favicon.ico HTTP/1.1" 404 179
+INFO 2025-12-08 19:34:24,028 autoreload Watching for file changes with StatReloader
+INFO 2025-12-08 19:34:27,337 basehttp "GET /admin/login/?next=/admin/%3Fnext%3D/ HTTP/1.1" 200 2198
+INFO 2025-12-08 19:34:27,388 basehttp "GET /static/css/dist/styles.css HTTP/1.1" 200 25474
+INFO 2025-12-08 19:34:31,855 basehttp "POST /admin/login/?next=/admin/%3Fnext%3D/ HTTP/1.1" 302 0
+INFO 2025-12-08 19:34:31,921 basehttp "GET / HTTP/1.1" 200 2238
+INFO 2025-12-08 19:34:33,889 basehttp "GET /vehicle_mpg/ HTTP/1.1" 200 2373
+INFO 2025-12-08 19:34:34,632 basehttp "GET / HTTP/1.1" 200 2238
+INFO 2025-12-08 19:34:35,155 basehttp "GET /vehicle_mpg/ HTTP/1.1" 200 2373
+INFO 2025-12-08 19:34:35,611 basehttp "GET /upload/ HTTP/1.1" 200 4694
+INFO 2025-12-08 19:35:07,483 basehttp "POST /upload/ HTTP/1.1" 302 0
+INFO 2025-12-08 19:35:07,510 basehttp "GET /upload/ HTTP/1.1" 200 4694
+INFO 2025-12-08 19:35:09,583 basehttp "GET / HTTP/1.1" 200 11961
+INFO 2025-12-08 19:35:15,692 basehttp "GET /vehicle_mpg/ HTTP/1.1" 200 115200
+INFO 2025-12-08 19:35:16,344 basehttp "GET /upload/ HTTP/1.1" 200 4694
+INFO 2025-12-08 19:35:19,630 basehttp "GET /report HTTP/1.1" 200 4717593
+INFO 2025-12-08 19:35:24,334 basehttp "GET / HTTP/1.1" 200 11961
+INFO 2025-12-08 19:35:25,972 basehttp "GET /upload/ HTTP/1.1" 200 4694
+INFO 2025-12-08 19:35:26,707 basehttp "GET /vehicle_mpg/ HTTP/1.1" 200 115200
+INFO 2025-12-08 19:35:27,194 basehttp "GET / HTTP/1.1" 200 11961
+INFO 2025-12-08 19:35:27,222 basehttp "GET /static/css/dist/styles.css HTTP/1.1" 304 0
+INFO 2025-12-08 19:35:28,154 basehttp "GET /admin/ HTTP/1.1" 200 11893
+INFO 2025-12-08 19:35:28,200 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-12-08 19:35:28,266 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-12-08 19:35:41,253 basehttp "GET /admin/app/vehiclerecord/ HTTP/1.1" 200 64802
+INFO 2025-12-08 19:35:41,288 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-12-08 19:35:41,299 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-12-08 19:35:41,318 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-12-08 19:35:41,319 basehttp "GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 200 87533
+INFO 2025-12-08 19:35:41,326 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-12-08 19:35:41,481 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-08 19:35:41,484 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-12-08 19:35:41,489 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-12-08 19:35:41,490 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-12-08 19:35:41,493 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-12-08 19:35:41,498 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 200 163184
+INFO 2025-12-08 19:35:41,638 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-12-08 19:35:41,638 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-12-08 19:35:41,638 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-12-08 19:35:41,639 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-12-08 19:35:51,480 basehttp "POST /admin/app/vehiclerecord/ HTTP/1.1" 200 1516436
+INFO 2025-12-08 19:35:51,549 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2025-12-08 19:36:01,244 basehttp - Broken pipe from ('127.0.0.1', 63069)
+INFO 2025-12-08 19:36:06,168 basehttp - Broken pipe from ('127.0.0.1', 63887)
+INFO 2025-12-08 19:36:06,195 basehttp "POST /admin/app/vehiclerecord/ HTTP/1.1" 302 0
+INFO 2025-12-08 19:36:06,234 basehttp "GET /admin/app/vehiclerecord/ HTTP/1.1" 200 10406
+INFO 2025-12-08 19:36:06,560 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-12-08 19:36:06,759 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436

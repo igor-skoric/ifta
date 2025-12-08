@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+{% if total_count != 0 %}
+
+<div class="p-4 container mx-auto flex justify-between items-center ">
+    <div class="flex items-center justify-center">
+        <h1 class="text-2xl font-bold text-gray-800">Vehicle Records</h1>
+    </div>
+    <div class="flex gap-5">
+        <a href="{% url 'export_ifta' %}?file_name={{ file_filter }}&type=miles"
+           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            Export Miles
+        </a>
+
+        <a href="{% url 'export_ifta' %}?file_name={{ file_filter }}&type=fuel"
+           class="bg-green-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
+            Export Fuel
+        </a>
+        <a href="{% url 'export_ifta_excel' %}?file_name={{ file_filter }}"
+           class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+            Export Miles & Fuel (Excel)
+        </a>
+    </div>
+</div>
+
+<div class="flex gap-5 container mx-auto p-4">
+    <div class="">
+
+        <!-- SEARCH -->
+       <form method="get" class="mb-4 flex flex-col gap-5 items-center max-w-md">
+            <div class="flex flex-col gap-2">
+                <input type="text" name="search" value="{{ search }}" placeholder="Search vehicle or jurisdiction..."
+                       class="bg-gray-100 w-full px-4 py-2 rounded-lg focus:outline-none">
+                <select name="file_name" class="bg-gray-100 px-4 py-2 rounded-lg focus:outline-none">
+                    <option value="all" {% if file_filter == "all" %}selected{% endif %}>All files</option>
+                    {% for fname in file_names %}
+                        <option value="{{ fname }}" {% if file_filter == fname %}selected{% endif %}>{{ fname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                Filter
+            </button>
+        </form>
+
+        <div class="flex flex-col gap-6 mb-6">
+            <!-- Total Records -->
+            <div class="bg-white shadow rounded-lg p-4 flex-1 flex flex-col items-center">
+                <span class="text-gray-500 text-sm uppercase">Total Records</span>
+                <span class="text-2xl font-bold text-gray-800">{{ total_count }}</span>
+            </div>
+
+            <!-- Total Miles -->
+            <div class="bg-white shadow rounded-lg p-4 flex-1 flex flex-col items-center">
+                <span class="text-gray-500 text-sm uppercase">Total Miles</span>
+                <span class="text-2xl font-bold text-blue-600">{{ total_miles_sum|floatformat:1 }}</span>
+            </div>
+
+            <!-- Total Fuel -->
+            <div class="bg-white shadow rounded-lg p-4 flex-1 flex flex-col items-center">
+                <span class="text-gray-500 text-sm uppercase">Total Fuel</span>
+                <span class="text-2xl font-bold text-green-600">{{ total_fuel_sum|floatformat:1 }}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class=" w-full">
+
+        <div class=" overflow-x-auto border border-gray-200 rounded-lg">
+            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                <thead class="bg-gray-100 uppercase text-xs text-gray-600">
+                    <tr>
+                        <th class="px-4 py-2 text-left">ID</th>
+                        <th class="px-4 py-2 text-left">Vehicle</th>
+                        <th class="px-4 py-2 text-left">Jurisdiction</th>
+                        <th class="px-4 py-2 text-right">Total Miles</th>
+                        <th class="px-4 py-2 text-right">Fuel Qty</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for record in page_obj %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2">{{ record.id }}</td>
+                        <td class="px-4 py-2">{{ record.vehicle }}</td>
+                        <td class="px-4 py-2">{{ record.jurisdiction }}</td>
+                        <td class="px-4 py-2 text-right">{{ record.total_miles|floatformat:1 }}</td>
+                        <td class="px-4 py-2 text-right">{{ record.fuel_qty|floatformat:1 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-4 py-2 text-center text-gray-500">
+                            No records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="flex justify-center my-4 space-x-2">
+            {% if page_obj.has_previous %}
+            <a href="?search={{ search }}&page={{ page_obj.previous_page_number }}"
+               class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                Previous
+            </a>
+            {% endif %}
+
+            <span class="px-3 py-1 bg-blue-600 text-white rounded">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?search={{ search }}&page={{ page_obj.next_page_number }}"
+               class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+                Next
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+
+
+<div class=" mx-auto container max-w-3xl bg-white border border-gray-300 rounded-xl p-6 text-center">
+
+    <div class="text-gray-500 mb-3 text-xl">
+        <i class="fa-solid fa-circle-info"></i>
+    </div>
+
+    <h2 class="text-gray-700 text-lg font-medium mb-2">
+        No data available
+    </h2>
+
+    <p class="text-gray-600 mb-4">
+        There is currently no data to display.
+        Please import data using
+        <span class="font-semibold">Upload Files</span>.
+    </p>
+
+    <a href="/upload/"
+       class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+        Upload Files
+    </a>
+
+</div>
+
+
+{% endif %}
+
+
+{% endblock %}

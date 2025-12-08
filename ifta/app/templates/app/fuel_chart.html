@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="w-full px-4 ">
+
+    <div class="bg-white rounded-xl p-6 w-full">
+        <button onclick="history.back()"
+                class="my-5 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg cursor-pointer">
+            ← Back
+        </button>
+        <h2 class="text-xl font-semibold mb-4">
+            Fuel Statistics for {{ vehicle_count }} vehicles
+        </h2>
+
+        <!-- CHART WRAPPER -->
+        <div class="w-full h-80">
+            <canvas id="mpgChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const labels = [{% for item in data %}"{{ item.vehicle }}",{% endfor %}];
+
+    const milesData = [{% for item in data %}{{ item.miles }},{% endfor %}];
+    const gallonsData = [{% for item in data %}{{ item.gallons }},{% endfor %}];
+    const mpgData = [{% for item in data %}{{ item.mpg }},{% endfor %}];
+
+    const ctx = document.getElementById('mpgChart').getContext('2d');
+
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Miles',
+                    data: milesData,
+                    backgroundColor: 'rgba(59,130,246,0.4)',
+                    borderColor: 'rgba(59,130,246,1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Gallons',
+                    data: gallonsData,
+                    backgroundColor: 'rgba(34,197,94,0.4)',
+                    borderColor: 'rgba(34,197,94,1)',
+                    borderWidth: 1,
+                },
+                {
+                    label: 'MPG',
+                    data: mpgData,
+                    backgroundColor: 'rgba(147,51,234,0.4)',
+                    borderColor: 'rgba(147,51,234,1)',
+                    borderWidth: 1,
+                    type: 'line',   // MPG kao linija je lepše za prikaz
+                    yAxisID: 'y1'
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'left'
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    grid: { drawOnChartArea: false }
+                }
+            }
+        }
+    });
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Upload{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class="flex flex-col items-center justify-center  p-4">
+  <div class="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Upload IFTA</h1>
+
+    <form method="post" enctype="multipart/form-data" class="flex flex-col space-y-4">
+      {% csrf_token %}
+
+      <!-- Miles files -->
+      <label class="block text-gray-700 font-medium">
+        Upload IFTA Miles Excel file
+        <input type="file" name="single_file" multiple
+               class="mt-2 w-full text-gray-700 border border-gray-300 rounded-lg px-3 py-2
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                      file:border-0 file:bg-blue-50 file:text-blue-700 file:font-semibold
+                      file:py-2 file:px-4 file:rounded-lg cursor-pointer">
+      </label>
+
+      <!-- Fuel files -->
+      <label class="block text-gray-700 font-medium">
+        Upload Fuel Excel files
+        <input type="file" name="multiple_files" multiple
+               class="mt-2 w-full text-gray-700 border border-gray-300 rounded-lg px-3 py-2
+                      focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500
+                      file:border-0 file:bg-green-50 file:text-green-700 file:font-semibold
+                      file:py-2 file:px-4 file:rounded-lg cursor-pointer">
+      </label>
+
+      <!-- Year -->
+      <label class="block text-gray-700 font-medium">
+        Year
+        <select name="year"
+                class="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          {% for value, label in form.year.field.choices %}
+          <option value="{{ value }}" {% if form.year.value == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <!-- Quarter -->
+      <label class="block text-gray-700 font-medium">
+        Quarter
+        <select name="quarter"
+                class="mt-2 w-full border border-gray-300 rounded-lg px-3 py-2
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          {% for value, label in form.quarter.field.choices %}
+          <option value="{{ value }}" {% if form.quarter.value == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+
+      <!-- Submit button -->
+      <button type="submit"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg
+                     hover:bg-blue-700 transition duration-200">
+        Upload
+      </button>
+    </form>
+
+    <!-- Link to records -->
+    <div class="text-center mt-6">
+      <a href="{% url 'report' %}"
+         class="text-blue-600 font-medium hover:underline">
+        View all IFTA records
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
