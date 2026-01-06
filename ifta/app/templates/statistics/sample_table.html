@@ -6,7 +6,7 @@
     <!-- ===================== -->
     <!-- WEEKLY CARDS (TOP) -->
     <!-- ===================== -->
-    
+
 
     <!-- ===================== -->
     <!-- TABLE (BOTTOM) -->
@@ -14,7 +14,7 @@
 
     <div class="flex-1 px-4 pb-6 overflow-hidden">
         <div class="flex justify-between">
-            <h1 class="my-1 text-sm font-semibold text-gray-50">Company Drivers - Week 49</h1>
+            <h1 class="my-1 text-sm font-semibold text-gray-50">Company Drivers</h1>
             <div>
                 <span id="total-profit-loss" class="text-sm font-bold text-gray-50 pr-50"> </span>
             </div>
@@ -45,12 +45,18 @@
     };
 
     const columnTitles = {
-        "Driver Pay %": "Driver %",
-        "Dispatch / Factoring": "Dispatch",
-        "Profit / Loss": "P/L",
-        "Miles": "Miles",
-        "Gross": "Gross",
-        "CUT": "Cut"
+        "driver": "DRIVER",
+        "dispatch": "DISPATCH",
+        "profit_loss": "PROFIT / LOSS",
+        "miles": "MILES",
+        "avg": "AVG RPM",
+        "gross": "GROSS",
+        "cut": "CUT",
+        "salary": "SALARY",
+        "truck": "TRUCK",
+        "mpg": "MPG",
+        "idle_time": "IDLE TIME",
+        "idle_percent": "IDLE %",
     };
 
     const totalProfitLoss = document.getElementById('total-profit-loss');
@@ -66,12 +72,21 @@
         let profitLossTotal = 0
         const res = await fetch('/api/statistic/weekly-driver-data/');
         const data = await res.json();
-        profitLossTotal = data.total_profit_loss;
+        profitLossTotal = Number(data.total_profit_loss);
 
-        totalProfitLoss.innerHTML = "Total Profit loss: " + data.total_profit_loss;
-        
+        totalProfitLoss.innerHTML =
+            "Total Profit / Loss ($): " +
+            profitLossTotal.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+        totalProfitLoss.classList.add(
+            profitLossTotal < 0 ? 'text-red-500' : 'text-green-500'
+        );
+
         if (!data.data.length) return;
-        
+
         const columns = Object.keys(data.data[0]);
         const headerRow = document.getElementById('headerRow');
         const tbody = document.getElementById('tbody');
@@ -96,10 +111,14 @@
                 td.className = "p-1 text-xs whitespace-nowrap";
                 td.textContent = row[col];
 
-                if (col === 'Profit / Loss') {
+                if (col === 'profit_loss') {
                     td.classList.add(
-                        parseDollar(row[col]) < 0 ? 'text-red-600' : 'text-green-600'
+                        parseDollar(row[col]) < 0 ? 'bg-red-300' : 'bg-green-300'
                     );
+                    td.classList.add(
+                        parseDollar(row[col]) < 0 ? 'font-bold' : 'font-bold'
+                    );
+
                 }
                 tr.appendChild(td);
             });

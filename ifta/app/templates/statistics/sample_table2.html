@@ -4,17 +4,14 @@
 <div class="h-screen w-screen bg-[#0F0F1A] p-4 overflow-hidden">
 
     <!-- Title -->
-    <div class="flex justify-between items-center mb-3">
+    <div class="mb-3">
         <h1 class="text-sm font-semibold text-gray-100 tracking-wide">
             ACTIVE TRUCKS FINAL GROSS
         </h1>
-        <span class="text-xs text-gray-400">
-            Last sync: {{ rows.first.synced_at|date:"H:i:s" }}
-        </span>
     </div>
 
     <!-- Table wrapper -->
-    <div class="flex flex-col w-2xl bg-white rounded-xl shadow-xl overflow-hidden ">
+    <div class="w-full flex flex-col bg-white rounded-xl shadow-xl overflow-hidden ">
 
         <div class="flex-1 overflow-y-auto">
             <table class="w-full border-collapse text-sm">

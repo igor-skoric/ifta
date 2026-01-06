@@ -359,14 +359,12 @@ def signout(request):
 
 
 @xframe_options_sameorigin
-@login_required
 def statistic(request):
     context = {"hide_header_and_footer": True}
     return render(request, "statistics/sample_table.html", context)
 
 
 @xframe_options_sameorigin
-@login_required
 def statistic2(request):
     rows = ActiveTrucksFinalGross.objects.all()
     context = {"rows": rows, "hide_header_and_footer": True}
@@ -374,6 +372,5 @@ def statistic2(request):
     return render(request, "statistics/sample_table2.html", context)
 
 
-@login_required
 def tv_rotator(request):
     return render(request, "statistics/tv_rotator.html", {"hide_header_and_footer": True})
