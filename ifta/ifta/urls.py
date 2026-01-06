@@ -9,9 +9,10 @@ class AdminLoginView(auth_views.LoginView):
 
 
 urlpatterns = [
+    path('', include('app.urls')),
     path('admin/login/', AdminLoginView.as_view(), name='admin_login'),
     path('admin/', admin.site.urls),
-    path('', include('app.urls')),
+    path('api/statistic/', include('statistic.urls')),
 ]
 
 

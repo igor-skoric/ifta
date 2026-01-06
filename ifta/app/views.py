@@ -2,16 +2,17 @@ import pandas as pd
 import csv
 from django.shortcuts import render, redirect
 from .forms import CombinedUploadForm
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.db import transaction
 from .models import VehicleRecord
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.views.decorators.clickjacking import xframe_options_sameorigin
+from statistic.services import sync_sheet
+from statistic.models import ActiveTrucksFinalGross
 
 @login_required
 def ifta_list(request):
@@ -53,6 +54,7 @@ def ifta_list(request):
         "file_filter": file_filter,
         "total_miles_sum": totals['total_miles_sum'] or 0,
         "total_fuel_sum": totals['total_fuel_sum'] or 0,
+        "hide_header_and_footer": False
     })
 
 
@@ -98,6 +100,7 @@ def vehicle_mpg(request):
         "vehicle_stats": vehicle_stats,
         "search": search,
         "file_filter": file_filter,
+        "hide_header_and_footer": False
     })
 
 
@@ -116,6 +119,7 @@ def vehicle_pivot_report(request):
             'jurisdiction_codes': None,
             'totals_per_vehicle': None,
             'totals_per_jurisdiction': None,
+            "hide_header_and_footer": False
         })
 
     df = pd.DataFrame(list(qs))
@@ -153,6 +157,7 @@ def vehicle_pivot_report(request):
         'jurisdiction_codes': jurisdiction_codes,
         'totals_per_vehicle': totals_per_vehicle,
         'totals_per_jurisdiction': totals_per_jurisdiction,
+        "hide_header_and_footer": False
     })
 
 
@@ -178,7 +183,7 @@ def import_miles_files(request):
                 df_miles_all = pd.concat([df_miles_all, df], ignore_index=True)
 
             if df_miles_all.empty:
-                return render(request, "app/upload.html", {"form": form, "error": "No valid miles data found."})
+                return render(request, "app/upload.html", {"form": form, "error": "No valid miles data found.", "hide_header_and_footer": False})
 
             # Grupisanje po (vehicle, jurisdiction)
             df_miles_grouped = df_miles_all.groupby(
@@ -263,7 +268,7 @@ def import_miles_files(request):
     else:
         form = CombinedUploadForm()
 
-    return render(request, "app/upload.html", {"form": form})
+    return render(request, "app/upload.html", {"form": form, "hide_header_and_footer": False})
 
 
 @login_required
@@ -344,10 +349,31 @@ def fuel_efficiency_chart(request):
         for s in stats
     ]
 
-    return render(request, "app/fuel_chart.html", {"data": data, "vehicle_count": vehicle_count})
+    return render(request, "app/fuel_chart.html", {"data": data, "vehicle_count": vehicle_count, "hide_header_and_footer": False})
 
 
 @login_required
 def signout(request):
     logout(request)
     return redirect('/')
+
+
+@xframe_options_sameorigin
+@login_required
+def statistic(request):
+    context = {"hide_header_and_footer": True}
+    return render(request, "statistics/sample_table.html", context)
+
+
+@xframe_options_sameorigin
+@login_required
+def statistic2(request):
+    rows = ActiveTrucksFinalGross.objects.all()
+    context = {"rows": rows, "hide_header_and_footer": True}
+
+    return render(request, "statistics/sample_table2.html", context)
+
+
+@login_required
+def tv_rotator(request):
+    return render(request, "statistics/tv_rotator.html", {"hide_header_and_footer": True})

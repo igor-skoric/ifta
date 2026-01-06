@@ -4,7 +4,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -12,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j633n(o*au4ljzmqfnp4(m65e-yanmq)ax-0b6*8lgoo-x@uoc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ifta.rs.itbranch.rs', '192.168.0.30']
 
 
 # Application definition
@@ -28,9 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'tailwind',
-    'theme'
-
-
+    'theme',
+    'statistic',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +128,13 @@ NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 LOGIN_URL = '/admin/'
 LOGIN_REDIRECT_URL = '/'
 
+SERVICE_ACCOUNT_FILE = os.getenv(
+    "GOOGLE_SERVICE_ACCOUNT_FILE",
+    BASE_DIR / "statistic" / "secrets" / "service_account.json"
+)
+
+if not os.path.exists(SERVICE_ACCOUNT_FILE):
+    raise RuntimeError(f"Service account file not found: {SERVICE_ACCOUNT_FILE}")
 
 LOGGING = {
     "version": 1,
@@ -171,6 +177,4 @@ LOGGING = {
         },
     },
 }
-
-
 

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="h-screen w-screen bg-[#0F0F1A] p-4 overflow-hidden">
+
+    <!-- Title -->
+    <div class="flex justify-between items-center mb-3">
+        <h1 class="text-sm font-semibold text-gray-100 tracking-wide">
+            ACTIVE TRUCKS FINAL GROSS
+        </h1>
+        <span class="text-xs text-gray-400">
+            Last sync: {{ rows.first.synced_at|date:"H:i:s" }}
+        </span>
+    </div>
+
+    <!-- Table wrapper -->
+    <div class="flex flex-col w-2xl bg-white rounded-xl shadow-xl overflow-hidden ">
+
+        <div class="flex-1 overflow-y-auto">
+            <table class="w-full border-collapse text-sm">
+
+                <!-- HEADER -->
+                <thead class="sticky top-0 bg-gray-100 z-10">
+                    <tr class="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        <th class="px-3 py-2 text-left">Label</th>
+                        <th class="px-3 py-2 text-right">Unit</th>
+                        <th class="px-3 py-2 text-right">Count</th>
+                        <th class="px-3 py-2 text-left">Manager</th>
+                        <th class="px-3 py-2 text-left">Last Update</th>
+                    </tr>
+                </thead>
+
+                <!-- BODY -->
+                <tbody class="divide-y divide-gray-100">
+                    {% for row in rows %}
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">
+                            {{ row.label }}
+                        </td>
+                        <td class="px-3 py-2 text-right font-mono">
+                            {{ row.unit_value }}
+                        </td>
+                        <td class="px-3 py-2 text-right font-mono">
+                            {{ row.count_value }}
+                        </td>
+                        <td class="px-3 py-2 text-gray-700">
+                            {{ row.manager }}
+                        </td>
+                        <td class="px-3 py-2 text-gray-500 text-xs">
+                            {{ row.last_update }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-10 text-gray-400">
+                            No data available
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

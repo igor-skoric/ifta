@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="h-screen w-screen bg-black overflow-hidden">
+  <iframe id="tvFrame" class="w-full h-full border-0" src=""></iframe>
+</div>
+
+<script>
+  const pages = [
+    "/statistic/",
+    "/statistic2/",
+  ];
+
+  const SWITCH_MS = 30000; // 2 min
+  let idx = 0;
+  const frame = document.getElementById("tvFrame");
+
+  function show(i) {
+    // cache bust da ne drži staru verziju u iframe-u
+    frame.src = pages[i] + "?t=" + Date.now();
+  }
+
+  show(idx);
+
+  setInterval(() => {
+    idx = (idx + 1) % pages.length;
+    show(idx);
+  }, SWITCH_MS);
+
+
+</script>
+{% endblock %}
