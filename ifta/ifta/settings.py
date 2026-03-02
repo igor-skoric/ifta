@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j633n(o*au4ljzmqfnp4(m65e-yanmq)ax-0b6*8lgoo-x@uoc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'ifta.rs.itbranch.rs', '192.168.0.30']
 
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'theme',
     'statistic',
     'rest_framework',
+    'office',
 ]
 
 MIDDLEWARE = [

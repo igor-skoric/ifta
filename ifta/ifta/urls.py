@@ -13,6 +13,7 @@ urlpatterns = [
     path('admin/login/', AdminLoginView.as_view(), name='admin_login'),
     path('admin/', admin.site.urls),
     path('api/statistic/', include('statistic.urls')),
+    path('office/', include('office.urls')),
 ]
 
 

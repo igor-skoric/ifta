@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import  ifta_list, vehicle_pivot_report,  import_miles_files, export_ifta, export_ifta_excel, vehicle_mpg, fuel_efficiency_chart, signout, statistic, tv_rotator, statistic2
+from .views import ifta_list, vehicle_pivot_report,  import_miles_files, export_ifta, export_ifta_excel, vehicle_mpg, fuel_efficiency_chart, signout, statistic, tv_rotator, statistic2, statistic3
 
 urlpatterns = [
       path('', ifta_list, name='home'),
@@ -17,7 +17,8 @@ urlpatterns = [
       # Statistics
       path("tv/", tv_rotator, name="tv"),
       path('statistic/', statistic, name='statistic'),
-      path("statistic2/", statistic2, name="statistic2")  # napraviš
+      path("statistic2/", statistic2, name="statistic2"), # napraviš
+      path("statistic3/", statistic3, name="statistic3"),  # napraviš
 
       # path('report-miles/export/', ifta_export_excel, name='export-miles'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

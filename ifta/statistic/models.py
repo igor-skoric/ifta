@@ -104,6 +104,8 @@ class ActiveTrucksFinalGross(models.Model):
     manager = models.CharField(max_length=255, blank=True, default="")
     last_update = models.CharField(max_length=255, blank=True, default="")
 
+    # POSTAVITI redni broj da mogu da ga orderujem, ako uspe da radi po ID-u je vec
+
     synced_at = models.DateTimeField(auto_now=True)
 
     class Meta:

@@ -1,0 +1,7 @@
+/* SVG hover override (Tailwind ne može direktno na child path bez plugin-a) */
+.seat-hover path,
+.seat-hover rect,
+.seat-hover circle,
+.seat-hover ellipse {
+  fill: #2563eb !important; /* blue-600 */
+}

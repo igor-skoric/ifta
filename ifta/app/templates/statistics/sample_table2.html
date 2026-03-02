@@ -1,25 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="h-screen w-screen bg-[#0F0F1A] p-4 overflow-hidden">
+<div class="h-screen  bg-[#0F0F1A] p-4 overflow-hidden">
 
-    <!-- Title -->
-    <div class="mb-3">
-        <h1 class="text-sm font-semibold text-gray-100 tracking-wide">
-            ACTIVE TRUCKS FINAL GROSS
-        </h1>
-    </div>
+
 
     <!-- Table wrapper -->
-    <div class="w-full flex flex-col bg-white rounded-xl shadow-xl overflow-hidden ">
+    <div class="flex flex-col justify-center mx-auto bg-white rounded-xl shadow-xl overflow-hidden w-fit ">
 
-        <div class="flex-1 overflow-y-auto">
-            <table class="w-full border-collapse text-sm">
+        <div class=" overflow-y-auto">
+            <table class=" text-2xl">
 
                 <!-- HEADER -->
                 <thead class="sticky top-0 bg-gray-100 z-10">
                     <tr class="text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        <th class="px-3 py-2 text-left">Label</th>
+                        <th class="px-3 py-2 text-left">GLOBAL MANAGER UNIT COUNT</th>
                         <th class="px-3 py-2 text-right">Unit</th>
                         <th class="px-3 py-2 text-right">Count</th>
                         <th class="px-3 py-2 text-left">Manager</th>
@@ -30,14 +25,26 @@
                 <!-- BODY -->
                 <tbody class="divide-y divide-gray-100">
                     {% for row in rows %}
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">
+                    <tr class="hover:bg-gray-50 {% if row.label == 'sum' %} bg-black text-white font-bold {% endif %}">
+                        <td class="px-4 py-3 font-medium
+                            {% if row.label == 'GOAL' %} bg-green-600 text-white
+                            {% elif row.label == '247' %} bg-blue-600 text-white
+                            {% elif row.label == 'sum' %} bg-black text-black
+                            {% else %} bg-gray-500
+                            {% endif %}
+                        ">
                             {{ row.label }}
                         </td>
-                        <td class="px-3 py-2 text-right font-mono">
+                        <td class="px-3 py-2 text-right font-mono
+                        {% if row.label == 'CURRENT ACTIVE (have load)' and row.unit_value > '0' %} font-bold bg-orange-500
+                        {% elif row.label == 'TOTAL' %}  font-bold bg-green-400
+                        {% endif %}">
                             {{ row.unit_value }}
                         </td>
-                        <td class="px-3 py-2 text-right font-mono">
+                        <td class="px-3 py-2 text-right font-mono
+                        {% if row.label == 'CURRENT ACTIVE (have load)' and row.count_value|add:0 >= 0 and row.count_value|add:0 <= 5 %} bg-green-500 text-5xl font-bold
+                        {% elif row.label == 'CURRENT ACTIVE (have load)' and row.count_value|add:0 >= 5 %}  bg-red-500 text-5xl font-bold
+                        {% endif %}">
                             {{ row.count_value }}
                         </td>
                         <td class="px-3 py-2 text-gray-700">
