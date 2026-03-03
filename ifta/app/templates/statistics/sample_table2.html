@@ -9,7 +9,7 @@
     <div class="flex flex-col justify-center mx-auto bg-white rounded-xl shadow-xl overflow-hidden w-fit ">
 
         <div class=" overflow-y-auto">
-            <table class=" text-2xl">
+            <table class="">
 
                 <!-- HEADER -->
                 <thead class="sticky top-0 bg-gray-100 z-10">
@@ -26,7 +26,7 @@
                 <tbody class="divide-y divide-gray-100">
                     {% for row in rows %}
                     <tr class="hover:bg-gray-50 {% if row.label == 'sum' %} bg-black text-white font-bold {% endif %}">
-                        <td class="px-4 py-3 font-medium
+                        <td class="px-4 font-medium
                             {% if row.label == 'GOAL' %} bg-green-600 text-white
                             {% elif row.label == '247' %} bg-blue-600 text-white
                             {% elif row.label == 'sum' %} bg-black text-black

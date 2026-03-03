@@ -1,6 +1,6 @@
 # statistic/serializers.py
 from rest_framework import serializers
-from .models import WeeklyDriverData, WeeklyDayData
+from .models import WeeklyDriverData, WeeklyDayData, DispatcherSheetRow
 
 
 class WeeklyDriverDataSerializer(serializers.ModelSerializer):
@@ -25,3 +25,17 @@ class WeeklyDayDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeeklyDayData
         fields = ['day', 'gross', 'cut', 'miles', 'rate_per_mile']
+
+
+class DispatcherSheetRowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DispatcherSheetRow
+        fields = [
+            "id",
+            "dispatcher",
+            "gross",
+            "cut",
+            "miles",
+            "rpm",
+            "imported_at",
+        ]

@@ -4,168 +4,157 @@
 <div class="h-screen w-screen bg-[#0F0F1A] flex flex-col overflow-hidden">
 
     <!-- ===================== -->
-    <!-- WEEKLY CARDS (TOP) -->
+    <!-- DISPATCHER GRID (TOP) -->
     <!-- ===================== -->
 
+    <div class="flex-1 px-3 py-2 flex flex-col overflow-hidden">
 
-    <!-- ===================== -->
-    <!-- TABLE (BOTTOM) -->
-    <!-- ===================== -->
-
-    <div class="flex-1 px-4 pb-6 overflow-hidden">
-        <div class="flex justify-between">
-            <h1 class="my-1 text-sm font-semibold text-gray-50">Company Drivers</h1>
-            <div>
-                <span id="total-profit-loss" class="text-sm font-bold text-gray-50 pr-50"> </span>
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-2">
+            <h1 class="text-xs font-semibold text-gray-300 tracking-wide uppercase">
+                Dispatchers Overview
+            </h1>
+            <div class="text-xs text-gray-400">
+                Total: <span id="dispatcherCount" class="text-gray-200 font-semibold">0</span>
             </div>
         </div>
-        <div class="h-full bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-            <!-- TABLE BODY (SCROLL AREA) -->
-            <div id="scrollContainer" class="flex-1 overflow-hidden relative">
-                <table class="w-full border-collapse">
-                    <thead class="bg-gray-100 sticky top-0 z-20">
-                        <tr id="headerRow"></tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
-            </div>
 
+        <!-- Compact Grid (fits ~40 on 1080p) -->
+        <div id="dispatcherCards"
+            class="flex-1 grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-9 gap-2 overflow-hidden">
         </div>
+
     </div>
-    <div id="weekly-container" class="flex gap-3 px-4 py-2 overflow-x-auto "></div>
+
+    <!-- ===================== -->
+    <!-- WEEKLY CARDS (BOTTOM) -->
+    <!-- ===================== -->
+
+    <div id="weekly-container" class="flex gap-3 px-4 py-2 overflow-x-auto"></div>
+
 </div>
 
 <script>
+
     /* ============================
-       CONSTANTS & HELPERS
+       HELPERS
     ============================ */
-    const DAY_ORDER = {
-        Mon: 1, Tue: 2, Wed: 3, Thu: 4,
-        Fri: 5, Sat: 6, Sun: 7, TOTALS: 99
-    };
 
-    const columnTitles = {
-        "driver": "DRIVER",
-        "dispatch": "DISPATCH",
-        "profit_loss": "PROFIT / LOSS",
-        "miles": "MILES",
-        "avg": "AVG RPM",
-        "gross": "GROSS",
-        "driver_gross": "DRIVER GROSS",
-        "cut": "CUT",
-        "salary": "SALARY",
-        "truck": "TRUCK",
-        "mpg": "MPG",
-        "idle_time": "IDLE TIME",
-        "idle_percent": "IDLE %",
-    };
-
-    const totalProfitLoss = document.getElementById('total-profit-loss');
-
-    function parseDollar(v) {
-        return parseFloat(String(v).replace(/[$,]/g, '')) || 0;
+    function safeStr(v) {
+        return (v === null || v === undefined) ? "" : String(v);
     }
 
     /* ============================
-       TABLE DATA
+       DISPATCHER STATS
     ============================ */
-    async function updateTableData() {
-        let profitLossTotal = 0
-        const res = await fetch('/api/statistic/weekly-driver-data/');
-        const data = await res.json();
-        profitLossTotal = Number(data.total_profit_loss);
 
-        totalProfitLoss.innerHTML =
-            "Total Profit / Loss ($): " +
-            profitLossTotal.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+    const DISPATCHER_API_URL = "/api/statistic/dispatchers/";
+    const elCards = document.getElementById("dispatcherCards");
+    const elCount = document.getElementById("dispatcherCount");
 
-        totalProfitLoss.classList.add(
-            profitLossTotal < 0 ? 'text-red-500' : 'text-green-500'
-        );
+    async function loadDispatcherStats() {
+        try {
+            const res = await fetch(DISPATCHER_API_URL);
+            const data = await res.json();
 
-        if (!data.data.length) return;
+            const rows = Array.isArray(data) ? data : (data.data || []);
+            elCount.textContent = rows.length;
 
-        const columns = Object.keys(data.data[0]);
-        const headerRow = document.getElementById('headerRow');
-        const tbody = document.getElementById('tbody');
+            renderDispatcherCards(rows);
 
-        headerRow.innerHTML = '';
-        tbody.innerHTML = '';
-
-        columns.forEach(col => {
-            const th = document.createElement('th');
-            th.className = "px-1 py-1 text-left text-xs font-semibold";
-            th.textContent = columnTitles[col] || col;
-            headerRow.appendChild(th);
-
-        });
-
-        data.data.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.className = "odd:bg-white even:bg-gray-50";
-
-            columns.forEach(col => {
-                const td = document.createElement('td');
-                td.className = "p-1 text-xs whitespace-nowrap";
-                td.textContent = row[col];
-
-                if (col === 'profit_loss') {
-                    td.classList.add(
-                        parseDollar(row[col]) < 0 ? 'bg-red-300' : 'bg-green-300'
-                    );
-                    td.classList.add(
-                        parseDollar(row[col]) < 0 ? 'font-bold' : 'font-bold'
-                    );
-
-                }
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
+        } catch (e) {
+            console.error("Dispatcher API error:", e);
+            elCards.innerHTML = `
+                <div class="col-span-full rounded-xl bg-red-500/10 ring-1 ring-red-500/20 p-4 text-red-200 text-sm">
+                    Failed to load dispatcher stats.
+                </div>
+            `;
+        }
     }
 
-    /* ============================
-       AUTO SCROLL (TV MODE)
-    ============================ */
-    let scrollPos = 0;
-    let dir = 1;
-    const speed = 0.35;
-    const pause = 2500;
-    let paused = false;
+    
+    function getRpmColorClass(rpmValue) {
+        // prihvata: "2.05", "$2.05", "2,05", "2.05 rpm"...
+        const s = String(rpmValue ?? "")
+            .replace(",", ".")
+            .replace(/[^0-9.\-]/g, "");
+        const num = parseFloat(s);
 
-    function autoScroll() {
-        const container = document.getElementById('scrollContainer');
-        const maxScroll = container.scrollHeight - container.clientHeight;
+        if (!Number.isFinite(num)) return "text-gray-400";
+        if (num < 1.8) return "text-red-500";
+        if (num <= 2.1) return "text-orange-400";
+        return "text-green-400";
+    }
 
-        if (!paused) {
-            scrollPos += speed * dir;
-            container.scrollTop = scrollPos;
 
-            if (scrollPos >= maxScroll) {
-                scrollPos = maxScroll;
-                dir = -1;
-                paused = true;
-                setTimeout(() => paused = false, pause);
-            }
-
-            if (scrollPos <= 0) {
-                scrollPos = 0;
-                dir = 1;
-                paused = true;
-                setTimeout(() => paused = false, pause);
-            }
+    function renderDispatcherCards(rows) {
+        if (!rows.length) {
+            elCards.innerHTML = `
+      <div class="col-span-full rounded-xl bg-white/5 ring-1 ring-white/10 p-6 text-gray-300 text-sm">
+        No dispatchers found.
+      </div>
+    `;
+            return;
         }
 
-        requestAnimationFrame(autoScroll);
+        elCards.innerHTML = "";
+
+        rows.forEach((r) => {
+            const dispatcher = safeStr(r.dispatcher);
+            const gross = safeStr(r.gross);
+            const cut = safeStr(r.cut);
+            const miles = safeStr(r.miles);
+            const rpm = safeStr(r.rpm);
+
+            const rpmColor = getRpmColorClass(rpm);
+
+            const card = document.createElement("div");
+            card.className =
+                "bg-gradient-to-br from-[#1E1E38] to-[#151528] rounded-xl p-3 text-gray-200 flex flex-col justify-between border border-white/10 shadow-lg";
+
+            card.innerHTML = `
+      <div class="text-[11px] text-gray-400 font-medium truncate mb-1">
+        ${dispatcher}
+      </div>
+
+      <div class="flex items-baseline justify-between">
+        <span class="text-sm font-bold text-gray-100 truncate">
+          ${gross}
+        </span>
+        <span class="text-xl font-semibold ${rpmColor}">
+          ${rpm}
+        </span>
+      </div>
+
+      <div class="h-px bg-white/10 my-2"></div>
+
+      <div class="grid grid-cols-2 gap-2 text-center">
+        <div class="flex flex-col">
+          <span class="text-[9px] text-gray-500 uppercase tracking-wide">Magic</span>
+          <span class="text-sm font-semibold text-gray-100 truncate">
+            ${cut}
+          </span>
+        </div>
+
+        <div class="flex flex-col">
+          <span class="text-[9px] text-gray-500 uppercase tracking-wide">Miles</span>
+          <span class="text-sm font-semibold text-gray-100 truncate">
+            ${miles}
+          </span>
+        </div>
+      </div>
+    `;
+
+            elCards.appendChild(card);
+        });
     }
 
     /* ============================
        WEEKLY CARDS
     ============================ */
+
+    const DAY_ORDER = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7, TOTALS: 99 };
+
     async function loadWeeklyStatistics() {
         const res = await fetch('/api/statistic/weekly-statistic/');
         const data = await res.json();
@@ -177,38 +166,37 @@
 
         data.forEach(item => {
             const totals = item.day === 'TOTALS';
-
-            // Background boje
-            const cardBg = totals ? '#5B7CFA' : '#330A56'; // totals - svetliji akcenat, ostalo - brand color
-            const cardShadow = totals ? 'shadow-xl' : 'shadow-lg';
+            const cardBg = totals ? '#5B7CFA' : '#330A56';
 
             const card = document.createElement('div');
             card.style.backgroundColor = cardBg;
-            card.className = `rounded-lg p-2 text-white ${cardShadow} flex flex-col transition-transform duration-300 ${totals ? 'scale-105' : ''}`;
+            card.className = `rounded-lg p-2 text-white shadow-lg flex flex-col`;
+
             card.innerHTML = `
-            <h2 class="text-xs font-bold mb-1">${item.day}</h2>
-            <div class="space-y-1 text-xs">
-                <div class="flex gap-1"><span>${Number(item.rate_per_mile).toFixed(2)}</span> <span>$/mile</span></div>
-                <div class="flex gap-1"><span>${Number(item.miles).toLocaleString()}</span> <span>Miles</span></div>
-                <div class="flex gap-1"><span>Cut</span> <span>$${Number(item.cut).toLocaleString()}</span></div>
-                <div class="flex gap-1 border-t border-white/30 pt-2 mt-2 font-bold text-xs">
-                    <span>Gross</span> <span>$${Number(item.gross).toLocaleString()}</span>
+                <h2 class="text-xs font-bold mb-1">${item.day}</h2>
+                <div class="space-y-1 text-xs">
+                    <div>${Number(item.rate_per_mile).toFixed(2)} $/mile</div>
+                    <div>${Number(item.miles).toLocaleString()} Miles</div>
+                    <div>Cut $${Number(item.cut).toLocaleString()}</div>
+                    <div class="border-t border-white/30 pt-1 mt-1 font-bold">
+                        Gross $${Number(item.gross).toLocaleString()}
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
 
             container.appendChild(card);
         });
     }
 
-
     /* ============================
        INIT
     ============================ */
-    updateTableData();
+
+    loadDispatcherStats();
     loadWeeklyStatistics();
-    setTimeout(autoScroll, pause);
-    setInterval(updateTableData, 120000);
+
+    setInterval(loadDispatcherStats, 120000);
     setInterval(loadWeeklyStatistics, 120000);
+
 </script>
 {% endblock %}

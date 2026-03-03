@@ -180,3 +180,16 @@ class SheetConfig(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.code})"
+
+
+class DispatcherSheetRow(models.Model):
+    dispatcher = models.CharField(max_length=200, blank=True, default="")
+    gross = models.CharField(max_length=50, blank=True, default="")
+    cut = models.CharField(max_length=50, blank=True, default="")
+    miles = models.CharField(max_length=50, blank=True, default="")
+    rpm = models.CharField(max_length=50, blank=True, default="")
+
+    imported_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.dispatcher} - {self.gross} - {self.cut} - {self.miles} - {self.rpm}"

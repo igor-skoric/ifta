@@ -15553,3 +15553,763 @@ INFO 2026-03-02 19:35:31,389 basehttp "GET /api/statistic/weekly-statistic/ HTTP
 INFO 2026-03-02 19:35:31,395 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
 INFO 2026-03-02 19:36:31,384 basehttp "GET /statistic2/?t=1772476591369 HTTP/1.1" 200 15164
 INFO 2026-03-02 19:36:31,399 basehttp "GET /static/css/dist/styles.css?v=1772476591 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:39:31,438 basehttp "GET /statistic/?t=1772476771380 HTTP/1.1" 200 7581
+INFO 2026-03-02 19:39:31,460 basehttp "GET /static/css/dist/styles.css?v=1772476771 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:39:31,535 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:39:31,549 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:41:32,390 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:41:32,402 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:42:31,392 basehttp "GET /statistic2/?t=1772476951375 HTTP/1.1" 200 15164
+INFO 2026-03-02 19:42:31,411 basehttp "GET /static/css/dist/styles.css?v=1772476951 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:45:31,397 basehttp "GET /statistic/?t=1772477131367 HTTP/1.1" 200 7581
+INFO 2026-03-02 19:45:31,413 basehttp "GET /static/css/dist/styles.css?v=1772477131 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:45:31,586 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:45:31,598 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:47:32,377 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:47:32,384 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:48:31,397 basehttp "GET /statistic2/?t=1772477311379 HTTP/1.1" 200 15164
+INFO 2026-03-02 19:48:31,484 basehttp "GET /static/css/dist/styles.css?v=1772477311 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:51:31,396 basehttp "GET /statistic/?t=1772477491375 HTTP/1.1" 200 7581
+INFO 2026-03-02 19:51:31,438 basehttp "GET /static/css/dist/styles.css?v=1772477491 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:51:31,480 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:51:31,494 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:53:32,383 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:53:32,392 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:54:31,389 basehttp "GET /statistic2/?t=1772477671375 HTTP/1.1" 200 15164
+INFO 2026-03-02 19:54:31,403 basehttp "GET /static/css/dist/styles.css?v=1772477671 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:57:31,399 basehttp "GET /statistic/?t=1772477851380 HTTP/1.1" 200 7581
+INFO 2026-03-02 19:57:31,413 basehttp "GET /static/css/dist/styles.css?v=1772477851 HTTP/1.1" 200 53696
+INFO 2026-03-02 19:57:31,590 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:57:31,605 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 19:59:32,384 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 19:59:32,391 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:00:31,390 basehttp "GET /statistic2/?t=1772478031371 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:00:31,406 basehttp "GET /static/css/dist/styles.css?v=1772478031 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:03:31,396 basehttp "GET /statistic/?t=1772478211376 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:03:31,422 basehttp "GET /static/css/dist/styles.css?v=1772478211 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:03:31,465 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:03:31,477 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:05:32,391 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:05:32,397 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:06:30,347 basehttp "GET /statistic2/?t=1772478390331 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:06:30,383 basehttp "GET /static/css/dist/styles.css?v=1772478390 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:09:30,391 basehttp "GET /statistic/?t=1772478570377 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:09:30,407 basehttp "GET /static/css/dist/styles.css?v=1772478570 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:09:30,452 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:09:30,462 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:11:31,384 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:11:31,394 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:12:30,375 basehttp "GET /statistic2/?t=1772478750364 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:12:30,393 basehttp "GET /static/css/dist/styles.css?v=1772478750 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:15:31,405 basehttp "GET /statistic/?t=1772478931376 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:15:31,436 basehttp "GET /static/css/dist/styles.css?v=1772478931 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:15:31,483 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:15:31,494 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:17:32,383 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:17:32,398 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:18:31,406 basehttp "GET /statistic2/?t=1772479111378 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:18:31,448 basehttp "GET /static/css/dist/styles.css?v=1772479111 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:21:30,353 basehttp "GET /statistic/?t=1772479290339 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:21:30,367 basehttp "GET /static/css/dist/styles.css?v=1772479290 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:21:30,388 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:21:30,405 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:23:30,387 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:23:30,396 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:24:30,379 basehttp "GET /statistic2/?t=1772479470368 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:24:30,400 basehttp "GET /static/css/dist/styles.css?v=1772479470 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:27:30,379 basehttp "GET /statistic/?t=1772479650369 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:27:30,398 basehttp "GET /static/css/dist/styles.css?v=1772479650 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:27:30,553 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:27:30,572 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:29:31,398 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:29:31,410 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:30:31,387 basehttp "GET /statistic2/?t=1772479831369 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:30:31,407 basehttp "GET /static/css/dist/styles.css?v=1772479831 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:33:31,398 basehttp "GET /statistic/?t=1772480011374 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:33:31,434 basehttp "GET /static/css/dist/styles.css?v=1772480011 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:33:31,577 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:33:31,587 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:35:32,371 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:35:32,375 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:36:31,394 basehttp "GET /statistic2/?t=1772480191367 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:36:31,423 basehttp "GET /static/css/dist/styles.css?v=1772480191 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:39:31,402 basehttp "GET /statistic/?t=1772480371379 HTTP/1.1" 200 7581
+INFO 2026-03-02 20:39:31,439 basehttp "GET /static/css/dist/styles.css?v=1772480371 HTTP/1.1" 200 53696
+INFO 2026-03-02 20:39:31,483 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:39:31,498 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:41:32,384 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-02 20:41:32,391 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-02 20:42:30,385 basehttp "GET /statistic2/?t=1772480550373 HTTP/1.1" 200 15164
+INFO 2026-03-02 20:42:30,434 basehttp "GET /static/css/dist/styles.css?v=1772480550 HTTP/1.1" 200 53696
+INFO 2026-03-03 14:59:32,774 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 14:59:49,991 basehttp "GET / HTTP/1.1" 200 12053
+INFO 2026-03-03 14:59:50,183 basehttp "GET /static/css/dist/styles.css?v=1772546389 HTTP/1.1" 200 53646
+WARNING 2026-03-03 14:59:50,342 log Not Found: /favicon.ico
+WARNING 2026-03-03 14:59:50,343 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 14:59:55,910 basehttp "GET /statistic/ HTTP/1.1" 200 7581
+INFO 2026-03-03 14:59:55,945 basehttp "GET /static/css/dist/styles.css?v=1772546395 HTTP/1.1" 200 53646
+INFO 2026-03-03 14:59:55,975 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-03 14:59:55,991 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:00:02,154 basehttp "GET /statistic2/ HTTP/1.1" 200 15164
+INFO 2026-03-03 15:00:02,189 basehttp "GET /static/css/dist/styles.css?v=1772546402 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:01:56,272 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-03 15:01:56,279 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:01:59,829 basehttp "GET /statistic2/ HTTP/1.1" 200 15162
+INFO 2026-03-03 15:01:59,864 basehttp "GET /static/css/dist/styles.css?v=1772546519 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:02:14,388 basehttp "GET /statistic2/ HTTP/1.1" 200 15155
+INFO 2026-03-03 15:02:14,417 basehttp "GET /static/css/dist/styles.css?v=1772546534 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:02:33,755 basehttp "GET /statistic2/ HTTP/1.1" 200 15155
+INFO 2026-03-03 15:02:33,783 basehttp "GET /static/css/dist/styles.css?v=1772546553 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:02:41,166 basehttp "GET /statistic2/ HTTP/1.1" 200 15155
+INFO 2026-03-03 15:02:41,194 basehttp "GET /static/css/dist/styles.css?v=1772546561 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:02:42,072 basehttp "GET /statistic2/ HTTP/1.1" 200 15080
+INFO 2026-03-03 15:02:42,101 basehttp "GET /static/css/dist/styles.css?v=1772546562 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:02:44,934 basehttp "GET /statistic2/ HTTP/1.1" 200 15080
+INFO 2026-03-03 15:02:44,970 basehttp "GET /static/css/dist/styles.css?v=1772546564 HTTP/1.1" 200 53646
+WARNING 2026-03-03 15:02:45,043 log Not Found: /favicon.ico
+WARNING 2026-03-03 15:02:45,045 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 15:03:55,971 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 638
+INFO 2026-03-03 15:03:55,978 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:04:38,978 basehttp "GET /statistic/ HTTP/1.1" 200 7581
+INFO 2026-03-03 15:04:39,023 basehttp "GET /static/css/dist/styles.css?v=1772546678 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:04:39,130 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:04:39,151 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:06:39,301 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:06:39,342 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:08:39,271 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:08:39,291 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:10:39,278 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:10:39,300 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:12:39,286 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:12:39,300 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:14:39,274 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:14:39,285 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:16:39,279 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:16:39,340 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:19:31,293 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:19:31,294 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:21:31,287 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:21:31,297 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:23:31,279 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:23:31,284 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:25:31,279 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:25:31,287 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:27:31,276 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:27:31,282 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:29:31,283 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:29:31,296 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:31:31,269 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:31:31,275 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:33:31,287 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:33:31,292 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:35:31,285 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:35:31,293 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:37:31,281 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:37:31,285 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:39:31,286 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:39:31,295 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:41:31,297 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:41:31,303 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:43:31,275 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:43:31,284 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:45:31,281 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:45:31,288 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:47:31,286 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:47:31,289 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:47:40,280 basehttp "GET /tv/ HTTP/1.1" 200 1080
+INFO 2026-03-03 15:47:40,364 basehttp "GET /static/css/dist/styles.css?v=1772549260 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:47:40,488 basehttp "GET /statistic/?t=1772549260479 HTTP/1.1" 200 7581
+INFO 2026-03-03 15:47:40,538 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:47:40,550 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:49:41,272 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:49:41,280 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:50:41,282 basehttp "GET /statistic2/?t=1772549441270 HTTP/1.1" 200 15080
+INFO 2026-03-03 15:50:41,297 basehttp "GET /static/css/dist/styles.css?v=1772549441 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:53:41,281 basehttp "GET /statistic/?t=1772549621270 HTTP/1.1" 200 7581
+INFO 2026-03-03 15:53:41,298 basehttp "GET /static/css/dist/styles.css?v=1772549621 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:53:41,349 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:53:41,360 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:55:42,273 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:55:42,282 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 15:56:41,281 basehttp "GET /statistic2/?t=1772549801266 HTTP/1.1" 200 15080
+INFO 2026-03-03 15:56:41,294 basehttp "GET /static/css/dist/styles.css?v=1772549801 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:59:41,287 basehttp "GET /statistic/?t=1772549981268 HTTP/1.1" 200 7581
+INFO 2026-03-03 15:59:41,309 basehttp "GET /static/css/dist/styles.css?v=1772549981 HTTP/1.1" 200 53646
+INFO 2026-03-03 15:59:41,582 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 15:59:41,596 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:01:42,267 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:01:42,272 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:02:41,271 basehttp "GET /statistic2/?t=1772550161262 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:02:41,281 basehttp "GET /static/css/dist/styles.css?v=1772550161 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:05:41,266 basehttp "GET /statistic/?t=1772550341259 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:05:41,279 basehttp "GET /static/css/dist/styles.css?v=1772550341 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:05:41,413 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:05:41,419 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:07:42,282 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:07:42,295 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:08:33,501 autoreload D:\projects\IFTA\ifta\statistic\models.py changed, reloading.
+INFO 2026-03-03 16:08:34,432 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:08:43,143 basehttp "GET /statistic2/?t=1772550521269 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:08:43,243 basehttp "GET /static/css/dist/styles.css?v=1772550523 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:11:41,278 basehttp "GET /statistic/?t=1772550701259 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:11:41,291 basehttp "GET /static/css/dist/styles.css?v=1772550701 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:11:41,342 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:11:41,353 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:12:08,208 autoreload D:\projects\IFTA\ifta\statistic\models.py changed, reloading.
+INFO 2026-03-03 16:12:09,079 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:12:48,626 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:12:49,046 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:13:15,887 basehttp "GET /statistic/?t=1772550795860 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:13:16,029 basehttp "GET /static/css/dist/styles.css?v=1772550795 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:13:20,419 basehttp "GET /admin/ HTTP/1.1" 200 19011
+INFO 2026-03-03 16:13:20,458 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2026-03-03 16:13:20,461 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-03-03 16:13:20,461 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-03-03 16:13:20,462 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2026-03-03 16:13:20,464 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2026-03-03 16:13:20,480 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-03-03 16:13:20,499 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-03-03 16:13:20,504 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-03-03 16:13:20,510 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-03-03 16:13:23,570 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16272
+INFO 2026-03-03 16:13:23,604 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-03-03 16:13:23,609 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-03-03 16:13:23,613 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2026-03-03 16:13:23,615 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-03-03 16:13:23,632 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2026-03-03 16:13:23,636 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2026-03-03 16:13:23,642 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-03-03 16:13:23,647 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:13:23,676 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-03-03 16:13:23,681 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-03-03 16:13:23,710 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-03-03 16:13:23,736 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-03-03 16:13:42,271 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:13:42,276 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:13:46,314 basehttp "GET /admin/statistic/sheetconfig/add/ HTTP/1.1" 200 21738
+INFO 2026-03-03 16:13:46,347 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:13:46,352 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2026-03-03 16:13:46,362 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-03-03 16:13:46,367 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-03-03 16:13:46,373 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-03-03 16:13:46,374 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2026-03-03 16:13:46,388 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-03-03 16:13:46,461 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-03-03 16:13:46,462 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-03-03 16:14:26,536 basehttp "POST /admin/statistic/sheetconfig/add/ HTTP/1.1" 302 0
+INFO 2026-03-03 16:14:26,560 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16849
+INFO 2026-03-03 16:14:26,590 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:14:26,640 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-03-03 16:14:29,275 basehttp "GET /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 200 22177
+INFO 2026-03-03 16:14:29,304 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:14:41,278 basehttp "GET /statistic2/?t=1772550881270 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:14:41,292 basehttp "GET /static/css/dist/styles.css?v=1772550881 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:14:42,794 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:15:56,682 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:16:14,133 basehttp "POST /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-03 16:16:14,186 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16851
+INFO 2026-03-03 16:16:14,219 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:17,503 basehttp "GET /admin/statistic/sheetconfig/1/change/ HTTP/1.1" 200 22114
+INFO 2026-03-03 16:16:17,526 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:20,087 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16605
+INFO 2026-03-03 16:16:20,118 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:20,904 basehttp "GET /admin/statistic/sheetconfig/3/change/ HTTP/1.1" 200 22236
+INFO 2026-03-03 16:16:20,930 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:23,107 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16605
+INFO 2026-03-03 16:16:23,141 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:24,057 basehttp "GET /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 200 22177
+INFO 2026-03-03 16:16:24,089 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:16:27,095 basehttp "POST /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-03 16:16:27,117 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16851
+INFO 2026-03-03 16:16:27,150 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:00,433 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 16605
+INFO 2026-03-03 16:17:00,462 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:18,462 autoreload D:\projects\IFTA\ifta\statistic\admin.py changed, reloading.
+INFO 2026-03-03 16:17:19,087 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:17:19,718 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:17:19,751 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:20,965 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:17:21,017 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:38,981 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:17:39,009 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:40,995 basehttp "GET /admin/statistic/dispatchersheetrow/add/ HTTP/1.1" 200 17965
+INFO 2026-03-03 16:17:41,024 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:17:41,267 basehttp "GET /statistic/?t=1772551061259 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:17:41,362 basehttp "GET /static/css/dist/styles.css?v=1772551061 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:17:41,381 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:17:41,393 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:17:44,624 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:17:44,649 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:18:21,140 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:18:21,175 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:18:22,175 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:18:22,205 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2026-03-03 16:18:22,209 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2026-03-03 16:18:22,221 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-03-03 16:18:22,222 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2026-03-03 16:18:22,224 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-03-03 16:18:22,226 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2026-03-03 16:18:22,227 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-03-03 16:18:22,228 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2026-03-03 16:18:22,232 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2026-03-03 16:18:22,233 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:18:22,233 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-03-03 16:18:22,233 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2026-03-03 16:18:22,234 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-03-03 16:18:22,238 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-03-03 16:18:22,242 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-03-03 16:18:22,248 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-03-03 16:18:22,256 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-03-03 16:18:22,269 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-03-03 16:18:22,270 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+WARNING 2026-03-03 16:18:22,362 log Not Found: /favicon.ico
+WARNING 2026-03-03 16:18:22,362 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 16:19:42,270 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:19:42,274 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:19:53,384 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:20:01,744 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:20:01,776 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:05,714 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:20:09,224 basehttp "GET /admin/statistic/weeklydaydata/ HTTP/1.1" 200 18256
+INFO 2026-03-03 16:20:09,253 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:13,628 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:20:13,653 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:14,625 basehttp "GET /admin/statistic/sheetconfig/3/change/ HTTP/1.1" 200 22740
+INFO 2026-03-03 16:20:14,656 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:26,414 basehttp "GET /admin/statistic/weeklydaydata/ HTTP/1.1" 200 18256
+INFO 2026-03-03 16:20:26,437 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:30,180 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:20:30,209 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:34,902 basehttp "GET /admin/statistic/sheetconfig/1/change/ HTTP/1.1" 200 22618
+INFO 2026-03-03 16:20:34,931 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:41,284 basehttp "GET /statistic2/?t=1772551241266 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:20:41,388 basehttp "GET /static/css/dist/styles.css?v=1772551241 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:20:58,147 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:20:58,173 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:20:59,113 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 14820
+INFO 2026-03-03 16:20:59,141 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:21:28,330 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:21:28,354 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:21:29,172 basehttp "GET /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 200 22682
+INFO 2026-03-03 16:21:29,199 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:21:33,939 basehttp "POST /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-03 16:21:33,960 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17355
+INFO 2026-03-03 16:21:33,993 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:21:48,707 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 21168
+INFO 2026-03-03 16:21:48,734 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:21:51,899 basehttp "GET /admin/statistic/dispatchersheetrow/19/change/ HTTP/1.1" 200 18226
+INFO 2026-03-03 16:21:51,928 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:22:20,285 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 21168
+INFO 2026-03-03 16:22:20,316 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:22:21,170 basehttp "GET /admin/statistic/dispatchersheetrow/11/change/ HTTP/1.1" 200 18223
+INFO 2026-03-03 16:22:21,196 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:23:29,800 autoreload D:\projects\IFTA\ifta\statistic\models.py changed, reloading.
+INFO 2026-03-03 16:23:30,362 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:23:33,337 basehttp "GET /admin/statistic/dispatchersheetrow/11/change/ HTTP/1.1" 200 18287
+INFO 2026-03-03 16:23:33,370 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:23:35,170 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 22138
+INFO 2026-03-03 16:23:35,202 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:23:41,278 basehttp "GET /statistic/?t=1772551421270 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:23:41,349 basehttp "GET /static/css/dist/styles.css?v=1772551421 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:23:41,450 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:23:41,466 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:24:15,783 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:24:16,306 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:24:24,309 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:24:24,778 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:24:27,679 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:24:28,157 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:24:32,056 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:24:32,629 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:24:36,091 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:24:55,267 autoreload D:\projects\IFTA\ifta\statistic\services\sync_sheet.py changed, reloading.
+INFO 2026-03-03 16:24:55,839 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:25:00,564 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:25:14,935 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 22444
+INFO 2026-03-03 16:25:14,969 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:25:30,545 basehttp "GET /admin/statistic/dispatchersheetrow/38/change/ HTTP/1.1" 200 18359
+INFO 2026-03-03 16:25:30,574 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:25:42,275 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:25:42,285 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:26:41,286 basehttp "GET /statistic2/?t=1772551601272 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:26:41,405 basehttp "GET /static/css/dist/styles.css?v=1772551601 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:28:03,133 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:28:03,163 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:28:05,273 basehttp "GET /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 200 22683
+INFO 2026-03-03 16:28:05,297 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:28:08,858 basehttp "POST /admin/statistic/sheetconfig/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-03 16:28:08,879 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17355
+INFO 2026-03-03 16:28:08,912 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:28:25,497 basehttp "GET /admin/statistic/sheetconfig/ HTTP/1.1" 200 17109
+INFO 2026-03-03 16:28:25,521 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:28:41,964 basehttp "GET /admin/statistic/dispatchersheetrow/ HTTP/1.1" 200 28394
+INFO 2026-03-03 16:28:41,990 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-03 16:29:41,275 basehttp "GET /statistic/?t=1772551781266 HTTP/1.1" 200 7581
+INFO 2026-03-03 16:29:41,287 basehttp "GET /static/css/dist/styles.css?v=1772551781 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:29:41,345 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:29:41,357 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:31:42,268 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:31:42,273 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:32:41,279 basehttp "GET /statistic2/?t=1772551961269 HTTP/1.1" 200 15080
+INFO 2026-03-03 16:32:41,295 basehttp "GET /static/css/dist/styles.css?v=1772551961 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:32:50,310 basehttp "GET /statistic/ HTTP/1.1" 200 7731
+INFO 2026-03-03 16:32:50,326 basehttp "GET /static/css/dist/styles.css?v=1772551970 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:32:50,415 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:32:50,429 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:34:40,927 basehttp "GET /statistic/ HTTP/1.1" 200 7582
+INFO 2026-03-03 16:34:40,953 basehttp "GET /static/css/dist/styles.css?v=1772552080 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:34:40,981 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:34:41,000 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+WARNING 2026-03-03 16:35:53,256 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:35:53,258 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:35:53,666 basehttp "GET /statistic/ HTTP/1.1" 200 7582
+WARNING 2026-03-03 16:35:53,717 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:35:53,719 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:35:53,721 basehttp "GET /static/css/dist/styles.css?v=1772552153 HTTP/1.1" 200 53646
+WARNING 2026-03-03 16:35:53,897 log Not Found: /favicon.ico
+WARNING 2026-03-03 16:35:53,897 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 16:35:53,905 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:35:53,923 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:37:09,124 autoreload D:\projects\IFTA\ifta\statistic\serializers.py changed, reloading.
+INFO 2026-03-03 16:37:10,207 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:37:34,618 autoreload D:\projects\IFTA\ifta\statistic\views.py changed, reloading.
+INFO 2026-03-03 16:37:35,395 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:37:53,556 autoreload D:\projects\IFTA\ifta\statistic\urls.py changed, reloading.
+INFO 2026-03-03 16:37:54,217 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:37:55,051 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:37:55,055 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:38:12,589 autoreload D:\projects\IFTA\ifta\statistic\views.py changed, reloading.
+INFO 2026-03-03 16:38:13,147 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:38:22,185 autoreload D:\projects\IFTA\ifta\statistic\views.py changed, reloading.
+INFO 2026-03-03 16:38:22,952 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:38:28,535 basehttp "GET /statistic/ HTTP/1.1" 200 7582
+WARNING 2026-03-03 16:38:28,577 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:38:28,578 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:38:28,725 basehttp "GET /static/css/dist/styles.css?v=1772552308 HTTP/1.1" 200 53646
+INFO 2026-03-03 16:38:28,767 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:38:28,786 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:40:29,271 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:40:29,276 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:42:29,293 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:42:29,314 basehttp "GET /api/statistic/weekly-driver-data/ HTTP/1.1" 200 17412
+INFO 2026-03-03 16:43:47,131 basehttp "GET /statistic/ HTTP/1.1" 200 10775
+WARNING 2026-03-03 16:43:47,178 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:43:47,179 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:43:47,181 basehttp "GET /static/css/dist/styles.css?v=1772552627 HTTP/1.1" 200 55934
+WARNING 2026-03-03 16:43:47,316 log Not Found: /api/dispatchers/
+WARNING 2026-03-03 16:43:47,316 basehttp "GET /api/dispatchers/ HTTP/1.1" 404 6343
+INFO 2026-03-03 16:43:47,322 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:43:59,998 basehttp "GET /static/css/dist/styles.css?v=1772552627 HTTP/1.1" 304 0
+WARNING 2026-03-03 16:44:00,019 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:00,020 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:00,822 basehttp "GET /statistic/ HTTP/1.1" 200 10775
+WARNING 2026-03-03 16:44:00,870 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:00,873 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:00,875 basehttp "GET /static/css/dist/styles.css?v=1772552640 HTTP/1.1" 200 55934
+WARNING 2026-03-03 16:44:01,009 log Not Found: /api/dispatchers/
+WARNING 2026-03-03 16:44:01,011 basehttp "GET /api/dispatchers/ HTTP/1.1" 404 6343
+INFO 2026-03-03 16:44:01,023 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:44:09,619 basehttp "GET /statistic/ HTTP/1.1" 200 10771
+WARNING 2026-03-03 16:44:09,690 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:09,690 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:09,695 basehttp "GET /static/css/dist/styles.css?v=1772552649 HTTP/1.1" 200 55934
+WARNING 2026-03-03 16:44:09,860 log Not Found: /dispatchers/
+WARNING 2026-03-03 16:44:09,861 basehttp "GET /dispatchers/ HTTP/1.1" 404 6331
+INFO 2026-03-03 16:44:09,866 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:44:10,849 basehttp "GET /statistic/ HTTP/1.1" 200 10771
+WARNING 2026-03-03 16:44:10,902 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:10,904 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:10,905 basehttp "GET /static/css/dist/styles.css?v=1772552650 HTTP/1.1" 200 55934
+WARNING 2026-03-03 16:44:11,025 log Not Found: /dispatchers/
+WARNING 2026-03-03 16:44:11,026 basehttp "GET /dispatchers/ HTTP/1.1" 404 6331
+INFO 2026-03-03 16:44:11,030 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:44:23,458 basehttp "GET /statistic/ HTTP/1.1" 200 10771
+WARNING 2026-03-03 16:44:23,516 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:23,517 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:23,518 basehttp "GET /static/css/dist/styles.css?v=1772552663 HTTP/1.1" 200 55934
+WARNING 2026-03-03 16:44:23,709 log Not Found: /dispatchers/
+WARNING 2026-03-03 16:44:23,710 basehttp "GET /dispatchers/ HTTP/1.1" 404 6331
+INFO 2026-03-03 16:44:23,718 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:44:28,508 basehttp "GET /statistic/ HTTP/1.1" 200 10785
+WARNING 2026-03-03 16:44:28,558 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:44:28,560 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:44:28,562 basehttp "GET /static/css/dist/styles.css?v=1772552668 HTTP/1.1" 200 55934
+INFO 2026-03-03 16:44:28,685 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:44:28,694 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:46:29,281 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:46:29,282 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:47:44,184 basehttp "GET /statistic/ HTTP/1.1" 200 10789
+INFO 2026-03-03 16:47:44,242 basehttp "GET /static/css/dist/styles.css?v=1772552864 HTTP/1.1" 200 55934
+INFO 2026-03-03 16:47:44,419 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:47:44,420 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:49:45,274 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:49:45,277 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:50:42,854 basehttp "GET /statistic/ HTTP/1.1" 200 9296
+INFO 2026-03-03 16:50:42,894 basehttp "GET /static/css/dist/styles.css?v=1772553042 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:50:51,125 basehttp "GET /static/css/dist/styles.css?v=1772553042 HTTP/1.1" 304 0
+WARNING 2026-03-03 16:50:51,159 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:50:51,160 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:50:52,894 basehttp "GET /statistic/ HTTP/1.1" 200 9296
+WARNING 2026-03-03 16:50:52,933 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:50:52,934 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:50:52,935 basehttp "GET /static/css/dist/styles.css?v=1772553052 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:50:59,036 basehttp "GET /statistic/ HTTP/1.1" 200 9296
+WARNING 2026-03-03 16:50:59,081 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:50:59,084 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:50:59,085 basehttp "GET /static/css/dist/styles.css?v=1772553059 HTTP/1.1" 200 56754
+WARNING 2026-03-03 16:50:59,250 log Not Found: /favicon.ico
+WARNING 2026-03-03 16:50:59,251 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 16:51:37,501 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 16:51:42,043 basehttp "GET /statistic/ HTTP/1.1" 200 9279
+WARNING 2026-03-03 16:51:42,088 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:51:42,088 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:51:42,225 basehttp "GET /static/css/dist/styles.css?v=1772553102 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:53:01,205 basehttp "GET /statistic/ HTTP/1.1" 200 10091
+WARNING 2026-03-03 16:53:01,251 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:53:01,253 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:53:01,254 basehttp "GET /static/css/dist/styles.css?v=1772553181 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:53:08,063 basehttp "GET /statistic/ HTTP/1.1" 200 10091
+WARNING 2026-03-03 16:53:08,140 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:53:08,141 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:53:08,145 basehttp "GET /static/css/dist/styles.css?v=1772553188 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:53:19,101 basehttp "GET /statistic/ HTTP/1.1" 200 10091
+WARNING 2026-03-03 16:53:19,172 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:53:19,175 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:53:19,177 basehttp "GET /static/css/dist/styles.css?v=1772553199 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:53:22,980 basehttp "GET /statistic/ HTTP/1.1" 200 10780
+WARNING 2026-03-03 16:53:23,046 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:53:23,050 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:53:23,064 basehttp "GET /static/css/dist/styles.css?v=1772553202 HTTP/1.1" 200 56754
+INFO 2026-03-03 16:53:23,321 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:53:23,331 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:53:57,213 basehttp "GET /statistic/ HTTP/1.1" 200 6042
+WARNING 2026-03-03 16:53:57,257 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 16:53:57,258 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 16:53:57,261 basehttp "GET /static/css/dist/styles.css?v=1772553237 HTTP/1.1" 200 56853
+INFO 2026-03-03 16:53:57,409 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:53:57,416 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:55:22,797 basehttp "GET /statistic/ HTTP/1.1" 200 6034
+INFO 2026-03-03 16:55:22,837 basehttp "GET /static/css/dist/styles.css?v=1772553322 HTTP/1.1" 200 56853
+INFO 2026-03-03 16:55:22,960 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:55:22,961 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:57:23,282 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:57:23,287 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 16:58:03,578 basehttp "GET /statistic/ HTTP/1.1" 200 6578
+INFO 2026-03-03 16:58:03,611 basehttp "GET /static/css/dist/styles.css?v=1772553483 HTTP/1.1" 200 58909
+INFO 2026-03-03 16:58:03,639 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 16:58:03,640 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:00:03,642 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:00:03,645 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:01:48,792 autoreload D:\projects\IFTA\ifta\statistic\views.py changed, reloading.
+INFO 2026-03-03 17:01:49,443 autoreload Watching for file changes with StatReloader
+INFO 2026-03-03 17:01:50,061 basehttp "GET /statistic/ HTTP/1.1" 200 6578
+INFO 2026-03-03 17:01:50,135 basehttp "GET /static/css/dist/styles.css?v=1772553710 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:01:50,153 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:01:50,157 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:02:52,704 basehttp "GET /statistic/ HTTP/1.1" 200 6326
+INFO 2026-03-03 17:02:52,733 basehttp "GET /static/css/dist/styles.css?v=1772553772 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:02:52,773 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:02:52,773 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:00,297 basehttp "GET /statistic/ HTTP/1.1" 200 6316
+INFO 2026-03-03 17:03:00,330 basehttp "GET /static/css/dist/styles.css?v=1772553780 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:00,365 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:03:00,365 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:09,265 basehttp "GET /statistic/ HTTP/1.1" 200 6326
+INFO 2026-03-03 17:03:09,299 basehttp "GET /static/css/dist/styles.css?v=1772553789 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:09,333 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:03:09,334 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:25,289 basehttp "GET /statistic/ HTTP/1.1" 200 6326
+INFO 2026-03-03 17:03:25,317 basehttp "GET /static/css/dist/styles.css?v=1772553805 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:25,358 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:03:25,359 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:26,210 basehttp "GET /statistic/ HTTP/1.1" 200 6326
+INFO 2026-03-03 17:03:26,239 basehttp "GET /static/css/dist/styles.css?v=1772553806 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:26,274 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:03:26,277 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:40,652 basehttp "GET /statistic/ HTTP/1.1" 200 6333
+INFO 2026-03-03 17:03:40,683 basehttp "GET /static/css/dist/styles.css?v=1772553820 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:40,724 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:03:40,724 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:57,256 basehttp "GET /statistic/ HTTP/1.1" 200 6438
+INFO 2026-03-03 17:03:57,286 basehttp "GET /static/css/dist/styles.css?v=1772553837 HTTP/1.1" 200 58909
+INFO 2026-03-03 17:03:57,327 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:03:57,341 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:04:31,888 basehttp "GET /statistic/ HTTP/1.1" 200 6480
+INFO 2026-03-03 17:04:31,924 basehttp "GET /static/css/dist/styles.css?v=1772553871 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:04:31,973 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:04:31,973 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:04:54,749 basehttp "GET /statistic/ HTTP/1.1" 200 6479
+INFO 2026-03-03 17:04:54,780 basehttp "GET /static/css/dist/styles.css?v=1772553894 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:04:54,829 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:04:54,830 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:06,400 basehttp "GET /statistic/ HTTP/1.1" 200 6477
+INFO 2026-03-03 17:05:06,438 basehttp "GET /static/css/dist/styles.css?v=1772553906 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:06,481 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:06,481 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:05:11,694 basehttp "GET /statistic/ HTTP/1.1" 200 6477
+INFO 2026-03-03 17:05:11,723 basehttp "GET /static/css/dist/styles.css?v=1772553911 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:11,765 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:05:11,765 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:20,423 basehttp "GET /statistic/ HTTP/1.1" 200 6478
+INFO 2026-03-03 17:05:20,460 basehttp "GET /static/css/dist/styles.css?v=1772553920 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:20,494 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:20,497 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:05:35,564 basehttp "GET /statistic/ HTTP/1.1" 200 6473
+INFO 2026-03-03 17:05:35,597 basehttp "GET /static/css/dist/styles.css?v=1772553935 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:35,631 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:05:35,632 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:45,519 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+INFO 2026-03-03 17:05:45,555 basehttp "GET /static/css/dist/styles.css?v=1772553945 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:45,592 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:05:45,598 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:51,544 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+INFO 2026-03-03 17:05:51,568 basehttp "GET /static/css/dist/styles.css?v=1772553951 HTTP/1.1" 200 59019
+INFO 2026-03-03 17:05:51,610 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:05:51,613 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:06:15,976 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+INFO 2026-03-03 17:06:16,014 basehttp "GET /static/css/dist/styles.css?v=1772553975 HTTP/1.1" 200 61179
+INFO 2026-03-03 17:06:16,054 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:06:16,056 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:06:20,753 basehttp "GET /statistic/ HTTP/1.1" 200 6490
+INFO 2026-03-03 17:06:20,786 basehttp "GET /static/css/dist/styles.css?v=1772553980 HTTP/1.1" 200 61298
+INFO 2026-03-03 17:06:20,821 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:06:20,822 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:06:35,362 basehttp "GET /static/css/dist/styles.css?v=1772553980 HTTP/1.1" 304 0
+WARNING 2026-03-03 17:06:35,420 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:06:35,421 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:06:44,995 basehttp "GET /statistic/ HTTP/1.1" 200 6490
+INFO 2026-03-03 17:06:45,032 basehttp "GET /static/css/dist/styles.css?v=1772554004 HTTP/1.1" 200 61298
+INFO 2026-03-03 17:06:45,119 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:06:45,121 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:07:08,856 basehttp "GET /statistic2/ HTTP/1.1" 200 15080
+INFO 2026-03-03 17:07:08,888 basehttp "GET /static/css/dist/styles.css?v=1772554028 HTTP/1.1" 200 61298
+INFO 2026-03-03 17:08:45,280 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:08:45,280 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:10:45,281 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:10:45,281 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:10:55,975 basehttp "GET /statistic/ HTTP/1.1" 200 6849
+INFO 2026-03-03 17:10:56,009 basehttp "GET /static/css/dist/styles.css?v=1772554255 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:10:56,101 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:10:56,102 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:11:12,590 basehttp "GET /statistic/ HTTP/1.1" 200 6607
+INFO 2026-03-03 17:11:12,624 basehttp "GET /static/css/dist/styles.css?v=1772554272 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:11:12,659 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:11:12,659 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:11:24,158 basehttp "GET /statistic/ HTTP/1.1" 200 6607
+INFO 2026-03-03 17:11:24,184 basehttp "GET /static/css/dist/styles.css?v=1772554284 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:11:24,222 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:11:24,226 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:11:27,617 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+INFO 2026-03-03 17:11:27,674 basehttp "GET /static/css/dist/styles.css?v=1772554287 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:11:27,709 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:11:27,709 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:12:29,891 basehttp "GET /statistic/ HTTP/1.1" 200 6469
+INFO 2026-03-03 17:12:29,931 basehttp "GET /static/css/dist/styles.css?v=1772554349 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:12:29,975 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:12:29,979 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:12:32,878 basehttp "GET /statistic/ HTTP/1.1" 200 6469
+INFO 2026-03-03 17:12:32,905 basehttp "GET /static/css/dist/styles.css?v=1772554352 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:12:32,938 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:12:32,939 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+WARNING 2026-03-03 17:12:34,976 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:12:34,977 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:12:42,731 basehttp "GET /statistic/ HTTP/1.1" 200 6469
+WARNING 2026-03-03 17:12:42,768 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:12:42,769 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:12:42,770 basehttp "GET /static/css/dist/styles.css?v=1772554362 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:12:42,881 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:12:42,881 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:12:56,931 basehttp "GET /statistic/ HTTP/1.1" 200 6469
+WARNING 2026-03-03 17:12:56,982 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:12:56,983 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:12:56,984 basehttp "GET /static/css/dist/styles.css?v=1772554376 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:12:57,115 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:12:57,116 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+WARNING 2026-03-03 17:12:57,153 log Not Found: /favicon.ico
+WARNING 2026-03-03 17:12:57,155 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+INFO 2026-03-03 17:13:11,352 basehttp "GET /statistic/ HTTP/1.1" 200 6469
+WARNING 2026-03-03 17:13:11,401 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:13:11,402 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:13:11,404 basehttp "GET /static/css/dist/styles.css?v=1772554391 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:13:11,525 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:13:11,526 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:13:14,539 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:13:14,579 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:13:14,580 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:13:14,581 basehttp "GET /static/css/dist/styles.css?v=1772554394 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:13:14,720 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:13:14,720 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:13:57,393 basehttp "GET /statistic/ HTTP/1.1" 200 6480
+WARNING 2026-03-03 17:13:57,440 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:13:57,441 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:13:57,448 basehttp "GET /static/css/dist/styles.css?v=1772554437 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:13:57,589 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:13:57,589 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:15:58,283 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:15:58,292 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:17:02,402 basehttp "GET /statistic/ HTTP/1.1" 200 6480
+WARNING 2026-03-03 17:17:02,446 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:17:02,447 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:17:02,448 basehttp "GET /static/css/dist/styles.css?v=1772554622 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:17:02,587 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:17:02,587 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:17:11,479 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:17:11,527 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:17:11,528 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:17:11,530 basehttp "GET /static/css/dist/styles.css?v=1772554631 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:17:11,681 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:17:11,682 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:18:20,112 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:18:20,164 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:18:20,166 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:18:20,167 basehttp "GET /static/css/dist/styles.css?v=1772554700 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:18:20,318 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:18:20,322 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:29,676 basehttp "GET /statistic/ HTTP/1.1" 200 6480
+WARNING 2026-03-03 17:19:29,741 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:29,744 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:29,746 basehttp "GET /static/css/dist/styles.css?v=1772554769 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:19:29,933 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:29,934 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:33,029 basehttp "GET /statistic/ HTTP/1.1" 200 6480
+WARNING 2026-03-03 17:19:33,082 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:33,084 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:33,089 basehttp "GET /static/css/dist/styles.css?v=1772554773 HTTP/1.1" 200 61408
+INFO 2026-03-03 17:19:33,232 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:33,233 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:39,499 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:19:39,545 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:39,549 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:39,550 basehttp "GET /static/css/dist/styles.css?v=1772554779 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:19:39,712 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:39,712 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:43,128 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:19:43,200 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:43,203 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:43,205 basehttp "GET /static/css/dist/styles.css?v=1772554783 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:19:43,353 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:43,353 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:44,633 basehttp "GET /statistic/ HTTP/1.1" 200 6490
+WARNING 2026-03-03 17:19:44,680 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:44,681 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:44,682 basehttp "GET /static/css/dist/styles.css?v=1772554784 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:19:44,821 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:44,824 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:48,575 basehttp "GET /statistic/ HTTP/1.1" 200 6490
+WARNING 2026-03-03 17:19:48,636 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:48,638 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:48,639 basehttp "GET /static/css/dist/styles.css?v=1772554788 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:19:48,789 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:48,790 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:19:49,827 basehttp "GET /statistic/ HTTP/1.1" 200 6489
+WARNING 2026-03-03 17:19:49,887 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 17:19:49,889 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 17:19:49,891 basehttp "GET /static/css/dist/styles.css?v=1772554789 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:19:50,034 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:19:50,034 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:21:03,365 basehttp "GET /statistic/ HTTP/1.1" 200 6653
+INFO 2026-03-03 17:21:03,393 basehttp "GET /static/css/dist/styles.css?v=1772554863 HTTP/1.1" 200 61525
+INFO 2026-03-03 17:21:03,502 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:21:03,503 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005
+INFO 2026-03-03 17:23:04,289 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 660
+INFO 2026-03-03 17:23:04,302 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5005

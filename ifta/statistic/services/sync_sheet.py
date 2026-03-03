@@ -1,4 +1,4 @@
-from ..models import WeeklyDriverData, WeeklyDayData, ActiveTrucksFinalGross, SheetConfig
+from ..models import WeeklyDriverData, WeeklyDayData, ActiveTrucksFinalGross, SheetConfig, DispatcherSheetRow
 from ..sheets.fetch_sheets import company_drivers_weekly
 
 
@@ -134,5 +134,39 @@ def sync_active_trucks_final():
         )
 
 
+def sync_dispatcher_sheet():
+    config = SheetConfig.objects.filter(code="DISPATCHER_SHEET").first()
+    if not config:
+        return
 
+    sheet_id = config.sheet_id
+    print("sheet_id", sheet_id)
+    sheet_range = config.sheet_range  # npr "!A:E" ili "!B:F"
+    print("sheet_range", sheet_range)
+    tab_name = config.tab_name
+    print("tab_name", tab_name)
+    sheet = f"{tab_name}{sheet_range}"
+    print("sheet", sheet)
+    rows = company_drivers_weekly(sheet_id, sheet)
+    print("rows", rows)
+    if not rows or len(rows) < 2:
+        return
 
+    headers = rows[0]
+    data_rows = rows[1:]
+    print("data_rows", data_rows)
+    # obriši stare
+    DispatcherSheetRow.objects.all().delete()
+
+    for row in data_rows:
+        # popuni do 5 kolona
+        while len(row) < 8:
+            row.append("")
+
+        DispatcherSheetRow.objects.create(
+            dispatcher=row[1],
+            gross=row[4],
+            cut=row[5],
+            miles=row[6],
+            rpm=row[7],
+        )

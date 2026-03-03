@@ -1,9 +1,9 @@
 # statistic/views.py
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status, generics
-from .models import WeeklyDriverData, WeeklyDayData
-from .serializers import WeeklyDriverDataSerializer, WeeklyDayDataSerializer, WeeklyDriverDataResponseSerializer
+from .models import WeeklyDriverData, WeeklyDayData, DispatcherSheetRow
+from .serializers import WeeklyDriverDataSerializer, WeeklyDayDataSerializer, WeeklyDriverDataResponseSerializer, DispatcherSheetRowSerializer
 from rest_framework.decorators import api_view
 
 
@@ -23,3 +23,8 @@ def WeeklyDriverDataAPI(request):
 class WeeklyDayDataListView(generics.ListAPIView):
     queryset = WeeklyDayData.objects.all().order_by('day')
     serializer_class = WeeklyDayDataSerializer
+
+
+class DispatcherSheetRowListAPIView(ListAPIView):
+    queryset = DispatcherSheetRow.objects.all().order_by("-rpm")
+    serializer_class = DispatcherSheetRowSerializer
