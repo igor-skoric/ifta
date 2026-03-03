@@ -72,7 +72,7 @@
         }
     }
 
-    
+
     function getRpmColorClass(rpmValue) {
         // prihvata: "2.05", "$2.05", "2,05", "2.05 rpm"...
         const s = String(rpmValue ?? "")
@@ -81,9 +81,21 @@
         const num = parseFloat(s);
 
         if (!Number.isFinite(num)) return "text-gray-400";
-        if (num < 1.8) return "text-red-500";
-        if (num <= 2.1) return "text-orange-400";
+        if (num < 1.89) return "text-red-500";
+        if (num <= 2.10) return "text-orange-400";
         return "text-green-400";
+    }
+
+        function getRpmColorClassBG(rpmValue) {
+        // prihvata: "2.05", "$2.05", "2,05", "2.05 rpm"...
+        const s = String(rpmValue ?? "")
+            .replace(",", ".")
+            .replace(/[^0-9.\-]/g, "");
+        const num = parseFloat(s);
+
+        if (!Number.isFinite(num)) return "bg-gray-400";
+        if (num < 1.89) return "bg-red-500";
+        return "bg-gradient-to-br from-[#1E1E38] to-[#151528] ";
     }
 
 
@@ -107,43 +119,39 @@
             const rpm = safeStr(r.rpm);
 
             const rpmColor = getRpmColorClass(rpm);
+            const rpmColorBG = getRpmColorClassBG(rpm);
 
             const card = document.createElement("div");
             card.className =
-                "bg-gradient-to-br from-[#1E1E38] to-[#151528] rounded-xl p-3 text-gray-200 flex flex-col justify-between border border-white/10 shadow-lg";
+                `rounded-xl p-3 text-gray-200 flex flex-col justify-between border border-white/10 shadow-lg ${rpmColorBG}`;
 
             card.innerHTML = `
-      <div class="text-[11px] text-gray-400 font-medium truncate mb-1">
-        ${dispatcher}
-      </div>
+                <div class="text-xl text-gray-200 font-medium truncate mb-1">
+                    ${dispatcher}
+                </div>
 
-      <div class="flex items-baseline justify-between">
-        <span class="text-sm font-bold text-gray-100 truncate">
-          ${gross}
-        </span>
-        <span class="text-xl font-semibold ${rpmColor}">
-          ${rpm}
-        </span>
-      </div>
+                <div class="flex items-baseline justify-between">
+                    <span class="text-sm font-bold text-gray-100 truncate">
+                    ${gross}
+                    </span>
+                    <span class="text-xl font-semibold ${rpmColor}">
+                    ${rpm}
+                    </span>
+                </div>
 
-      <div class="h-px bg-white/10 my-2"></div>
+                <div class="h-px bg-white/10 my-2"></div>
 
-      <div class="grid grid-cols-2 gap-2 text-center">
-        <div class="flex flex-col">
-          <span class="text-[9px] text-gray-500 uppercase tracking-wide">Magic</span>
-          <span class="text-sm font-semibold text-gray-100 truncate">
-            ${cut}
-          </span>
-        </div>
+                <div class="grid grid-cols-1 gap-2 text-center">
+                    <div class="flex flex-col">
+                    <span class="text-[9px] text-gray-500 uppercase tracking-wide">Magic</span>
+                    <span class="text-sm font-semibold text-gray-100 truncate">
+                        ${cut}
+                    </span>
+                    </div>
 
-        <div class="flex flex-col">
-          <span class="text-[9px] text-gray-500 uppercase tracking-wide">Miles</span>
-          <span class="text-sm font-semibold text-gray-100 truncate">
-            ${miles}
-          </span>
-        </div>
-      </div>
-    `;
+
+                </div>
+                `;
 
             elCards.appendChild(card);
         });
