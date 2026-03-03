@@ -16450,3 +16450,47 @@ INFO 2026-03-03 17:58:21,605 basehttp "GET /statistic/ HTTP/1.1" 200 7300
 INFO 2026-03-03 17:58:21,718 basehttp "GET /static/css/dist/styles.css?v=1772557101 HTTP/1.1" 200 61661
 INFO 2026-03-03 17:58:21,767 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
 INFO 2026-03-03 17:58:21,777 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:00:22,295 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:00:22,295 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:13:32,079 basehttp "GET /statistic/ HTTP/1.1" 200 7197
+INFO 2026-03-03 18:13:32,237 basehttp "GET /static/css/dist/styles.css?v=1772558012 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:13:32,288 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:13:32,295 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+WARNING 2026-03-03 18:13:32,445 log Not Found: /favicon.ico
+WARNING 2026-03-03 18:13:32,446 basehttp "GET /favicon.ico HTTP/1.1" 404 6328
+WARNING 2026-03-03 18:13:59,637 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:13:59,638 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:14:25,206 basehttp "GET /statistic/ HTTP/1.1" 200 7197
+WARNING 2026-03-03 18:14:25,361 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:14:25,366 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:14:25,373 basehttp "GET /static/css/dist/styles.css?v=1772558065 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:14:25,623 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:14:25,631 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:14:49,788 basehttp "GET /statistic/ HTTP/1.1" 200 7197
+INFO 2026-03-03 18:14:49,951 basehttp "GET /static/css/dist/styles.css?v=1772558089 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:14:50,223 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:14:50,226 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+WARNING 2026-03-03 18:14:50,468 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:14:50,469 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:15:29,921 basehttp "GET /statistic/ HTTP/1.1" 200 7203
+WARNING 2026-03-03 18:15:30,012 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:15:30,014 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:15:30,016 basehttp "GET /static/css/dist/styles.css?v=1772558129 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:15:30,198 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:15:30,202 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:15:33,227 basehttp "GET /statistic/ HTTP/1.1" 200 7197
+WARNING 2026-03-03 18:15:33,346 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:15:33,349 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:15:33,351 basehttp "GET /static/css/dist/styles.css?v=1772558133 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:15:33,495 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:15:33,495 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:17:34,287 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:17:34,288 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:19:34,289 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
+INFO 2026-03-03 18:19:34,290 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:20:15,469 basehttp "GET /statistic/ HTTP/1.1" 200 7195
+WARNING 2026-03-03 18:20:15,548 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-03 18:20:15,551 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6439
+INFO 2026-03-03 18:20:15,552 basehttp "GET /static/css/dist/styles.css?v=1772558415 HTTP/1.1" 200 61661
+INFO 2026-03-03 18:20:15,734 basehttp "GET /api/statistic/dispatchers/ HTTP/1.1" 200 5017
+INFO 2026-03-03 18:20:15,737 basehttp "GET /api/statistic/weekly-statistic/ HTTP/1.1" 200 662
