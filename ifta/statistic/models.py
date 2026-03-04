@@ -188,6 +188,7 @@ class DispatcherSheetRow(models.Model):
     cut = models.CharField(max_length=50, blank=True, default="")
     miles = models.CharField(max_length=50, blank=True, default="")
     rpm = models.CharField(max_length=50, blank=True, default="")
+    gpu = models.CharField(max_length=50, blank=True, default="")
 
     imported_at = models.DateTimeField(auto_now_add=True)
 

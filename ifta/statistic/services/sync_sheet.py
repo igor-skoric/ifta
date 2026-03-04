@@ -160,13 +160,25 @@ def sync_dispatcher_sheet():
 
     for row in data_rows:
         # popuni do 5 kolona
-        while len(row) < 8:
+        while len(row) < 10:
             row.append("")
 
         DispatcherSheetRow.objects.create(
             dispatcher=row[1],
-            gross=row[4],
-            cut=row[5],
-            miles=row[6],
+            gross=remove_decimals(row[4]),
+            cut=remove_decimals(row[5]),
+            miles=remove_decimals(row[6]),
             rpm=row[7],
+            gpu=remove_decimals(row[9]),
         )
+
+
+def remove_decimals(value):
+    if not value:
+        return ""
+
+    value = value.replace("$", "").replace(",", "")
+    try:
+        return f"{int(float(value)):,}"
+    except ValueError:
+        return value

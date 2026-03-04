@@ -37,5 +37,6 @@ class DispatcherSheetRowSerializer(serializers.ModelSerializer):
             "cut",
             "miles",
             "rpm",
+            "gpu",
             "imported_at",
         ]
