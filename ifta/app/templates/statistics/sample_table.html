@@ -106,21 +106,8 @@
         const num = parseFloat(s);
 
         if (!Number.isFinite(num)) return "text-gray-400";
-        if (num < 1.9) return "text-white";
-        if (num <= 2.10) return "text-orange-400";
+        if (num <= 7.000) return "text-red-400";
         return "text-green-400";
-    }
-
-    function getGpuColorClassBG(rpmValue) {
-        // prihvata: "2.05", "$2.05", "2,05", "2.05 rpm"...
-        const s = String(rpmValue ?? "")
-            .replace(",", ".")
-            .replace(/[^0-9.\-]/g, "");
-        const num = parseFloat(s);
-
-        if (!Number.isFinite(num)) return "bg-gray-400";
-        if (num < 1.9) return "bg-red-500";
-        return "bg-gradient-to-br from-[#1E1E38] to-[#151528] ";
     }
 
 
@@ -140,16 +127,22 @@
             const dispatcher = safeStr(r.dispatcher).trim();
 
             // 👇 Ako je dispatcher prazan – ne prikazuj karticu
-            if (!dispatcher) return;
-
+            
+            
             const gross = safeStr(r.gross);
             const cut = safeStr(r.cut);
+
+            console.log("Processing dispatcher:", gross);
+            if (!dispatcher || gross === "0" || cut === "0") return;
+
             const miles = safeStr(r.miles);
             const rpm = safeStr(r.rpm);
             const gpu = safeStr(r.gpu);
 
             const rpmColor = getRpmColorClass(rpm);
             const rpmColorBG = getRpmColorClassBG(rpm);
+
+            const gpuColor = getGpuColorClass(gpu);
 
             const card = document.createElement("div");
             card.className =
@@ -169,14 +162,14 @@
             </span>
         </div>
 
-        <div class="h-px bg-white/10 my-2"></div>
+        <div class="h-px bg-white/10"></div>
 
         <div class="grid grid-cols-1 gap-2 text-center">
             <div class="flex justify-between">
                 <span class="text-sm font-semibold text-gray-100 truncate">
                     $${cut}
                 </span>
-                <span class="text-sm font-semibold text-green-500 truncate">
+                <span class="text-sm font-semibold ${gpuColor} truncate">
                     $${gpu}
                 </span>
 
@@ -215,7 +208,7 @@
                 <div class="space-y-1 text-xs">
                     <div>${Number(item.rate_per_mile).toFixed(2)} $/mile</div>
                     <div>${Number(item.miles).toLocaleString()} Miles</div>
-                    <div>Cut $${Number(item.cut).toLocaleString()}</div>
+                    <div>Magic $${Number(item.cut).toLocaleString()}</div>
                     <div class="border-t border-white/30 pt-1 mt-1 font-bold">
                         Gross $${Number(item.gross).toLocaleString()}
                     </div>
