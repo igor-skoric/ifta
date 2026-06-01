@@ -139,3 +139,86 @@ Napomene:
 - `/api/statistic/` više nije javan — potreban login, TV IP/token, ili `statistics.view` permisija.
 - `DEBUG=false` uključuje secure cookies i HSTS (uz HTTPS).
 - `statistic/secrets/service_account.json` ne sme u git (već je u `.gitignore`).
+
+## 9) Linux produkcija (labvit / cPanel)
+
+Repozitorijum je u `/home/labvit/IFTA`, Django projekat u **`/home/labvit/IFTA/ifta`** (tu je `manage.py`).
+
+```bash
+source /home/labvit/virtualenv/IFTA/3.11/bin/activate
+cd /home/labvit/IFTA/ifta
+
+# 1) .env (obavezno pre prvog pokretanja)
+cp .env.example .env
+nano .env   # DJANGO_SECRET_KEY, ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS, putanja do service_account.json
+
+# 2) Google Sheets credential (nije u git-u)
+mkdir -p statistic/secrets
+# upload: statistic/secrets/service_account.json
+
+# 3) dependencies, baza, static
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py check --deploy
+
+# 4) superuser (jednom)
+python manage.py createsuperuser
+```
+
+**Python app / Passenger (cPanel):**
+
+| Polje | Vrednost |
+|--------|----------|
+| Application root | `/home/labvit/IFTA/ifta` |
+| Application startup | `core/wsgi.py` |
+| Application entry point | `application` |
+| Python version | 3.11 |
+
+**Česte greške posle deploya:**
+
+| Poruka | Rešenje |
+|--------|---------|
+| `Set DJANGO_SECRET_KEY...` | U `.env`: `DJANGO_DEBUG=false` i pravi `DJANGO_SECRET_KEY` (ne `django-insecure-...`) |
+| `Service account file not found` | Postavi `GOOGLE_SERVICE_ACCOUNT_FILE=/home/labvit/IFTA/ifta/statistic/secrets/service_account.json` i upload fajla |
+| `python: can't open file 'manage.py'` | `cd /home/labvit/IFTA/ifta` (ne samo `IFTA`) |
+| `DisallowedHost` | Dodaj domen u `ALLOWED_HOSTS` u `.env` |
+| `403 CSRF` | Dodaj `https://tvoj-domen` u `CSRF_TRUSTED_ORIGINS` |
+| TV/statistics prazno | Uloguj se na TV ili dodaj IP u `STATISTICS_TV_ALLOWED_IPS` |
+
+Ako dobiješ grešku, pošalji **ceo traceback** (ne samo `activate && cd`).
+
+### `table "app_employee" already exists` pri `migrate`
+
+**Uzrok:** stari migration fajlovi na serveru (bez `git pull`) ili pogrešno obrisana baza. Django uvek čita migracije iz **koda na disku**, ne iz stare baze.
+
+**1) Proveri da server ima novi kod** (prva linija `0009` mora imati `Database: no-op`):
+
+```bash
+head -3 ifta/ifta/migrations/0009_employee_equipmentitem.py
+# ili, ako je layout ravniji:
+head -3 ifta/migrations/0009_employee_equipmentitem.py
+```
+
+Ako vidiš običan `CreateModel` bez `SeparateDatabaseAndState` → uradi `git pull` (deploy najnovijeg commita).
+
+**2) Obriši celu SQLite bazu na pravoj putanji** (i WAL fajlove):
+
+```bash
+source /home/labvit/virtualenv/IFTA/3.11/bin/activate
+cd /home/labvit/IFTA/ifta   # gde je manage.py
+
+python -c "from django.conf import settings; print(settings.DATABASES['default']['NAME'])"
+
+# Obriši TAČNO taj fajl +:
+rm -f db.sqlite3 db.sqlite3-wal db.sqlite3-shm
+```
+
+**3) Čist migrate:**
+
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+**Ne briši** foldere `*/migrations/` iz koda — to nisu podaci, to je šema aplikacije.

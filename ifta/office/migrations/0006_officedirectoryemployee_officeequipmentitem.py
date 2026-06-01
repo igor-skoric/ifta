@@ -4,48 +4,77 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
+def _existing_tables(schema_editor):
+    return set(schema_editor.connection.introspection.table_names())
+
+
+def create_office_tables_if_missing(apps, schema_editor):
+    """Skip CREATE when legacy/production DB already has app_employee tables."""
+    existing = _existing_tables(schema_editor)
+    if "app_employee" in existing and "app_equipmentitem" in existing:
+        return
+    OfficeDirectoryEmployee = apps.get_model("office", "OfficeDirectoryEmployee")
+    OfficeEquipmentItem = apps.get_model("office", "OfficeEquipmentItem")
+    if "app_employee" not in existing:
+        schema_editor.create_model(OfficeDirectoryEmployee)
+    if "app_equipmentitem" not in existing:
+        schema_editor.create_model(OfficeEquipmentItem)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('office', '0005_add_state_to_officeequipmentitem'),
+        ("office", "0005_add_state_to_officeequipmentitem"),
+        # Posle app.0010 (koji uklanja privremene app Employee tabele) — inače 0006 i app.0009 oba CREATE app_employee.
+        ("app", "0010_remove_equipmentitem_assigned_employee_and_more"),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='OfficeDirectoryEmployee',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('employee_id', models.CharField(blank=True, max_length=12, unique=True)),
-                ('first_name', models.CharField(max_length=100)),
-                ('last_name', models.CharField(max_length=100)),
-                ('phone', models.CharField(blank=True, max_length=30)),
-                ('email', models.EmailField(blank=True, max_length=254)),
-                ('login_type', models.CharField(choices=[('company', 'Company'), ('native', 'Native'), ('contractor', 'Contractor'), ('other', 'Other')], default='company', max_length=20)),
-                ('department', models.CharField(choices=[('tracking', 'Tracking'), ('hr', 'HR'), ('it', 'IT'), ('safety', 'Safety'), ('dispatch', 'Dispatch'), ('recruiter', 'Recruiter'), ('finance', 'Finance')], default='it', max_length=20)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.CreateModel(
+                    name="OfficeDirectoryEmployee",
+                    fields=[
+                        ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                        ("employee_id", models.CharField(blank=True, max_length=12, unique=True)),
+                        ("first_name", models.CharField(max_length=100)),
+                        ("last_name", models.CharField(max_length=100)),
+                        ("phone", models.CharField(blank=True, max_length=30)),
+                        ("email", models.EmailField(blank=True, max_length=254)),
+                        ("login_type", models.CharField(choices=[("company", "Company"), ("native", "Native"), ("contractor", "Contractor"), ("other", "Other")], default="company", max_length=20)),
+                        ("department", models.CharField(choices=[("tracking", "Tracking"), ("hr", "HR"), ("it", "IT"), ("safety", "Safety"), ("dispatch", "Dispatch"), ("recruiter", "Recruiter"), ("finance", "Finance")], default="it", max_length=20)),
+                        ("is_active", models.BooleanField(default=True)),
+                        ("created_at", models.DateTimeField(auto_now_add=True)),
+                    ],
+                    options={
+                        "db_table": "app_employee",
+                        "ordering": ["last_name", "first_name"],
+                    },
+                ),
+                migrations.CreateModel(
+                    name="OfficeEquipmentItem",
+                    fields=[
+                        ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                        ("asset_id", models.CharField(max_length=40, unique=True)),
+                        ("equipment_type", models.CharField(choices=[("computer", "Computer"), ("monitor", "Monitor"), ("laptop", "Laptop"), ("printer", "Printer"), ("router", "Router"), ("tv", "Television"), ("other", "Other")], default="computer", max_length=20)),
+                        ("brand_model", models.CharField(blank=True, max_length=140)),
+                        ("serial_number", models.CharField(blank=True, max_length=120)),
+                        ("state", models.CharField(choices=[("in_service", "In service"), ("in_stock", "In stock"), ("broken", "Broken"), ("maintenance", "Maintenance"), ("retired", "Retired")], default="in_service", max_length=20)),
+                        ("notes", models.TextField(blank=True)),
+                        ("created_at", models.DateTimeField(auto_now_add=True)),
+                        ("assigned_employee", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="equipment_items", to="office.officedirectoryemployee")),
+                    ],
+                    options={
+                        "db_table": "app_equipmentitem",
+                        "ordering": ["asset_id"],
+                    },
+                ),
             ],
-            options={
-                'db_table': 'app_employee',
-                'ordering': ['last_name', 'first_name'],
-            },
-        ),
-        migrations.CreateModel(
-            name='OfficeEquipmentItem',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('asset_id', models.CharField(max_length=40, unique=True)),
-                ('equipment_type', models.CharField(choices=[('computer', 'Computer'), ('monitor', 'Monitor'), ('laptop', 'Laptop'), ('printer', 'Printer'), ('router', 'Router'), ('tv', 'Television'), ('other', 'Other')], default='computer', max_length=20)),
-                ('brand_model', models.CharField(blank=True, max_length=140)),
-                ('serial_number', models.CharField(blank=True, max_length=120)),
-                ('state', models.CharField(choices=[('in_service', 'In service'), ('in_stock', 'In stock'), ('broken', 'Broken'), ('maintenance', 'Maintenance'), ('retired', 'Retired')], default='in_service', max_length=20)),
-                ('notes', models.TextField(blank=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('assigned_employee', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='equipment_items', to='office.officedirectoryemployee')),
+            database_operations=[
+                migrations.RunPython(
+                    create_office_tables_if_missing,
+                    migrations.RunPython.noop,
+                ),
             ],
-            options={
-                'db_table': 'app_equipmentitem',
-                'ordering': ['asset_id'],
-            },
         ),
     ]
