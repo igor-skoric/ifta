@@ -1,0 +1,51 @@
+<div class="load-status-stepper mt-4 pt-4">
+  <p class="load-detail-kicker mb-3">Status progress</p>
+  {% if off_workflow_status %}
+  <p class="mb-3 flex flex-wrap items-center gap-2 text-xs load-detail-muted">
+    <span>Current status (off main flow):</span>
+    <span class="trip-status-badge trip-status-badge--{{ off_workflow_status }}">{{ load.get_status_display }}</span>
+  </p>
+  {% endif %}
+  <div class="load-status-stepper__scroll overflow-x-auto pb-1">
+    <ol class="load-status-stepper__track m-0 flex min-w-min list-none p-0">
+      {% for step in status_workflow_steps %}
+      <li class="load-status-stepper__step load-status-stepper__step--{{ step.state }}" aria-current="{% if step.state == 'current' %}step{% else %}false{% endif %}">
+        <div class="load-status-stepper__head">
+          {% if not forloop.first %}
+          <span class="load-status-stepper__line load-status-stepper__line--before" aria-hidden="true"></span>
+          {% endif %}
+          <span class="load-status-stepper__num">{{ step.number }}</span>
+          {% if not forloop.last %}
+          <span class="load-status-stepper__line load-status-stepper__line--after" aria-hidden="true"></span>
+          {% endif %}
+        </div>
+        <p class="load-status-stepper__title">{{ step.label }}</p>
+        <div class="load-status-stepper__icon" aria-hidden="true">
+          <i class="{{ step.icon }}{% if step.slug == 'delivered' %} text-emerald-500{% endif %}"></i>
+        </div>
+        <p class="load-status-stepper__desc">{{ step.description }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% if status_history_timeline %}
+  <div class="load-status-changelog mt-3 pt-3">
+    <p class="load-detail-kicker mb-2">Status change log ({{ status_history_timeline|length }})</p>
+    <div class="load-status-changelog__scroll overflow-x-auto pb-0.5">
+      <ol class="load-status-changelog__track m-0 flex min-w-min list-none flex-wrap items-center gap-y-1 p-0">
+        {% for row in status_history_timeline %}
+        <li class="load-status-changelog__item flex shrink-0 items-center gap-2">
+          {% if not forloop.first %}
+          <span class="load-status-changelog__arrow" aria-hidden="true">→</span>
+          {% elif row.from_status %}
+          <span class="trip-status-badge {{ row.from_status_badge_css_class }} whitespace-nowrap">{{ row.from_status_display }}</span>
+          <span class="load-status-changelog__arrow" aria-hidden="true">→</span>
+          {% endif %}
+          <span class="trip-status-badge {{ row.to_status_badge_css_class }} whitespace-nowrap">{{ row.get_to_status_display }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  {% endif %}
+</div>

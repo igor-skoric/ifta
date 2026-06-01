@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Import people · Office{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl">
+    <div class="mb-6 flex items-end justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Office</p>
+        <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Mass import (Excel)</h1>
+        <p class="mt-2 text-sm text-slate-400">
+          Prvi sheet: obavezno <span class="text-slate-200">Name</span>; opciono
+          <span class="text-slate-200">Department</span>,
+          <span class="text-slate-200">Location</span>,
+          <span class="text-slate-200">Position</span>.
+          Kontakt (svi opcioni, mogu biti prazni):
+          <span class="text-slate-200">Work email</span> ili klasično <span class="text-slate-200">Email</span>,
+          <span class="text-slate-200">Private email</span>,
+          <span class="text-slate-200">Work phone</span> ili <span class="text-slate-200">Phone</span>,
+          <span class="text-slate-200">Private phone</span>.
+          Ažuriranje: prvo ime + prezime + departman; zatim ime + prezime + work/private email (više ljudi može isti work email); email samo ako je jedinstven u bazi.
+        </p>
+      </div>
+      <a href="{% url 'office:people_list' %}" class="text-sm text-slate-300 hover:text-white">Back to list</a>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-xl">
+      <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <label class="block text-sm text-slate-300">
+          <span class="mb-1 block">Excel file (.xlsx)</span>
+          {{ form.file }}
+        </label>
+        {% if form.file.errors %}
+          <p class="text-sm text-rose-300">{{ form.file.errors.0 }}</p>
+        {% endif %}
+        <button type="submit" class="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400">
+          Import
+        </button>
+      </form>
+    </div>
+
+    {% if result %}
+    <div class="mt-6 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-sm">
+      <p class="text-slate-200">
+        Kreirano: <strong class="text-emerald-300">{{ result.created }}</strong> ·
+        Ažurirano: <strong class="text-sky-300">{{ result.updated }}</strong> ·
+        Preskočeno: <strong class="text-slate-400">{{ result.skipped }}</strong>
+      </p>
+      {% if result.warnings %}
+        <div>
+          <p class="font-semibold text-amber-200">Upozorenja</p>
+          <ul class="mt-1 list-inside list-disc text-slate-400">
+            {% for w in result.warnings %}
+              <li>{{ w }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if result.errors %}
+        <div>
+          <p class="font-semibold text-rose-300">Greške</p>
+          <ul class="mt-1 list-inside list-disc text-slate-400">
+            {% for e in result.errors %}
+              <li>{{ e }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

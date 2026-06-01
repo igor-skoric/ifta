@@ -4,12 +4,66 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a30888da-9f37-496e-beb5-bfb4272d84e2" name="Changes" comment="new update 5">
+    <list default="true" id="a30888da-9f37-496e-beb5-bfb4272d84e2" name="Changes" comment="new update 6">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table.html" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0002_rename_created_at_iftasamsara_uploaded_at_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0003_state_alter_iftasamsara_options_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0004_insert_states.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0005_add_canada_provinces.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0006_fueltransaction_delete_fuelrecord.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0007_vehiclerecord.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/0008_delete_fueltransaction_vehiclerecord_file_name_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/fuel_chart.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/ifta_list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/mpg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/pivot_report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/upload.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/app/upload_fuel.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/registration/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/office.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/sample_table4.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templates/statistics/tv_rotator.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templatetags/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templatetags/custom_tags.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/templatetags/form_tags.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/app/views.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ifta/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/ifta/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/ifta/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/ifta/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/ifta/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/ifta/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/logs/errors.log" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/logs/errors.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ifta/logs/info.log" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/logs/info.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ifta/staticfiles/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/staticfiles/css/dist/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/office/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/office/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/office/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/office/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/office/templates/office/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/office/templates/office/map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/office/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/office/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/office/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/office/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/management/commands/sync_sheets_once.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/management/commands/sync_sheets_once.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/scheduler_dev.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/scheduler_dev.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/services/sync_sheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/services/sync_sheet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/statistic/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/statistic/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/templates/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/templates/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifta/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/templates/header.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ifta/theme/static/css/dist/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/ifta/theme/static/css/dist/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +113,7 @@
     &quot;Python.Tailwind CSS.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/projects&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Igor/Desktop/django-starter&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -74,7 +128,7 @@
       <recent name="D:\projects\IFTA\ifta\statistic\fetch_sheets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Tailwind CSS">
+  <component name="RunManager" selected="Python.Python">
     <configuration name="Python 0.0.0.0" type="PythonConfigurationType" factoryName="Python">
       <module name="IFTA" />
       <option name="ENV_FILES" value="" />
@@ -246,7 +300,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772638451367</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="new update 6">
+      <option name="closed" value="true" />
+      <created>1772640803735</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772640803735</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -259,6 +321,7 @@
     <MESSAGE value="new update 3" />
     <MESSAGE value="new update 4" />
     <MESSAGE value="new update 5" />
-    <option name="LAST_COMMIT_MESSAGE" value="new update 5" />
+    <MESSAGE value="new update 6" />
+    <option name="LAST_COMMIT_MESSAGE" value="new update 6" />
   </component>
 </project>

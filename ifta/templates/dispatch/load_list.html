@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · Loads{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Loads</h1>
+    </div>
+    {% if can_manage_dispatch %}
+    <a href="{% url 'dispatch:load_create' %}" data-dispatch-entity-modal class="app-btn app-btn--primary">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+      New load
+    </a>
+    {% endif %}
+  </div>
+
+  {% url 'dispatch:load_list' as load_list_clear_url %}
+  <form method="get" action="{% url 'dispatch:load_list' %}" class="mb-6 flex flex-wrap items-end gap-3">
+    <div class="w-full max-w-[16rem] shrink-0">
+      <label for="load-search-q" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Search</label>
+      <input id="load-search-q" type="search" name="q" value="{{ search_q }}" placeholder="Load ID, lane, BOL, driver…"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40" />
+    </div>
+    <div class="w-full min-w-[9rem] max-w-[12rem] shrink-0 sm:w-auto">
+      <label for="load-filter-status" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Status</label>
+      <select id="load-filter-status" name="status"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+        <option value="" {% if not filter_status %}selected{% endif %}>Any</option>
+        {% for value, label in load_status_choices %}
+        <option value="{{ value }}" {% if filter_status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="w-full min-w-[10rem] max-w-[14rem] shrink-0 sm:w-auto">
+      <label for="load-filter-driver" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Driver</label>
+      <select id="load-filter-driver" name="driver"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+        <option value="" {% if not filter_driver %}selected{% endif %}>Any</option>
+        {% for d in driver_choices %}
+        <option value="{{ d.pk }}" {% if filter_driver == d.pk|stringformat:"s" %}selected{% endif %}>{{ d.display_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="w-full min-w-[8rem] max-w-[11rem] shrink-0 sm:w-auto">
+      <label for="load-filter-driver-assignment" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Assigned</label>
+      <select id="load-filter-driver-assignment" name="driver_assignment"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+        <option value="" {% if not filter_driver_assignment %}selected{% endif %}>Any</option>
+        <option value="assigned" {% if filter_driver_assignment == "assigned" %}selected{% endif %}>With driver</option>
+        <option value="unassigned" {% if filter_driver_assignment == "unassigned" %}selected{% endif %}>No driver</option>
+      </select>
+    </div>
+    <div class="w-full min-w-[8.5rem] max-w-[10rem] shrink-0 sm:w-auto">
+      <label for="load-filter-planner-from" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Planner from</label>
+      <input id="load-filter-planner-from" type="date" name="planner_from" value="{{ filter_planner_from }}"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40" />
+    </div>
+    <div class="w-full min-w-[8.5rem] max-w-[10rem] shrink-0 sm:w-auto">
+      <label for="load-filter-planner-to" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Planner to</label>
+      <input id="load-filter-planner-to" type="date" name="planner_to" value="{{ filter_planner_to }}"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40" />
+    </div>
+    {% include "dispatch/includes/_dispatch_filter_buttons.html" with clear_url=load_list_clear_url %}
+  </form>
+
+  {% if page_obj.paginator.count == 0 %}
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-12 text-center">
+    <p class="text-sm text-slate-400">{% if filters_active %}No loads match your search or filters.{% else %}No loads yet.{% endif %}</p>
+    {% if can_manage_dispatch and not filters_active %}
+    <a href="{% url 'dispatch:load_create' %}" data-dispatch-entity-modal class="app-btn app-btn--accent-outline mt-4">Create first load</a>
+    {% endif %}
+  </div>
+  {% else %}
+  {% with n=page_obj.paginator.count %}
+  <div class="dispatch-entity-list rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    {% include "dispatch/includes/_dispatch_list_meta.html" with position="top" n=n entity_singular="load" filters_active=filters_active page_obj=page_obj %}
+    <div class="overflow-x-auto">
+      <table class="min-w-[1150px] w-full text-sm">
+        <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-4 py-3 text-left">Load ID</th>
+            <th class="px-4 py-3 text-left">Lane</th>
+            <th class="px-4 py-3 text-left">Driver</th>
+            <th class="px-4 py-3 text-left">Dispatcher</th>
+            <th class="px-4 py-3 text-left">Pickup date &amp; time</th>
+            <th class="px-4 py-3 text-left">Delivery date &amp; time</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">RC</th>
+            <th class="px-4 py-3 text-left">POD</th>
+            {% if can_manage_dispatch %}
+            <th class="dispatch-list-actions-cell w-12 px-2 py-3 text-right"><span class="sr-only">Actions</span></th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for load in page_obj %}
+          <tr class="hover:bg-white/[0.03]">
+            <td class="px-4 py-3">
+              <a href="{% url 'dispatch:load_detail' load.pk %}" class="font-mono font-semibold text-indigo-200 hover:text-indigo-100">
+                {% if load.load_id_display %}{{ load.load_id_display }}{% else %}#{{ load.pk }}{% endif %}
+              </a>
+            </td>
+            <td class="px-4 py-3 text-slate-400">{{ load.pickup_display|default:"—" }} → {{ load.delivery_display|default:"—" }}</td>
+            <td class="px-4 py-3 text-slate-300">
+              {% if load.driver %}<a href="{% url 'dispatch:driver_detail' load.driver.pk %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ load.driver.display_name }}</a>{% else %}<span class="text-slate-500">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-slate-400">
+              {% if load.driver and load.driver.dispatcher %}{{ load.driver.dispatcher.first_name }} {{ load.driver.dispatcher.last_name }}{% else %}<span class="text-slate-600">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 font-mono text-xs text-slate-400 whitespace-nowrap">
+              {% with pickup_at=load.pickup_datetime_display %}
+              {% if pickup_at %}{{ pickup_at|date:"M j, Y H:i" }}{% else %}<span class="text-slate-600">—</span>{% endif %}
+              {% endwith %}
+            </td>
+            <td class="px-4 py-3 font-mono text-xs text-slate-400 whitespace-nowrap">
+              {% if load.delivery_datetime %}{{ load.delivery_datetime|date:"M j, Y H:i" }}{% else %}<span class="text-slate-600">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3">
+              {% include "dispatch/includes/_load_status_badge.html" %}
+            </td>
+            <td class="px-4 py-3">
+              {% include "dispatch/includes/_load_rc_status_badge.html" %}
+            </td>
+            <td class="px-4 py-3">
+              {% include "dispatch/includes/_load_pod_status_badge.html" %}
+            </td>
+            {% if can_manage_dispatch %}
+            {% url 'dispatch:load_edit' load.pk as load_edit_url %}
+            {% include "dispatch/includes/_dispatch_row_actions.html" with edit_url=load_edit_url use_entity_modal=True %}
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dispatch/includes/_dispatch_list_pagination.html" %}
+    {% include "dispatch/includes/_dispatch_list_meta.html" with position="bottom" n=n entity_singular="load" filters_active=filters_active page_obj=page_obj %}
+  </div>
+  {% endwith %}
+  {% endif %}
+
+  <p class="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
+    <a href="{% url 'dispatch:planner' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Load planner</a>
+    {% if user.is_staff %}
+    <a href="{% url 'admin:dispatch_dispatchload_changelist' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">Admin →</a>
+    {% endif %}
+  </p>
+</div>
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% include "dispatch/includes/_dispatch_row_actions_script.html" %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,6 @@
+<div class="flex flex-wrap gap-2">
+  <button type="submit" class="app-btn app-btn--primary">Apply</button>
+  {% if filters_active %}
+  <a href="{{ clear_url }}" class="app-btn app-btn--secondary">Clear</a>
+  {% endif %}
+</div>

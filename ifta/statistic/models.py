@@ -1,56 +1,6 @@
 from django.db import models
 
 
-class WeeklyDriverData(models.Model):
-    driver_pay_percent = models.CharField(max_length=10, blank=True, null=True)
-    fuel = models.CharField(max_length=50, blank=True, null=True)
-    tolls = models.CharField(max_length=50, blank=True, null=True)
-    ifta = models.CharField(max_length=50, blank=True, null=True)
-    dispatch_factoring = models.CharField(max_length=50, blank=True, null=True)
-    insurance = models.CharField(max_length=50, blank=True, null=True)
-    truck_trailer = models.CharField(max_length=50, blank=True, null=True)
-    admin = models.CharField(max_length=50, blank=True, null=True)
-    empty_col = models.CharField(max_length=50, blank=True, null=True)
-    driver = models.CharField(max_length=100, blank=True, null=True)
-    dispatch = models.CharField(max_length=100, blank=True, null=True)
-    miles = models.CharField(max_length=50, blank=True, null=True)
-    avg = models.CharField(max_length=50, blank=True, null=True)
-    gross = models.CharField(max_length=50, blank=True, null=True)
-    driver_gross = models.CharField(max_length=50, blank=True, null=True)
-    cut = models.CharField(max_length=50, blank=True, null=True)
-    salary = models.CharField(max_length=50, blank=True, null=True)
-    truck = models.CharField(max_length=50, blank=True, null=True)
-    profit_loss = models.CharField(max_length=50, blank=True, null=True)
-    mpg = models.CharField(max_length=50, blank=True, null=True)
-    idle_time = models.CharField(max_length=50, blank=True, null=True)
-    idle_percent = models.CharField(max_length=10, blank=True, null=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.driver} - {self.profit_loss}"
-
-    @property
-    def profit_loss_float(self):
-        """
-        Konvertuje profit_loss u float odmah pri pozivu.
-        Uklanja $ i , ako ih ima.
-        """
-        if not self.profit_loss:
-            return 0.0
-        try:
-            return float(self.profit_loss.replace("$", "").replace(",", ""))
-        except ValueError:
-            return 0.0
-
-    @classmethod
-    def total_profit_loss(cls):
-        """
-        Sumira sve profit_loss vrednosti u tabeli.
-        """
-        return sum(obj.profit_loss_float for obj in cls.objects.all())
-
-
 class WeeklyDayData(models.Model):
     DAY_CHOICES = [
         ('Mon', 'Monday'),
@@ -63,56 +13,48 @@ class WeeklyDayData(models.Model):
         ('TOTALS', 'Totals'),
     ]
 
-    day = models.CharField(max_length=10, choices=DAY_CHOICES, unique=True)
+    year = models.PositiveIntegerField(help_text="ISO week year")
+    iso_week = models.PositiveSmallIntegerField(help_text="ISO week number (1–53)")
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)
     gross = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     cut = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     miles = models.IntegerField(default=0)
     rate_per_mile = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-
-    def __str__(self):
-        return f"{self.day} - Gross: {self.gross}"
-
-    @classmethod
-    def get_totals(cls):
-        """Automatski računa totals po kolonama za sve dane osim TOTALS"""
-        totals = cls.objects.exclude(day='TOTALS').aggregate(
-            total_gross=models.Sum('gross'),
-            total_cut=models.Sum('cut'),
-            total_miles=models.Sum('miles'),
-        )
-        # Rate per mile se može izračunati prosečno ili weighted
-        total_rate = 0
-        if totals['total_miles']:
-            total_rate = totals['total_gross'] / totals['total_miles']
-        totals['total_rate_per_mile'] = total_rate
-        return totals
-
-
-class ActiveTrucksFinalGross(models.Model):
-    """
-    Jedan red iz Excel/Google Sheet tabele.
-    Sve vrednosti su string.
-    """
-
-    # Stabilan ključ za update (npr. "TOTAL", "HOME", ...)
-    label = models.CharField(max_length=255, unique=True)
-
-    global_value = models.CharField(max_length=255, blank=True, default="")
-    unit_value = models.CharField(max_length=255, blank=True, default="")
-    count_value = models.CharField(max_length=255, blank=True, default="")
-
-    manager = models.CharField(max_length=255, blank=True, default="")
-    last_update = models.CharField(max_length=255, blank=True, default="")
-
-    # POSTAVITI redni broj da mogu da ga orderujem, ako uspe da radi po ID-u je vec
-
-    synced_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["year", "iso_week", "day"],
+                name="statistic_weeklydaydata_year_iso_week_day_uniq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["year", "iso_week"],
+                name="statistic_wdd_yr_wk_idx",
+            ),
+        ]
 
     def __str__(self):
-        return self.label
+        return f"{self.year}-W{self.iso_week} {self.day} - Gross: {self.gross}"
+
+    @classmethod
+    def get_totals(cls, year=None, iso_week=None):
+        """Totals po kolonama za sve dane osim TOTALS; podrazumevano tekuća nedelja ako se prosledi."""
+        qs = cls.objects.all()
+        if year is not None and iso_week is not None:
+            qs = qs.filter(year=year, iso_week=iso_week)
+        totals = qs.exclude(day="TOTALS").aggregate(
+            total_gross=models.Sum("gross"),
+            total_cut=models.Sum("cut"),
+            total_miles=models.Sum("miles"),
+        )
+        total_rate = 0
+        if totals["total_miles"]:
+            total_rate = totals["total_gross"] / totals["total_miles"]
+        totals["total_rate_per_mile"] = total_rate
+        return totals
 
 
 class SheetConfig(models.Model):
@@ -166,7 +108,7 @@ class SheetConfig(models.Model):
     target_model = models.CharField(
         max_length=255,
         blank=True,
-        help_text="Npr: statistic.ActiveTrucksFinalGross"
+        help_text="Npr: statistic.DispatcherSheetRow"
     )
 
     # Poslednji uspešan sync
@@ -183,14 +125,32 @@ class SheetConfig(models.Model):
 
 
 class DispatcherSheetRow(models.Model):
+    year = models.PositiveIntegerField(help_text="ISO week year")
+    iso_week = models.PositiveSmallIntegerField(help_text="ISO week number (1–53)")
     dispatcher = models.CharField(max_length=200, blank=True, default="")
     gross = models.CharField(max_length=50, blank=True, default="")
     cut = models.CharField(max_length=50, blank=True, default="")
     miles = models.CharField(max_length=50, blank=True, default="")
     rpm = models.CharField(max_length=50, blank=True, default="")
     gpu = models.CharField(max_length=50, blank=True, default="")
+    drpm = models.CharField(max_length=50, blank=True, default="")
 
     imported_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["year", "iso_week", "dispatcher"],
+                name="statistic_dispatchersheet_year_week_dispatcher_uniq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["year", "iso_week"],
+                name="statistic_dsr_yr_wk_idx",
+            ),
+        ]
 
     def __str__(self):
-        return f"{self.dispatcher} - {self.gross} - {self.cut} - {self.miles} - {self.rpm}"
+        return f"{self.year}-W{self.iso_week} {self.dispatcher} - {self.gross} - {self.cut} - {self.miles} - {self.rpm}"

@@ -1,0 +1,135 @@
+{% if samsara_vehicle %}
+<section class="app-live-panel rounded-2xl p-5 sm:p-6" aria-labelledby="truck-samsara-live-heading">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <h2 id="truck-samsara-live-heading" class="flex items-center gap-2 text-sm font-semibold text-white">
+      <i class="fa-solid fa-satellite-dish text-sky-400" aria-hidden="true"></i>
+      Live data
+    </h2>
+    <button type="button" class="text-xs font-semibold text-indigo-300 hover:text-indigo-200" data-samsara-panel-refresh>Refresh</button>
+  </div>
+
+  {% if samsara_live_stats_error %}
+  <p class="app-alert-error mt-3 rounded-lg px-3 py-2 text-sm">{{ samsara_live_stats_error }}</p>
+  {% endif %}
+
+  <div class="truck-samsara-live-grid mt-4 grid gap-4 lg:grid-cols-3 lg:items-stretch lg:gap-5">
+    <div class="app-surface-inset min-w-0 rounded-xl p-4" aria-labelledby="truck-samsara-telematics-heading">
+      <h3 id="truck-samsara-telematics-heading" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <i class="fa-solid fa-bolt text-emerald-400" aria-hidden="true"></i>
+        Live telematics
+      </h3>
+      <dl class="mt-4 space-y-4">
+        <div>
+          <dt class="text-xs text-slate-500">Fuel level</dt>
+          <dd class="mt-0.5 text-lg font-semibold tabular-nums text-white">
+            {% if samsara_live_stats and samsara_live_stats.fuel_percent is not None %}
+            {{ samsara_live_stats.fuel_percent|floatformat:0 }}%
+            {% else %}
+            <span class="text-base font-normal text-slate-500">—</span>
+            {% endif %}
+          </dd>
+          {% if samsara_live_stats and samsara_live_stats.fuel_updated_display %}
+          <p class="mt-0.5 text-[10px] text-slate-600">Updated {{ samsara_live_stats.fuel_updated_display }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Engine</dt>
+          <dd class="mt-0.5 text-sm font-semibold text-slate-200">
+            {% if samsara_live_stats and samsara_live_stats.engine_state %}
+            {{ samsara_live_stats.engine_state }}
+            {% else %}
+            <span class="text-slate-500">—</span>
+            {% endif %}
+          </dd>
+          {% if samsara_live_stats and samsara_live_stats.engine_updated_display %}
+          <p class="mt-0.5 text-[10px] text-slate-600">Updated {{ samsara_live_stats.engine_updated_display }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Fault codes</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">
+            {% if samsara_live_stats and samsara_live_stats.fault_lines %}
+            <ul class="space-y-1">
+              {% for line in samsara_live_stats.fault_lines %}
+              <li class="app-alert-warning rounded-lg px-2.5 py-1.5 text-xs">{{ line }}</li>
+              {% endfor %}
+            </ul>
+            {% elif samsara_live_stats %}
+            <span class="text-emerald-300">No active faults reported</span>
+            {% else %}
+            <span class="text-slate-500">—</span>
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="app-surface-inset min-w-0 rounded-xl p-4" aria-labelledby="truck-samsara-gps-heading">
+      <h3 id="truck-samsara-gps-heading" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <i class="fa-solid fa-location-crosshairs text-emerald-400" aria-hidden="true"></i>
+        Live GPS
+      </h3>
+      {% if samsara_gps_error %}
+      <p class="app-alert-error mt-4 rounded-lg px-3 py-2 text-sm">{{ samsara_gps_error }}</p>
+      <p class="mt-2 text-xs text-slate-500">API token needs <span class="text-slate-400">Read Vehicle Statistics</span> scope.</p>
+      {% elif samsara_gps %}
+      <dl class="mt-4 space-y-3 text-sm">
+        <div>
+          <dt class="text-xs text-slate-500">Coordinates</dt>
+          <dd class="mt-0.5 font-mono text-slate-200">{{ samsara_gps.coords_display }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Last update</dt>
+          <dd class="mt-0.5 text-slate-200">{{ samsara_gps.time_display }}</dd>
+        </div>
+        {% if samsara_gps.address %}
+        <div>
+          <dt class="text-xs text-slate-500">Address</dt>
+          <dd class="mt-0.5 text-slate-300">{{ samsara_gps.address }}</dd>
+        </div>
+        {% endif %}
+        <div class="flex flex-wrap gap-x-6 gap-y-3">
+          {% if samsara_gps.speed_mph is not None %}
+          <div>
+            <dt class="text-xs text-slate-500">Speed</dt>
+            <dd class="mt-0.5 text-slate-200">{{ samsara_gps.speed_mph|floatformat:1 }} mph</dd>
+          </div>
+          {% endif %}
+          {% if samsara_gps.heading_deg is not None %}
+          <div>
+            <dt class="text-xs text-slate-500">Heading</dt>
+            <dd class="mt-0.5 text-slate-200">{{ samsara_gps.heading_deg|floatformat:0 }}°</dd>
+          </div>
+          {% endif %}
+        </div>
+      </dl>
+      <a href="{{ samsara_gps.google_maps_url }}" target="_blank" rel="noopener noreferrer"
+         class="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-indigo-300 hover:text-indigo-200">
+        <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        Open in Google Maps
+      </a>
+      <p class="mt-2 text-[10px] text-slate-600">Source: Samsara {{ samsara_gps.source }}</p>
+      {% else %}
+      <p class="mt-4 text-sm text-slate-500">No GPS data returned for this vehicle.</p>
+      {% endif %}
+    </div>
+
+    <div class="truck-samsara-live-map app-surface-inset min-w-0 rounded-xl p-2 lg:flex lg:flex-col">
+      {% if samsara_gps_show_map and samsara_gps_embed_url %}
+      <iframe
+        title="Truck location on map"
+        class="truck-gps-map-embed min-h-[14rem] w-full flex-1 rounded-lg border border-white/10 lg:min-h-[16rem]"
+        src="{{ samsara_gps_embed_url }}"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+      {% else %}
+      <div class="flex min-h-[14rem] flex-1 items-center justify-center rounded-lg border border-dashed border-white/10 px-4 text-center text-sm text-slate-500 lg:min-h-[16rem]">
+        Map unavailable
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}

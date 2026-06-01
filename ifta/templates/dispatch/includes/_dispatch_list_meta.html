@@ -1,0 +1,7 @@
+<p class="dispatch-list-meta flex flex-wrap items-baseline gap-x-2 gap-y-1 border-white/10 px-4 py-2.5 text-sm text-slate-400{% if position == 'top' %} border-b{% else %} border-t{% endif %}" aria-live="polite">
+  <span class="tabular-nums font-semibold text-white">{{ n }}</span>
+  <span>{{ entity_singular }}{{ n|pluralize }}{% if filters_active %} <span class="font-normal text-slate-500">(filtered)</span>{% endif %}</span>
+  {% if n > 0 %}
+  <span class="text-slate-500">· Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ n }}</span>
+  {% endif %}
+</p>

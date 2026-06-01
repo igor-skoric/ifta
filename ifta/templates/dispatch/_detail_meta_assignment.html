@@ -1,0 +1,37 @@
+{# Inline assignment fields for header <dl>. self_kind: truck | trailer | driver — that row is hidden (shown in page title). #}
+{% if self_kind != "truck" %}
+<div>
+  <dt class="text-xs text-slate-500">Truck</dt>
+  <dd class="font-medium text-slate-200">
+    {% if assign_truck %}
+    <a href="{% url 'dispatch:truck_detail' assign_truck.pk %}" class="font-mono text-indigo-300 hover:text-indigo-200 hover:underline">{{ assign_truck.unit_number }}</a>
+    {% else %}<span class="text-slate-600">—</span>{% endif %}
+  </dd>
+</div>
+{% endif %}
+{% if self_kind != "trailer" %}
+<div>
+  <dt class="text-xs text-slate-500">Trailer</dt>
+  <dd class="font-medium text-slate-200">
+    {% if assign_trailer %}
+    <a href="{% url 'dispatch:trailer_detail' assign_trailer.pk %}" class="font-mono text-indigo-300 hover:text-indigo-200 hover:underline">{{ assign_trailer.unit_number }}</a>
+    {% else %}<span class="text-slate-600">—</span>{% endif %}
+  </dd>
+</div>
+{% endif %}
+{% if self_kind != "driver" %}
+<div>
+  <dt class="text-xs text-slate-500">Driver</dt>
+  <dd class="text-slate-200">
+    {% if assign_driver %}
+    <a href="{% url 'dispatch:driver_detail' assign_driver.pk %}" class="font-medium text-indigo-300 hover:text-indigo-200 hover:underline">{{ assign_driver.display_name }}</a>
+    {% else %}<span class="text-slate-600">—</span>{% endif %}
+  </dd>
+</div>
+{% endif %}
+{% if assigned_since %}
+<div>
+  <dt class="text-xs text-slate-500">Assigned since</dt>
+  <dd class="text-slate-200">{{ assigned_since|date:"M j, Y" }}</dd>
+</div>
+{% endif %}

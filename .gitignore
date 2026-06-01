@@ -1,1 +1,12 @@
 /ifta/statistic/secrets/
+.env
+.env.*
+!.env.example
+/ifta/db.sqlite3
+/ifta/logs/
+/ifta/staticfiles/
+/ifta/media/
+__pycache__/
+*.pyc
+.venv/
+venv/

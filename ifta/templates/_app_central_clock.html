@@ -1,0 +1,4 @@
+<div class="app-topbar-clock shrink-0 text-right leading-tight {{ clock_class|default:'' }}"{% if clock_id %} id="{{ clock_id }}"{% endif %}>
+  <time class="block text-sm font-semibold tabular-nums" datetime="" data-clock-time>{{ app_now|date:"g:i:s A" }}</time>
+  <p class="mt-0.5 hidden text-[11px] text-slate-400 sm:block" data-clock-date>{{ app_now|date:"l, M j, Y" }}</p>
+</div>

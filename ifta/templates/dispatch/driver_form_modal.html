@@ -1,0 +1,7 @@
+<div data-dispatch-entity-modal-panel data-modal-title="{% if is_create %}New driver{% else %}Edit driver · {{ driver.display_name }}{% endif %}" data-modal-submit-label="Save">
+  <form method="post" action="{{ form_action }}" class="dispatch-entity-modal-form space-y-5">
+    {% csrf_token %}
+    <p class="text-sm load-detail-muted">Dispatcher is optional. Truck and trailers are edited on the truck / trailer screens.</p>
+    {% include "dispatch/_driver_form_fields.html" %}
+  </form>
+</div>

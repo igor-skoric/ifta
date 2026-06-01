@@ -1,115 +1,136 @@
 # app/models.py
+from django.conf import settings
 from django.db import models
-from django.utils import timezone
 
 
-class Seat(models.Model):
-    svg_id = models.CharField(max_length=120, unique=True)
-    dept = models.CharField(max_length=20, blank=True, default="")
-    zone = models.CharField(max_length=20, blank=True, default="")
-    seat_no = models.CharField(max_length=20, blank=True, default="")
-    label = models.CharField(max_length=50, blank=True, default="")
+class Department(models.Model):
+    """Firma departmani — dodaju se kroz admin ili migracije, bez hardkodiranih choices."""
+
+    code = models.SlugField(max_length=64, unique=True)
+    name = models.CharField(max_length=120)
     is_active = models.BooleanField(default=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["sort_order", "name"]
 
     def __str__(self):
-        return self.svg_id
+        return self.name
 
 
-class Employee(models.Model):
-    alias = models.CharField(max_length=50, unique=True)  # npr. "user0a" / "igor" / "dispatch01"
-    name = models.CharField(max_length=80, blank=True, default="")
-    email = models.EmailField(blank=True, default="")
-    phone = models.CharField(max_length=30, blank=True, default="")
+class OfficeDirectoryEmployee(models.Model):
+    class LoginType(models.TextChoices):
+        COMPANY = "company", "Company"
+        NATIVE = "native", "Native"
+        CONTRACTOR = "contractor", "Contractor"
+        OTHER = "other", "Other"
 
-    company_name = models.CharField(max_length=80, blank=True, default="")
-    company_phone = models.CharField(max_length=30, blank=True, default="")
-    company_email = models.EmailField(blank=True, default="")
-
-    is_active = models.BooleanField(default=False)
-
-    def __str__(self):
-        name = f"{self.name} {self.email}".strip()
-        return f"{name} ({self.alias})" if self.alias else name
-
-
-class Asset(models.Model):
-    class AssetType(models.TextChoices):
-        LAPTOP = "LAPTOP", "Laptop"
-        DESKTOP = "DESKTOP", "Desktop/PC"
-        MONITOR = "MONITOR", "Monitor"
-        HEADSET = "HEADSET", "Headset"
-        KEYBOARD = "KEYBOARD", "Keyboard"
-        MOUSE = "MOUSE", "Mouse"
-        DOCK = "DOCK", "Dock/Hub"
-        PHONE = "PHONE", "Phone"
-        OTHER = "OTHER", "Other"
-
-    class Status(models.TextChoices):
-        IN_USE = "IN_USE", "In use"
-        IN_STOCK = "IN_STOCK", "In stock"
-        BROKEN = "BROKEN", "Broken"
-        LOST = "LOST", "Lost"
-        RETIRED = "RETIRED", "Retired"
-        PRIVATE = "PRIVATE", "Private"
-
-    asset_type = models.CharField(max_length=20, choices=AssetType.choices)
-    brand = models.CharField(max_length=80, blank=True, default="")
-    model = models.CharField(max_length=80, blank=True, default="")
-    serial_number = models.CharField(max_length=80, blank=True, default="")
-    inventory_tag = models.CharField(max_length=50, blank=True, default="")  # nalepnica/asset tag
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_USE)
-    notes = models.TextField(blank=True, default="")
-
+    employee_id = models.CharField(max_length=12, unique=True, blank=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    work_email = models.EmailField(blank=True, null=True)
+    private_email = models.EmailField(blank=True, null=True)
+    work_phone = models.CharField(max_length=30, blank=True, null=True)
+    private_phone = models.CharField(max_length=30, blank=True, null=True)
+    login_type = models.CharField(max_length=20, choices=LoginType.choices, default=LoginType.COMPANY)
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employees",
+    )
+    location = models.CharField(max_length=120, blank=True)
+    position = models.CharField(max_length=80, blank=True)
+    is_active = models.BooleanField(default=True)
+    is_dispatcher = models.BooleanField(
+        default=False,
+        help_text="If true, appears on Dispatch load planner and can own driver rows.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["last_name", "first_name"]
+        db_table = "app_employee"
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new and not self.employee_id:
+            self.employee_id = f"EMP{self.pk:05d}"
+            type(self).objects.filter(pk=self.pk).update(employee_id=self.employee_id)
+
     def __str__(self):
-        core = f"{self.get_asset_type_display()}"
-        extra = " ".join([x for x in [self.brand, self.model] if x]).strip()
-        sn = f"SN:{self.serial_number}" if self.serial_number else ""
-        return " ".join([x for x in [core, extra, sn] if x])
+        return f"{self.employee_id} - {self.first_name} {self.last_name}"
 
 
-class AssetAssignment(models.Model):
-    """
-    Ko trenutno zadužuje opremu.
-    end_at = NULL => aktivno zaduženje.
-    """
-    asset = models.ForeignKey(Asset, on_delete=models.PROTECT, related_name="assignments")
-    employee = models.ForeignKey(Employee, on_delete=models.PROTECT, related_name="asset_assignments")
+class OfficeEquipmentItem(models.Model):
+    class EquipmentType(models.TextChoices):
+        COMPUTER = "computer", "Computer"
+        MONITOR = "monitor", "Monitor"
+        LAPTOP = "laptop", "Laptop"
+        PRINTER = "printer", "Printer"
+        ROUTER = "router", "Router"
+        TV = "tv", "Television"
+        OTHER = "other", "Other"
 
-    start_at = models.DateTimeField(default=timezone.now)
-    end_at = models.DateTimeField(null=True, blank=True)
+    class ItemState(models.TextChoices):
+        DRAFT = "draft", "Draft"
+        ACTIVE = "active", "Active"
+        IN_SERVICE = "in_service", "In service"
+        BROKEN = "broken", "Broken"
+        MAINTENANCE = "maintenance", "Maintenance"
+        RETIRED = "retired", "Retired"
 
-    assigned_by = models.CharField(max_length=80, blank=True, default="")  # ko je zadužio (opciono)
-    note = models.CharField(max_length=200, blank=True, default="")
+    asset_id = models.CharField(max_length=40, unique=True)
+    equipment_type = models.CharField(max_length=20, choices=EquipmentType.choices, default=EquipmentType.COMPUTER)
+    brand_model = models.CharField(max_length=140, blank=True)
+    serial_number = models.CharField(max_length=120, blank=True)
+    state = models.CharField(max_length=20, choices=ItemState.choices, default=ItemState.DRAFT)
+    notes = models.TextField(blank=True)
+    assigned_employee = models.ForeignKey(
+        OfficeDirectoryEmployee,
+        on_delete=models.SET_NULL,
+        related_name="equipment_items",
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        indexes = [
-            models.Index(fields=["employee", "end_at"]),
-            models.Index(fields=["asset", "end_at"]),
-        ]
+        ordering = ["asset_id"]
+        db_table = "app_equipmentitem"
+
+    def save(self, *args, **kwargs):
+        if self.assigned_employee_id is None:
+            self.state = self.ItemState.DRAFT
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.asset} -> {self.employee}"
+        return f"{self.asset_id} ({self.get_equipment_type_display()})"
 
 
-class SeatAssignment(models.Model):
-    seat = models.ForeignKey(Seat, on_delete=models.PROTECT, related_name="assignments")
-    employee = models.ForeignKey(Employee, on_delete=models.PROTECT, related_name="seat_assignments")
+class OfficeEquipmentItemNote(models.Model):
+    """Hronološki zapis beleški za jednu stavku inventara (pored polja notes na samoj stavci)."""
 
-    start_at = models.DateTimeField(default=timezone.now)
-    end_at = models.DateTimeField(null=True, blank=True)
-
-    note = models.CharField(max_length=200, blank=True, default="")
+    item = models.ForeignKey(
+        OfficeEquipmentItem,
+        on_delete=models.CASCADE,
+        related_name="note_entries",
+    )
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="equipment_item_notes",
+    )
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["seat"],
-                condition=models.Q(end_at__isnull=True),
-                name="uniq_active_seat_assignment_per_seat",
-            )
-        ]
+        ordering = ["-created_at"]
+        db_table = "app_equipmentitemnote"
 
     def __str__(self):
-        return f"{self.employee} @ {self.seat}"
+        return f"{self.item_id} @ {self.created_at:%Y-%m-%d}"

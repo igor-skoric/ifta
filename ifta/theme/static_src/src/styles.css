@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./theme-tokens.css";
+@import "./theme-components.css";
+@import "./dispatch-theme.css";
 
 /**
   * A catch-all path to Django template files, JavaScript, and Python files
@@ -8,3 +11,591 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+html {
+  scrollbar-gutter: stable;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background-image: linear-gradient(to bottom right, var(--app-shell-from), var(--app-shell-via), var(--app-shell-to));
+  color: var(--app-text);
+}
+
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--app-border-subtle);
+  background-color: var(--app-topbar-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.app-topbar-clock [data-clock-time] {
+  color: var(--app-text);
+}
+
+.app-topbar-clock [data-clock-date] {
+  color: var(--app-text-muted);
+}
+
+.app-footer {
+  border-top: 1px solid var(--app-border-subtle);
+  background-color: var(--app-footer-bg);
+}
+
+.app-mobile-header {
+  border-bottom: 1px solid var(--app-border-subtle);
+  background-color: var(--app-sidebar-bg);
+}
+
+.app-sidebar {
+  border-right: 1px solid var(--app-sidebar-border);
+  background-color: var(--app-sidebar-bg);
+  color: var(--app-text);
+}
+
+/* Middle section: scroll when Apps + module nav exceed viewport (flex min-h-0 chain) */
+.app-sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(129 140 248 / 0.55) rgb(30 41 59 / 0.6);
+}
+.app-sidebar-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.app-sidebar-scroll::-webkit-scrollbar-track {
+  background: rgb(15 23 42 / 0.5);
+  border-radius: 9999px;
+  margin-block: 4px;
+}
+.app-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgb(129 140 248 / 0.7), rgb(99 102 241 / 0.45));
+  border-radius: 9999px;
+  border: 2px solid rgb(15 23 42 / 0.35);
+  background-clip: padding-box;
+}
+.app-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgb(165 180 252 / 0.9), rgb(129 140 248 / 0.75));
+}
+
+html[data-theme="light"] .app-sidebar-scroll {
+  scrollbar-color: rgb(79 70 229 / 0.5) rgb(226 232 240 / 0.95);
+}
+html[data-theme="light"] .app-sidebar-scroll::-webkit-scrollbar-track {
+  background: rgb(241 245 249 / 0.95);
+}
+html[data-theme="light"] .app-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgb(99 102 241 / 0.55), rgb(79 70 229 / 0.4));
+  border-color: rgb(226 232 240 / 0.95);
+}
+html[data-theme="light"] .app-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgb(79 70 229 / 0.75), rgb(67 56 202 / 0.6));
+}
+
+.app-module-panel {
+  border: 1px solid var(--app-card-border);
+  background-color: var(--app-card-bg);
+}
+
+.app-surface-inset {
+  border: 1px solid var(--app-card-border);
+  background-color: var(--app-surface-inset-bg);
+}
+
+.app-live-panel {
+  border: 1px solid var(--app-live-border);
+  background-color: var(--app-live-bg);
+  box-shadow: var(--app-panel-shadow);
+}
+
+.app-alert-error {
+  border: 1px solid var(--app-alert-error-border);
+  background-color: var(--app-alert-error-bg);
+  color: var(--app-alert-error-text);
+}
+
+.app-alert-warning {
+  border: 1px solid var(--app-alert-warning-border);
+  background-color: var(--app-alert-warning-bg);
+  color: var(--app-alert-warning-text);
+}
+
+.app-notes-callout {
+  border: 1px solid var(--app-notes-border);
+  background-color: var(--app-notes-bg);
+  color: var(--app-notes-text);
+}
+
+.app-chip-sky {
+  border: 1px solid var(--app-chip-sky-border);
+  background-color: var(--app-chip-sky-bg);
+  color: var(--app-chip-sky-text);
+}
+
+.app-chip-sky:hover {
+  background-color: rgb(14 165 233 / 0.2);
+}
+
+html[data-theme="light"] .app-chip-sky:hover {
+  background-color: rgb(224 242 254);
+}
+
+.app-chip-indigo {
+  border: 1px solid var(--app-chip-indigo-border);
+  background-color: var(--app-chip-indigo-bg);
+  color: var(--app-chip-indigo-text);
+}
+
+.app-chip-indigo:hover {
+  background-color: rgb(99 102 241 / 0.2);
+}
+
+html[data-theme="light"] .app-chip-indigo:hover {
+  background-color: rgb(238 242 255);
+}
+
+.app-badge-emerald {
+  border: 1px solid var(--app-badge-emerald-border);
+  background-color: var(--app-badge-emerald-bg);
+  color: var(--app-badge-emerald-text);
+}
+
+.app-badge-amber {
+  border: 1px solid var(--app-badge-amber-border);
+  background-color: var(--app-badge-amber-bg);
+  color: var(--app-badge-amber-text);
+}
+
+.app-brand-tile {
+  border: 1px solid var(--app-card-border);
+  background-color: var(--app-card-bg);
+}
+
+.app-chrome-btn {
+  border: 1px solid var(--app-border-strong);
+  color: var(--app-text-muted);
+}
+
+.app-chrome-btn:hover {
+  background-color: var(--app-card-bg);
+  color: var(--app-text);
+}
+
+.app-breadcrumb-link {
+  color: var(--app-text-muted);
+}
+
+.app-breadcrumb-link:hover {
+  background-color: var(--app-card-bg);
+  color: var(--app-text);
+}
+
+.app-breadcrumb-sep {
+  color: var(--app-text-muted);
+  opacity: 0.7;
+}
+
+.app-breadcrumb-current {
+  background-color: var(--app-breadcrumb-pill-bg);
+  color: var(--app-text);
+}
+
+.app-settings-card {
+  border-color: var(--app-card-border);
+  background-color: var(--app-card-bg);
+  box-shadow: 0 25px 50px -12px var(--app-settings-card-shadow);
+}
+
+.app-primary-btn {
+  background-color: var(--app-accent);
+}
+
+.app-primary-btn:hover {
+  background-color: var(--app-accent-hover);
+}
+
+.app-theme-radios ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.app-theme-radios li label {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--app-text);
+}
+
+.app-theme-radios input[type="radio"] {
+  accent-color: var(--app-accent);
+}
+
+html[data-theme="light"] #app-sidebar .text-slate-200,
+html[data-theme="light"] #app-sidebar .text-slate-300 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-slate-400,
+html[data-theme="light"] #app-sidebar .text-slate-500 {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-white {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-sky-300 {
+  color: #0369a1 !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-indigo-200,
+html[data-theme="light"] #app-sidebar .text-indigo-300 {
+  color: #4338ca !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-rose-200 {
+  color: #be123c !important;
+}
+
+html[data-theme="light"] #app-sidebar .text-amber-100,
+html[data-theme="light"] #app-sidebar .text-amber-200,
+html[data-theme="light"] #app-sidebar .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html[data-theme="light"] #app-sidebar a.sidebar-apps-link:hover,
+html[data-theme="light"] #app-sidebar a.sidebar-footer-link:hover {
+  background-color: rgb(15 23 42 / 0.06);
+}
+
+html[data-theme="light"] #app-sidebar .hover\:bg-white\/10:hover {
+  background-color: rgb(15 23 42 / 0.06) !important;
+}
+
+/**
+ * Light mode: sadržaj ispod headera/breadcrumb-a (bez menjanja svakog šablona).
+ * Koristi .app-themed omotač iz base.html.
+ */
+html[data-theme="light"] .app-themed {
+  color: #0f172a;
+}
+
+/* Osnovni tekst (svetle nijanse na beloj pozadini) */
+html[data-theme="light"] .app-themed .text-white,
+html[data-theme="light"] .app-themed .text-slate-50,
+html[data-theme="light"] .app-themed .text-slate-100,
+html[data-theme="light"] .app-themed .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .app-themed .text-slate-300 {
+  color: #334155 !important;
+}
+
+html[data-theme="light"] .app-themed .text-slate-400 {
+  color: #475569 !important;
+}
+
+html[data-theme="light"] .app-themed .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Indigo / link akcenti */
+html[data-theme="light"] .app-themed .text-indigo-100,
+html[data-theme="light"] .app-themed .text-indigo-200 {
+  color: #3730a3 !important;
+}
+
+html[data-theme="light"] .app-themed .text-indigo-300,
+html[data-theme="light"] .app-themed .text-indigo-300\/90 {
+  color: #4338ca !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:text-indigo-100:hover,
+html[data-theme="light"] .app-themed .hover\:text-indigo-200:hover {
+  color: #312e81 !important;
+}
+
+/* Sky / mono ID */
+html[data-theme="light"] .app-themed .text-sky-300 {
+  color: #0369a1 !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:text-sky-300:hover {
+  color: #075985 !important;
+}
+
+/* Emerald / status */
+html[data-theme="light"] .app-themed .text-emerald-100,
+html[data-theme="light"] .app-themed .text-emerald-200 {
+  color: #047857 !important;
+}
+
+html[data-theme="light"] .app-themed .text-emerald-300,
+html[data-theme="light"] .app-themed .text-emerald-300\/90 {
+  color: #047857 !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:text-emerald-100:hover,
+html[data-theme="light"] .app-themed .hover\:text-emerald-200:hover {
+  color: #065f46 !important;
+}
+
+/* Amber / upozorenja */
+html[data-theme="light"] .app-themed .text-amber-100,
+html[data-theme="light"] .app-themed .text-amber-200,
+html[data-theme="light"] .app-themed .text-amber-200\/80,
+html[data-theme="light"] .app-themed .text-amber-400 {
+  color: #92400e !important;
+}
+
+/* Violet / sekcije */
+html[data-theme="light"] .app-themed .text-violet-100,
+html[data-theme="light"] .app-themed .text-violet-200,
+html[data-theme="light"] .app-themed .text-violet-200\/80 {
+  color: #5b21b6 !important;
+}
+
+/* Rose / greške */
+html[data-theme="light"] .app-themed .text-rose-100,
+html[data-theme="light"] .app-themed .text-rose-200,
+html[data-theme="light"] .app-themed .text-rose-300,
+html[data-theme="light"] .app-themed .text-rose-400 {
+  color: #9f1239 !important;
+}
+
+/* Cyan */
+html[data-theme="light"] .app-themed .text-cyan-200 {
+  color: #0e7490 !important;
+}
+
+/* Hover na beli tekst */
+html[data-theme="light"] .app-themed .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+/* Okviri: beli „staklo“ -> tamniji rub na svetloj pozadini */
+html[data-theme="light"] .app-themed .border-white\/5 {
+  border-color: rgb(15 23 42 / 0.08) !important;
+}
+
+html[data-theme="light"] .app-themed .border-white\/10 {
+  border-color: rgb(15 23 42 / 0.12) !important;
+}
+
+html[data-theme="light"] .app-themed .border-white\/15 {
+  border-color: rgb(15 23 42 / 0.16) !important;
+}
+
+html[data-theme="light"] .app-themed .border-white\/20 {
+  border-color: rgb(15 23 42 / 0.2) !important;
+}
+
+html[data-theme="light"] .app-themed .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(15 23 42 / 0.08) !important;
+}
+
+html[data-theme="light"] .app-themed .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(15 23 42 / 0.12) !important;
+}
+
+/* Blago svetle površine umesto providnog belog na belom */
+html[data-theme="light"] .app-themed .bg-white\/5,
+html[data-theme="light"] .app-themed .bg-white\/10,
+html[data-theme="light"] .app-themed .bg-white\/15 {
+  background-color: rgb(241 245 249 / 0.95) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-white\/\[0\.02\],
+html[data-theme="light"] .app-themed .bg-white\/\[0\.03\],
+html[data-theme="light"] .app-themed .bg-white\/\[0\.04\],
+html[data-theme="light"] .app-themed .bg-white\/\[0\.06\] {
+  background-color: rgb(248 250 252 / 0.98) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-slate-950\/50:not(.day-cell):not([class*="day-cell--"]),
+html[data-theme="light"] .app-themed .bg-slate-900\/40:not(.day-cell):not([class*="day-cell--"]),
+html[data-theme="light"] .app-themed .bg-slate-900\/50:not(.day-cell):not([class*="day-cell--"]),
+html[data-theme="light"] .app-themed .bg-slate-950\/60:not(.day-cell):not([class*="day-cell--"]),
+html[data-theme="light"] .app-themed .bg-slate-900\/80 {
+  background-color: rgb(241 245 249 / 0.96) !important;
+}
+
+html[data-theme="light"] .app-themed thead.bg-slate-900\/80 {
+  background-color: rgb(226 232 240 / 0.98) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-white\/5:hover,
+html[data-theme="light"] .app-themed .hover\:bg-white\/10:hover,
+html[data-theme="light"] .app-themed .hover\:bg-white\/15:hover {
+  background-color: rgb(226 232 240 / 0.85) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-white\/\[0\.03\]:hover,
+html[data-theme="light"] .app-themed .hover\:bg-white\/\[0\.04\]:hover {
+  background-color: rgb(241 245 249 / 0.95) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-slate-900\/40:hover {
+  background-color: rgb(241 245 249 / 0.95) !important;
+}
+
+/* Indigo pozadine (badges, kartice) */
+html[data-theme="light"] .app-themed .bg-indigo-500\/10,
+html[data-theme="light"] .app-themed .bg-indigo-500\/15,
+html[data-theme="light"] .app-themed .bg-indigo-500\/20,
+html[data-theme="light"] .app-themed .bg-indigo-500\/25 {
+  background-color: rgb(99 102 241 / 0.16) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-indigo-500\/10:hover {
+  background-color: rgb(99 102 241 / 0.2) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-emerald-500\/20,
+html[data-theme="light"] .app-themed .bg-emerald-500\/25 {
+  background-color: rgb(16 185 129 / 0.18) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-amber-500\/10,
+html[data-theme="light"] .app-themed .bg-amber-500\/20 {
+  background-color: rgb(245 158 11 / 0.2) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-rose-500\/10,
+html[data-theme="light"] .app-themed .bg-rose-500\/20 {
+  background-color: rgb(244 63 94 / 0.16) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-cyan-500\/20 {
+  background-color: rgb(6 182 212 / 0.18) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-violet-500\/20 {
+  background-color: rgb(139 92 246 / 0.16) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-sky-500\/\[0\.06\] {
+  background-color: rgb(14 165 233 / 0.12) !important;
+}
+
+/* Polja unosa */
+html[data-theme="light"] .app-themed input,
+html[data-theme="light"] .app-themed select,
+html[data-theme="light"] .app-themed textarea {
+  color: #0f172a !important;
+}
+
+html[data-theme="light"] .app-themed input::placeholder,
+html[data-theme="light"] .app-themed textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* <code> u tekstu */
+html[data-theme="light"] .app-themed code {
+  color: #4338ca !important;
+  background-color: rgb(238 242 255 / 0.9);
+}
+
+/* Ikone i sekundarni tekst koji nisu pokriveni gore */
+html[data-theme="light"] .app-themed .text-sky-400 {
+  color: #0284c7 !important;
+}
+
+html[data-theme="light"] .app-themed .text-emerald-400 {
+  color: #059669 !important;
+}
+
+html[data-theme="light"] .app-themed .text-indigo-400 {
+  color: #4f46e5 !important;
+}
+
+html[data-theme="light"] .app-themed .text-slate-600 {
+  color: #64748b !important;
+}
+
+html[data-theme="light"] .app-themed .text-sky-100,
+html[data-theme="light"] .app-themed .text-sky-200 {
+  color: #0369a1 !important;
+}
+
+html[data-theme="light"] .app-themed .text-indigo-100 {
+  color: #4338ca !important;
+}
+
+html[data-theme="light"] .app-themed .bg-slate-950\/30 {
+  background-color: var(--app-surface-inset-bg) !important;
+}
+
+html[data-theme="light"] .app-themed .border-emerald-500\/20,
+html[data-theme="light"] .app-themed .border-emerald-500\/30 {
+  border-color: rgb(16 185 129 / 0.28) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-emerald-500\/\[0\.04\],
+html[data-theme="light"] .app-themed .bg-emerald-500\/15 {
+  background-color: rgb(236 253 245 / 0.92) !important;
+}
+
+html[data-theme="light"] .app-themed .border-rose-500\/25 {
+  border-color: rgb(225 29 72 / 0.22) !important;
+}
+
+html[data-theme="light"] .app-themed .border-amber-500\/20,
+html[data-theme="light"] .app-themed .border-amber-500\/25,
+html[data-theme="light"] .app-themed .border-amber-500\/30 {
+  border-color: rgb(217 119 6 / 0.28) !important;
+}
+
+html[data-theme="light"] .app-themed .bg-amber-500\/\[0\.08\],
+html[data-theme="light"] .app-themed .bg-amber-500\/15 {
+  background-color: rgb(255 251 235 / 0.98) !important;
+}
+
+html[data-theme="light"] .app-themed .border-sky-500\/35 {
+  border-color: rgb(2 132 199 / 0.28) !important;
+}
+
+html[data-theme="light"] .app-themed .border-indigo-500\/35 {
+  border-color: rgb(79 70 229 / 0.28) !important;
+}
+
+html[data-theme="light"] .app-themed .ring-emerald-500\/15 {
+  --tw-ring-color: rgb(16 185 129 / 0.22) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-sky-500\/20:hover {
+  background-color: rgb(224 242 254) !important;
+}
+
+html[data-theme="light"] .app-themed .hover\:bg-indigo-500\/20:hover {
+  background-color: rgb(238 242 255) !important;
+}
+
+html[data-theme="light"] .app-themed .text-amber-100\/90 {
+  color: rgb(120 53 15 / 0.95) !important;
+}
+
+html[data-theme="light"] .app-themed .shadow-xl {
+  box-shadow: var(--app-panel-shadow) !important;
+}
+
+@layer base {
+  select option {
+    color: var(--app-input-text);
+    background-color: var(--app-input-bg);
+  }
+}
+
+/* Mobilni padajući meni */
+html[data-theme="light"] .app-mobile-header .text-white {
+  color: var(--app-text) !important;
+}

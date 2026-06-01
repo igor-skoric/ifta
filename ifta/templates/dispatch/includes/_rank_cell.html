@@ -1,0 +1,3 @@
+{% if rank and rank <= 3 %}
+<span class="dispatch-ranking-rank dispatch-ranking-rank--{{ rank }}{% if only_gold and rank != 1 %}{% endif %}" title="Rank {{ rank }} in column">#{{ rank }}</span>
+{% endif %}

@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {{ trip.display_title }}{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<style>
+  .trip-detail-add-panel {
+    position: sticky;
+    top: 1.25rem;
+  }
+  .load-card + .load-card {
+    margin-top: 1rem;
+  }
+  .load-status-feedback.is-visible {
+    display: block !important;
+  }
+  .load-status-feedback.is-error {
+    color: rgb(252, 165, 165);
+  }
+  .load-status-feedback.is-success {
+    color: rgb(134, 239, 172);
+  }
+</style>
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">{{ trip.display_title }}</h1>
+      <p class="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-400">
+        {% if can_manage_dispatch %}
+        <div class="trip-status-quick-wrap trip-status-badge--{{ trip.status }} min-w-[10rem]">
+          <select class="trip-status-quick trip-status-quick-input trip-status-badge--{{ trip.status }} w-full min-w-[10rem]" data-trip-id="{{ trip.pk }}" aria-label="Trip status">
+            {% for value, label in trip_status_choices %}
+            <option value="{{ value }}"{% if trip.status == value %} selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <p class="trip-status-feedback w-full text-[10px] text-slate-500" data-trip-id="{{ trip.pk }}" aria-live="polite"></p>
+        {% else %}
+        {% include "dispatch/includes/_trip_status_badge.html" %}
+        {% endif %}
+        {% if trip.planner_date %}
+        <span class="inline-flex items-center gap-1.5">
+          <i class="fa-regular fa-calendar text-slate-500" aria-hidden="true"></i>
+          <span class="font-mono text-xs text-slate-300">Planner: {{ trip.planner_date|date:"M j, Y" }}</span>
+        </span>
+        {% endif %}
+        {% if trip.driver %}
+        <span class="inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-user text-slate-500" aria-hidden="true"></i>
+          <a href="{% url 'dispatch:driver_detail' trip.driver.pk %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ trip.driver.display_name }}</a>
+        </span>
+        {% else %}
+        <span class="text-slate-500">No driver</span>
+        {% endif %}
+      </p>
+    </div>
+    {% if can_manage_dispatch %}
+    <a href="{% url 'dispatch:trip_edit' trip.pk %}" class="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-900/30 hover:bg-indigo-400">
+      <i class="fa-solid fa-pen text-xs" aria-hidden="true"></i>
+      Edit trip
+    </a>
+    {% endif %}
+  </div>
+
+  {% if trip.notes %}
+  <p class="mb-6 rounded-xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-300">{{ trip.notes|linebreaksbr }}</p>
+  {% endif %}
+
+  <div class="grid gap-8 lg:grid-cols-12 lg:items-start">
+    <section class="{% if can_manage_dispatch and load_form %}lg:col-span-6{% else %}lg:col-span-12{% endif %}">
+      <div class="mb-4 flex items-center justify-between gap-3">
+        <h2 class="text-lg font-semibold text-white">Loads <span class="font-mono text-base font-normal text-slate-400">({{ load_count }})</span></h2>
+      </div>
+
+      {% if trip.loads.all %}
+      <div class="space-y-4">
+        {% for load in trip.loads.all %}
+        {% include "dispatch/includes/_trip_load_card.html" %}
+        {% endfor %}
+      </div>
+      <p class="mt-4 text-xs text-slate-500">Showing {{ load_count }} of {{ load_count }} load{{ load_count|pluralize }}</p>
+      {% else %}
+      <div class="rounded-2xl border border-dashed border-white/15 bg-slate-950/30 px-6 py-14 text-center">
+        <p class="text-sm text-slate-400">No loads on this trip yet.</p>
+        <p class="mt-1 text-xs text-slate-500">Use the form on the right to add the first load.</p>
+      </div>
+      {% endif %}
+    </section>
+
+    {% if can_manage_dispatch and load_form %}
+    <aside class="lg:col-span-6">
+      <div class="trip-detail-add-panel rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl lg:p-7">
+        <h2 class="text-lg font-semibold text-white">Add load</h2>
+        <p class="mt-1 text-xs text-slate-500">City and state on one line each. First load inherits the trip planner date for pick up.</p>
+        <form method="post" action="{% url 'dispatch:trip_load_add' trip.pk %}" class="mt-5 space-y-5">
+          {% csrf_token %}
+          {% if load_form.non_field_errors %}
+          <div class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-100">{{ load_form.non_field_errors }}</div>
+          {% endif %}
+          {% include "dispatch/includes/_trip_load_form_fields.html" with form=load_form pickup_hint=add_load_pickup_hint %}
+          <div class="flex flex-wrap gap-2 border-t border-white/10 pt-4">
+            <button type="submit" class="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-400">Add load</button>
+            <a href="{% url 'dispatch:trip_detail' trip.pk %}" class="rounded-xl border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/10">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </aside>
+    {% endif %}
+  </div>
+
+  <p class="mt-10 text-xs text-slate-500">
+    <a href="{% url 'dispatch:planner' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Load planner</a>
+  </p>
+</div>
+
+{% if can_manage_dispatch %}
+{{ trip_status_choices_json|json_script:"trip-status-choices" }}
+<form id="trip-detail-csrf" class="hidden" aria-hidden="true">{% csrf_token %}</form>
+<script>
+(function () {
+  var tripStatusUrl = "{{ trip_status_update_url|escapejs }}";
+  var statusUrlSample = "{{ load_status_url_sample|escapejs }}";
+  var csrfInput = document.querySelector("#trip-detail-csrf input[name=csrfmiddlewaretoken]");
+  function getCsrf() {
+    return csrfInput ? csrfInput.value : "";
+  }
+  function setTripStatusStyle(sel, slug) {
+    sel.className = "trip-status-quick trip-status-quick-input trip-status-badge--" + slug + " w-full min-w-[10rem]";
+    var wrap = sel.closest(".trip-status-quick-wrap");
+    if (wrap) {
+      wrap.className = "trip-status-quick-wrap trip-status-badge--" + slug + " min-w-[10rem]";
+    }
+  }
+  function showTripFeedback(tripId, text) {
+    var el = document.querySelector(".trip-status-feedback[data-trip-id=\"" + tripId + "\"]");
+    if (el) el.textContent = text;
+  }
+  document.querySelectorAll(".trip-status-quick").forEach(function (sel) {
+    sel.addEventListener("focus", function () {
+      sel.setAttribute("data-prev-status", sel.value);
+    });
+    sel.addEventListener("change", function () {
+      var tripId = parseInt(sel.getAttribute("data-trip-id"), 10);
+      var prev = sel.getAttribute("data-prev-status") || sel.value;
+      var next = sel.value;
+      if (!tripId || prev === next) return;
+      sel.disabled = true;
+      showTripFeedback(tripId, "Saving…");
+      var body = new URLSearchParams();
+      body.set("status", next);
+      fetch(tripStatusUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCsrf(),
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: body.toString(),
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (!result.ok || !result.data.ok) {
+            throw new Error((result.data && result.data.error) || "Save failed");
+          }
+          setTripStatusStyle(sel, result.data.status_slug);
+          sel.setAttribute("data-prev-status", next);
+          showTripFeedback(tripId, "Saved · " + result.data.status);
+        })
+        .catch(function (err) {
+          sel.value = prev;
+          setTripStatusStyle(sel, prev);
+          showTripFeedback(tripId, err.message || "Save failed");
+        })
+        .finally(function () {
+          sel.disabled = false;
+        });
+    });
+  });
+  function loadStatusUrl(tripId, loadId) {
+    return statusUrlSample
+      .replace("/trips/0/", "/trips/" + tripId + "/")
+      .replace("/loads/0/", "/loads/" + loadId + "/");
+  }
+  function setLoadStatusStyle(sel, slug) {
+    sel.className = "load-status-quick trip-status-quick-input trip-status-badge--" + slug + " w-full min-w-[10rem]";
+    var wrap = sel.closest(".load-status-quick-wrap");
+    if (wrap) {
+      wrap.className = "load-status-quick-wrap trip-status-badge--" + slug + " min-w-[10rem]";
+    }
+  }
+  function showFeedback(loadId, text, kind) {
+    var el = document.querySelector(".load-status-feedback[data-load-id=\"" + loadId + "\"]");
+    if (!el) return;
+    el.textContent = text;
+    el.classList.add("is-visible");
+    el.classList.remove("is-error", "is-success");
+    if (kind) el.classList.add("is-" + kind);
+  }
+  document.querySelectorAll(".load-status-quick").forEach(function (sel) {
+    sel.addEventListener("focus", function () {
+      sel.setAttribute("data-prev-status", sel.value);
+    });
+    sel.addEventListener("change", function () {
+      var loadId = parseInt(sel.getAttribute("data-load-id"), 10);
+      var tripId = parseInt(sel.getAttribute("data-trip-id"), 10);
+      var prev = sel.getAttribute("data-prev-status") || sel.value;
+      var next = sel.value;
+      if (!loadId || !tripId || prev === next) return;
+      sel.disabled = true;
+      showFeedback(loadId, "Saving…", null);
+      var body = new URLSearchParams();
+      body.set("status", next);
+      fetch(loadStatusUrl(tripId, loadId), {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCsrf(),
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: body.toString(),
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (!result.ok || !result.data.ok) {
+            throw new Error((result.data && result.data.error) || "Save failed");
+          }
+          setLoadStatusStyle(sel, result.data.status_slug);
+          sel.setAttribute("data-prev-status", next);
+          showFeedback(loadId, "Saved · " + result.data.status, "success");
+        })
+        .catch(function (err) {
+          sel.value = prev;
+          setLoadStatusStyle(sel, prev);
+          showFeedback(loadId, err.message || "Save failed", "error");
+        })
+        .finally(function () {
+          sel.disabled = false;
+        });
+    });
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

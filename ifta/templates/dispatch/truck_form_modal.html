@@ -1,0 +1,7 @@
+<div data-dispatch-entity-modal-panel data-modal-title="{% if is_create %}New truck{% else %}Edit truck · {{ truck.unit_number }}{% endif %}" data-modal-submit-label="Save">
+  <form method="post" action="{{ form_action }}" class="dispatch-entity-modal-form space-y-4">
+    {% csrf_token %}
+    <p class="text-sm load-detail-muted">Assigning a driver ends the previous truck assignment and keeps assignment history.</p>
+    {% include "dispatch/_truck_form_fields.html" %}
+  </form>
+</div>

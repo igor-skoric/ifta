@@ -1,0 +1,20 @@
+<div class="space-y-4">
+  <div>
+    {% include "dispatch/includes/_form_field.html" with field=form.broker_or_customer label="Load ID" hint="Broker #, TMS id, etc." only %}
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {% include "dispatch/includes/_form_field.html" with field=form.pickup label="Pick up" only %}
+    {% include "dispatch/includes/_form_field.html" with field=form.pickup_datetime label="Pick up date & time" hint=pickup_hint only %}
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {% include "dispatch/includes/_form_field.html" with field=form.delivery label="Delivery" only %}
+    {% include "dispatch/includes/_form_field.html" with field=form.delivery_datetime label="Delivery date & time" only %}
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    {% include "dispatch/includes/_form_field.html" with field=form.loaded_miles label="Miles" only %}
+    {% include "dispatch/includes/_form_field.html" with field=form.linehaul_amount label="Linehaul ($)" only %}
+  </div>
+  <div>
+    {% include "dispatch/includes/_form_field.html" with field=form.notes label="Notes" only %}
+  </div>
+</div>

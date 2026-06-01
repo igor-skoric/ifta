@@ -1,0 +1,39 @@
+<script>
+(function () {
+  function closeAll(except) {
+    document.querySelectorAll("[data-dispatch-row-actions].is-open").forEach(function (root) {
+      if (except && root === except) return;
+      root.classList.remove("is-open");
+      var menu = root.querySelector(".dispatch-row-actions__menu");
+      var btn = root.querySelector(".dispatch-row-actions__trigger");
+      if (menu) menu.classList.add("hidden");
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.querySelectorAll("[data-dispatch-row-actions]").forEach(function (root) {
+    var btn = root.querySelector(".dispatch-row-actions__trigger");
+    var menu = root.querySelector(".dispatch-row-actions__menu");
+    if (!btn || !menu) return;
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var willOpen = !root.classList.contains("is-open");
+      closeAll();
+      if (willOpen) {
+        root.classList.add("is-open");
+        menu.classList.remove("hidden");
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
+    menu.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener("click", function () {
+    closeAll();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeAll();
+  });
+})();
+</script>

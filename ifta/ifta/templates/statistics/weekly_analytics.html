@@ -1,0 +1,371 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Weekly analytics · IFTA{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+    <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90 mb-1">Liveboard · WeeklyDayData</p>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Nedeljna analitika</h1>
+        <p class="mt-1 text-sm text-slate-400 max-w-xl">
+          Poredjenje svih sacuvanih ISO nedelja (bez reda TOTALS u zbiru). Prva do poslednje uvezena nedelja u bazi.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <label class="text-xs text-slate-500 uppercase tracking-wide">Godina</label>
+        <select id="yearFilter"
+          class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/60">
+          <option value="">Sve godine</option>
+        </select>
+      </div>
+    </header>
+
+    <div id="emptyState" class="hidden rounded-2xl border border-dashed border-white/15 bg-white/5 p-12 text-center">
+      <p id="emptyTitle" class="text-slate-300 text-lg font-medium">Nema podataka</p>
+      <p id="emptyHint" class="mt-2 text-sm text-slate-500">Uvezi nedelje preko sync-a ili <code class="text-indigo-300">import_statistic_sheet</code>.</p>
+    </div>
+
+    <div id="dashboard" class="hidden space-y-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg shadow-black/20 backdrop-blur-sm">
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wide">Nedelja</p>
+          <p id="kpiWeeks" class="mt-1 text-2xl sm:text-3xl font-bold text-white tabular-nums">0</p>
+          <p class="mt-1 text-xs text-slate-500">distinct ISO weeks</p>
+        </div>
+        <div class="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 sm:p-5 shadow-lg shadow-black/20">
+          <p class="text-xs font-medium text-emerald-300/80 uppercase tracking-wide">Ukupno gross</p>
+          <p id="kpiGross" class="mt-1 text-xl sm:text-2xl font-bold text-emerald-200 tabular-nums">$0</p>
+        </div>
+        <div class="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 sm:p-5 shadow-lg shadow-black/20">
+          <p class="text-xs font-medium text-amber-300/80 uppercase tracking-wide">Ukupno cut</p>
+          <p id="kpiCut" class="mt-1 text-xl sm:text-2xl font-bold text-amber-200 tabular-nums">$0</p>
+        </div>
+        <div class="rounded-2xl border border-sky-500/20 bg-sky-500/5 p-4 sm:p-5 shadow-lg shadow-black/20">
+          <p class="text-xs font-medium text-sky-300/80 uppercase tracking-wide">Ukupno miles</p>
+          <p id="kpiMiles" class="mt-1 text-xl sm:text-2xl font-bold text-sky-200 tabular-nums">0</p>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-6 shadow-xl shadow-black/30">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <h2 class="text-sm font-semibold text-slate-200 uppercase tracking-wide">Gross po nedelji</h2>
+          <span class="text-xs text-slate-500">Chart.js</span>
+        </div>
+        <div class="relative h-72 sm:h-80 w-full">
+          <canvas id="chartGross"></canvas>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-6 shadow-xl shadow-black/30">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <h2 class="text-sm font-semibold text-slate-200 uppercase tracking-wide">Miles i cut</h2>
+        </div>
+        <div class="relative h-64 sm:h-72 w-full">
+          <canvas id="chartMilesCut"></canvas>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden shadow-xl shadow-black/30">
+        <div class="px-4 sm:px-6 py-4 border-b border-white/10 flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-200 uppercase tracking-wide">Tabela</h2>
+          <span id="tableCount" class="text-xs text-slate-500"></span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="text-left text-xs uppercase tracking-wider text-slate-500 bg-black/20">
+                <th class="px-4 py-3 font-semibold">Nedelja</th>
+                <th class="px-4 py-3 font-semibold text-right">Gross</th>
+                <th class="px-4 py-3 font-semibold text-right">Cut</th>
+                <th class="px-4 py-3 font-semibold text-right">Miles</th>
+                <th class="px-4 py-3 font-semibold text-right">$/mi</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="errorState" class="hidden rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-red-200 text-sm"></div>
+</div>
+
+<script>
+(function () {
+  const STATISTICS_API_BASE_URL = "{{ statistics_api_base_url|default:'/api/statistic'|escapejs }}";
+  const API_URL = `${STATISTICS_API_BASE_URL}/weekly-by-week/`;
+
+  function statisticsFetch(url) {
+    const headers = { Accept: "application/json" };
+    const tvToken = new URLSearchParams(window.location.search).get("tv_token");
+    if (tvToken) headers["X-Statistics-TV-Token"] = tvToken;
+    return fetch(url, { credentials: "same-origin", headers });
+  }
+
+  let rawRows = [];
+  let chartGross = null;
+  let chartMilesCut = null;
+
+  function money(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "—";
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
+  }
+  function money2(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "—";
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(v);
+  }
+  function intFmt(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return "—";
+    return new Intl.NumberFormat("en-US").format(Math.round(v));
+  }
+
+  function filteredRows() {
+    const y = document.getElementById("yearFilter").value;
+    if (!y) return rawRows.slice();
+    return rawRows.filter((r) => String(r.year) === y);
+  }
+
+  function destroyCharts() {
+    if (chartGross) { chartGross.destroy(); chartGross = null; }
+    if (chartMilesCut) { chartMilesCut.destroy(); chartMilesCut = null; }
+  }
+
+  function renderKpis(rows) {
+    const sumGross = rows.reduce((a, r) => a + (r.total_gross || 0), 0);
+    const sumCut = rows.reduce((a, r) => a + (r.total_cut || 0), 0);
+    const sumMiles = rows.reduce((a, r) => a + (r.total_miles || 0), 0);
+    document.getElementById("kpiWeeks").textContent = String(rows.length);
+    document.getElementById("kpiGross").textContent = money(sumGross);
+    document.getElementById("kpiCut").textContent = money(sumCut);
+    document.getElementById("kpiMiles").textContent = intFmt(sumMiles);
+  }
+
+  function renderTable(rows) {
+    const tb = document.getElementById("tableBody");
+    tb.innerHTML = "";
+    document.getElementById("tableCount").textContent = rows.length ? rows.length + " redova" : "";
+    for (const r of rows) {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-white/[0.04] transition-colors";
+      tr.innerHTML =
+        "<td class=\"px-4 py-3 font-medium text-slate-200\">" + escapeHtml(r.label) + "</td>" +
+        "<td class=\"px-4 py-3 text-right tabular-nums text-emerald-300/95\">" + money2(r.total_gross) + "</td>" +
+        "<td class=\"px-4 py-3 text-right tabular-nums text-amber-300/90\">" + money2(r.total_cut) + "</td>" +
+        "<td class=\"px-4 py-3 text-right tabular-nums text-sky-300/90\">" + intFmt(r.total_miles) + "</td>" +
+        "<td class=\"px-4 py-3 text-right tabular-nums text-slate-400\">" +
+        (r.blended_rate_per_mile != null ? "$" + Number(r.blended_rate_per_mile).toFixed(2) : "—") +
+        "</td>";
+      tb.appendChild(tr);
+    }
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function renderCharts(rows) {
+    destroyCharts();
+    const labels = rows.map((r) => r.label);
+    const gross = rows.map((r) => r.total_gross);
+    const cut = rows.map((r) => r.total_cut);
+    const miles = rows.map((r) => r.total_miles);
+
+    const grid = { color: "rgba(148, 163, 184, 0.12)" };
+    const ticks = { color: "#94a3b8", font: { size: 11 } };
+
+    const ctxG = document.getElementById("chartGross").getContext("2d");
+    const grad = ctxG.createLinearGradient(0, 0, 0, 280);
+    grad.addColorStop(0, "rgba(52, 211, 153, 0.35)");
+    grad.addColorStop(1, "rgba(52, 211, 153, 0)");
+
+    chartGross = new Chart(ctxG, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Gross",
+          data: gross,
+          borderColor: "rgb(52, 211, 153)",
+          backgroundColor: grad,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "rgba(15, 23, 42, 0.95)",
+            titleColor: "#e2e8f0",
+            bodyColor: "#a7f3d0",
+            borderColor: "rgba(255,255,255,0.1)",
+            borderWidth: 1,
+            callbacks: {
+              label: (c) => "Gross: " + money2(c.parsed.y),
+            },
+          },
+        },
+        scales: {
+          x: { grid, ticks },
+          y: {
+            grid,
+            ticks: {
+              ...ticks,
+              callback: (v) => "$" + Number(v).toLocaleString("en-US", { maximumFractionDigits: 0 }),
+            },
+          },
+        },
+      },
+    });
+
+    const ctxM = document.getElementById("chartMilesCut").getContext("2d");
+    chartMilesCut = new Chart(ctxM, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Miles",
+            data: miles,
+            backgroundColor: "rgba(56, 189, 248, 0.45)",
+            borderRadius: 6,
+            yAxisID: "y",
+          },
+          {
+            label: "Cut",
+            data: cut,
+            type: "line",
+            borderColor: "rgb(251, 191, 36)",
+            backgroundColor: "rgba(251, 191, 36, 0.1)",
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 2,
+            yAxisID: "y1",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: "#cbd5e1", boxWidth: 12, font: { size: 11 } },
+          },
+          tooltip: {
+            backgroundColor: "rgba(15, 23, 42, 0.95)",
+            borderColor: "rgba(255,255,255,0.1)",
+            borderWidth: 1,
+          },
+        },
+        scales: {
+          x: { grid, ticks },
+          y: {
+            position: "left",
+            grid,
+            ticks: { ...ticks, callback: (v) => intFmt(v) },
+            title: { display: true, text: "Miles", color: "#64748b", font: { size: 10 } },
+          },
+          y1: {
+            position: "right",
+            grid: { drawOnChartArea: false },
+            ticks: {
+              ...ticks,
+              callback: (v) => "$" + Number(v).toLocaleString("en-US", { maximumFractionDigits: 0 }),
+            },
+            title: { display: true, text: "Cut ($)", color: "#64748b", font: { size: 10 } },
+          },
+        },
+      },
+    });
+  }
+
+  function fillYearOptions() {
+    const sel = document.getElementById("yearFilter");
+    const years = [...new Set(rawRows.map((r) => r.year))].sort((a, b) => a - b);
+    const cur = sel.value;
+    sel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
+    for (const y of years) {
+      const o = document.createElement("option");
+      o.value = String(y);
+      o.textContent = String(y);
+      sel.appendChild(o);
+    }
+    if (years.map(String).includes(cur)) sel.value = cur;
+  }
+
+  function refresh() {
+    const rows = filteredRows();
+    if (!rows.length) {
+      destroyCharts();
+      document.getElementById("dashboard").classList.add("hidden");
+      const empty = document.getElementById("emptyState");
+      const title = document.getElementById("emptyTitle");
+      const hint = document.getElementById("emptyHint");
+      empty.classList.remove("hidden");
+      if (rawRows.length === 0) {
+        title.textContent = "Nema podataka";
+        hint.classList.remove("hidden");
+        hint.innerHTML = "Uvezi nedelje preko sync-a ili <code class=\"text-indigo-300\">import_statistic_sheet</code>.";
+      } else {
+        title.textContent = "Nema podataka za izabranu godinu";
+        hint.classList.add("hidden");
+      }
+      return;
+    }
+    document.getElementById("emptyState").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    renderKpis(rows);
+    renderTable(rows);
+    renderCharts(rows);
+  }
+
+  async function load() {
+    document.getElementById("errorState").classList.add("hidden");
+    try {
+      const res = await statisticsFetch(API_URL);
+      if (res.status === 403 || res.status === 401) {
+        document.getElementById("errorState").textContent = "Morate biti ulogovani da vidite API podatke.";
+        document.getElementById("errorState").classList.remove("hidden");
+        return;
+      }
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      rawRows = await res.json();
+      if (!Array.isArray(rawRows)) rawRows = [];
+      fillYearOptions();
+      if (!rawRows.length) {
+        document.getElementById("dashboard").classList.add("hidden");
+        const empty = document.getElementById("emptyState");
+        document.getElementById("emptyTitle").textContent = "Nema podataka";
+        document.getElementById("emptyHint").classList.remove("hidden");
+        document.getElementById("emptyHint").innerHTML =
+          "Uvezi nedelje preko sync-a ili <code class=\"text-indigo-300\">import_statistic_sheet</code>.";
+        empty.classList.remove("hidden");
+        return;
+      }
+      document.getElementById("emptyState").classList.add("hidden");
+      refresh();
+    } catch (e) {
+      document.getElementById("errorState").textContent = "Greska pri ucitavanju: " + (e && e.message ? e.message : String(e));
+      document.getElementById("errorState").classList.remove("hidden");
+    }
+  }
+
+  document.getElementById("yearFilter").addEventListener("change", refresh);
+  load();
+})();
+</script>
+{% endblock %}

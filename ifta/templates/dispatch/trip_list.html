@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · Trips{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Trips</h1>
+    </div>
+    {% if can_manage_dispatch %}
+    <a href="{% url 'dispatch:trip_create' %}" data-dispatch-entity-modal class="app-btn app-btn--primary">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+      New trip
+    </a>
+    {% endif %}
+  </div>
+
+  {% if not trips %}
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-12 text-center">
+    <p class="text-sm text-slate-400">No trips yet.</p>
+    {% if can_manage_dispatch %}
+    <a href="{% url 'dispatch:trip_create' %}" data-dispatch-entity-modal class="app-btn app-btn--accent-outline mt-4">Create first load</a>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="min-w-[720px] w-full text-sm">
+        <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-4 py-3 text-left">Trip</th>
+            <th class="px-4 py-3 text-left">Planner</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-left">Driver</th>
+            <th class="px-4 py-3 text-center">Loads</th>
+            <th class="px-4 py-3 text-left">Updated</th>
+            <th class="px-4 py-3 text-right"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for trip in trips %}
+          <tr class="hover:bg-white/[0.03]">
+            <td class="px-4 py-3">
+              <a href="{% url 'dispatch:trip_detail' trip.pk %}" class="font-semibold text-indigo-200 hover:text-indigo-100">{{ trip.display_title }}</a>
+            </td>
+            <td class="px-4 py-3 font-mono text-xs text-slate-400">
+              {% if trip.planner_date %}{{ trip.planner_date|date:"Y-m-d" }}{% else %}<span class="text-slate-600">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3">
+              {% include "dispatch/includes/_trip_status_badge.html" %}
+            </td>
+            <td class="px-4 py-3 text-slate-300">
+              {% if trip.driver %}<a href="{% url 'dispatch:driver_detail' trip.driver.pk %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ trip.driver.display_name }}</a>{% else %}<span class="text-slate-500">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-center font-mono text-slate-300">{{ trip.load_count }}</td>
+            <td class="px-4 py-3 font-mono text-xs text-slate-500">{{ trip.updated_at|date:"Y-m-d H:i" }}</td>
+            <td class="px-4 py-3 text-right whitespace-nowrap">
+              <a href="{% url 'dispatch:trip_detail' trip.pk %}" class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">View</a>
+              {% if can_manage_dispatch %}
+              <span class="mx-1.5 text-slate-600">·</span>
+              <a href="{% url 'dispatch:trip_edit' trip.pk %}" class="text-xs font-semibold text-slate-400 hover:text-indigo-200">Edit</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <p class="mt-6 text-xs text-slate-500">
+    <a href="{% url 'dispatch:planner' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Load planner</a>
+  </p>
+</div>
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% endif %}
+{% endblock %}

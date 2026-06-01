@@ -1,0 +1,22 @@
+{% if status_history_timeline %}
+<div class="load-status-timeline mt-4 border-t border-white/10 pt-4">
+  <p class="mb-3 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Status history</p>
+  <div class="load-status-timeline__scroll overflow-x-auto">
+    <ol class="load-status-timeline__track flex min-w-min list-none items-start gap-0 p-0 m-0">
+      {% for row in status_history_timeline %}
+      <li class="load-status-timeline__step flex shrink-0 flex-col items-center">
+        <span class="trip-status-badge {{ row.to_status_badge_css_class }} whitespace-nowrap">{{ row.get_to_status_display }}</span>
+        <span class="mt-1.5 max-w-[7.5rem] truncate text-center text-[10px] leading-tight text-slate-500" title="{{ row.changed_at|date:'M j, Y H:i' }}{% if row.changed_by %} · {{ row.changed_by.get_full_name|default:row.changed_by.username }}{% endif %}">
+          {{ row.changed_at|date:"M j, H:i" }}
+        </span>
+      </li>
+      {% if not forloop.last %}
+      <li class="load-status-timeline__arrow flex shrink-0 items-center self-start px-2.5 pt-2 text-slate-600" aria-hidden="true">
+        <i class="fa-solid fa-arrow-right-long text-sm opacity-70"></i>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endif %}

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · Dispatcher leaderboard{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Dispatcher leaderboard</h1>
+      <p class="mt-1 max-w-2xl text-sm text-slate-400">
+        Fair comparison using <strong class="font-medium text-slate-300">per-driver</strong> metrics (roster size matters).
+        Composite score weights delivery rate, volume per driver, revenue, $/mi, and document compliance.
+        <span class="text-slate-500">{{ period_label }} · {{ date_from|date:"M j, Y" }} – {{ date_to|date:"M j, Y" }}</span>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'dispatch:statistics' %}?period={{ period }}" class="app-btn app-btn--secondary">Load statistics</a>
+      <a href="{% url 'dispatch:load_list' %}?planner_from={{ date_from|date:'Y-m-d' }}&amp;planner_to={{ date_to|date:'Y-m-d' }}" class="app-btn app-btn--ghost app-btn--sm">View loads</a>
+    </div>
+  </div>
+
+  <div class="dispatch-stats-filters mb-6 flex flex-wrap items-center gap-3">
+    <div class="dispatch-stats-view-toggle" role="group" aria-label="Period">
+      {% for key, label, href in period_links %}
+      <a href="{{ href }}" class="dispatch-stats-view-toggle__btn {% if period == key %}is-active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+    <span class="text-xs text-slate-500">Sort table by</span>
+    <div class="dispatch-stats-view-toggle" role="group" aria-label="Sort">
+      {% for key, label, href in sort_links %}
+      <a href="{{ href }}" class="dispatch-stats-view-toggle__btn {% if sort == key %}is-active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if podium %}
+  <section class="dispatch-ranking-podium mb-8" aria-label="Top dispatchers">
+    {% for row in podium %}
+    <article class="dispatch-ranking-podium__card dispatch-ranking-podium__card--rank-{{ row.overall_rank }}">
+      <p class="dispatch-ranking-podium__place">#{{ row.overall_rank }}</p>
+      <h2 class="dispatch-ranking-podium__name">
+        {% if row.employee_id %}
+        <a href="{% url 'office:people_profile' row.employee_id %}" class="hover:text-indigo-200 hover:underline">{{ row.name }}</a>
+        {% else %}{{ row.name }}{% endif %}
+      </h2>
+      <p class="dispatch-ranking-podium__score">{{ row.overall_score }} <span class="text-sm font-normal text-slate-400">pts</span></p>
+      <ul class="dispatch-ranking-podium__stats">
+        <li><span>Loads/driver</span><strong>{{ row.loads_per_roster|floatformat:1 }}</strong></li>
+        <li><span>Delivery</span><strong>{{ row.delivery_rate|floatformat:0 }}%</strong></li>
+        <li><span>$/mi</span><strong>{% if row.avg_rpm %}${{ row.avg_rpm|floatformat:2 }}{% else %}—{% endif %}</strong></li>
+        <li><span>Roster</span><strong>{{ row.roster_size }} drivers</strong></li>
+      </ul>
+      {% if row.top_in %}
+      <p class="dispatch-ranking-podium__badges">
+        {% for badge in row.top_in %}<span class="dispatch-ranking-badge">#1 {{ badge }}</span>{% endfor %}
+      </p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <div class="dispatch-entity-list overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    <div class="border-b border-white/10 px-5 py-3">
+      <h2 class="text-sm font-semibold text-white">Full ranking</h2>
+      <p class="text-xs text-slate-500">Rank # in each column · only dispatchers with ≥1 load and ≥1 roster driver in score</p>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="dispatch-ranking-table w-full min-w-[88rem] text-sm">
+        <thead>
+          <tr>
+            <th class="text-left sticky-col">#</th>
+            <th class="text-left sticky-col">Dispatcher</th>
+            <th class="text-right">Score</th>
+            <th class="text-right">Roster</th>
+            <th class="text-right">Active</th>
+            <th class="text-right">Loads</th>
+            <th class="text-right">Loads/driver</th>
+            <th class="text-right">Delivered</th>
+            <th class="text-right">Delivery %</th>
+            <th class="text-right">Cancelled</th>
+            <th class="text-right">Cancel %</th>
+            <th class="text-right">Miles/driver</th>
+            <th class="text-right">Linehaul/driver</th>
+            <th class="text-right">$/mi</th>
+            <th class="text-right">$/load</th>
+            <th class="text-right">POD %</th>
+            <th class="text-right">RC %</th>
+            <th class="text-right">Docs %</th>
+            <th class="text-right">Util %</th>
+            <th class="text-left">Top in</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr class="{% if row.overall_rank == 1 and row.load_count %}dispatch-ranking-table__row--gold{% elif row.overall_rank == 2 and row.load_count %}dispatch-ranking-table__row--silver{% elif row.overall_rank == 3 and row.load_count %}dispatch-ranking-table__row--bronze{% endif %}">
+            <td class="sticky-col font-bold text-slate-300">{% if row.overall_rank %}{{ row.overall_rank }}{% else %}—{% endif %}</td>
+            <td class="sticky-col font-medium text-slate-100">
+              {% if row.employee_id %}
+              <a href="{% url 'office:people_profile' row.employee_id %}" class="text-indigo-200 hover:underline">{{ row.name }}</a>
+              {% else %}{{ row.name }}{% endif %}
+            </td>
+            <td class="text-right tabular-nums">
+              {% if row.overall_score %}<span class="dispatch-ranking-score">{{ row.overall_score }}</span>{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.overall_score only_gold=True %}{% else %}—{% endif %}
+            </td>
+            <td class="text-right tabular-nums text-slate-400">{{ row.roster_size }}</td>
+            <td class="text-right tabular-nums text-slate-400">{{ row.drivers_active }}</td>
+            <td class="text-right tabular-nums text-slate-200">{{ row.load_count }}{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.load_count %}</td>
+            <td class="text-right tabular-nums text-indigo-200">{{ row.loads_per_roster|floatformat:1 }}{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.loads_per_roster %}</td>
+            <td class="text-right tabular-nums text-emerald-300/90">{{ row.delivered_count }}</td>
+            <td class="text-right tabular-nums text-emerald-300/90">{{ row.delivery_rate|floatformat:0 }}%{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.delivery_rate %}</td>
+            <td class="text-right tabular-nums text-slate-500">{{ row.cancelled_count }}</td>
+            <td class="text-right tabular-nums text-slate-500">{{ row.cancel_rate|floatformat:0 }}%{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.cancel_rate %}</td>
+            <td class="text-right tabular-nums text-slate-300">{{ row.miles_per_roster|floatformat:0 }}</td>
+            <td class="text-right tabular-nums text-slate-200">${{ row.linehaul_per_roster|floatformat:0 }}{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.linehaul_per_roster %}</td>
+            <td class="text-right tabular-nums text-indigo-200">{% if row.avg_rpm %}${{ row.avg_rpm|floatformat:2 }}{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.avg_rpm %}{% else %}—{% endif %}</td>
+            <td class="text-right tabular-nums text-slate-300">{% if row.avg_linehaul_per_load %}${{ row.avg_linehaul_per_load|floatformat:0 }}{% else %}—{% endif %}</td>
+            <td class="text-right tabular-nums text-slate-400">{{ row.pod_compliance|floatformat:0 }}%</td>
+            <td class="text-right tabular-nums text-slate-400">{{ row.rc_compliance|floatformat:0 }}%</td>
+            <td class="text-right tabular-nums text-amber-200/90">{{ row.doc_compliance|floatformat:0 }}%{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.doc_compliance %}</td>
+            <td class="text-right tabular-nums text-sky-300/80">{{ row.driver_utilization|floatformat:0 }}%{% include "dispatch/includes/_rank_cell.html" with rank=row.ranks.driver_utilization %}</td>
+            <td class="text-xs text-slate-500">
+              {% for badge in row.top_in %}<span class="dispatch-ranking-badge">{{ badge }}</span>{% empty %}—{% endfor %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="19" class="px-5 py-10 text-center text-slate-400">No dispatcher data for this period.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <details class="mt-6 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-400">
+    <summary class="cursor-pointer font-semibold text-slate-300">How is the score calculated?</summary>
+    <ul class="mt-3 list-inside list-disc space-y-1 text-xs">
+      <li>Volume per roster driver (not raw load count) — fair when one dispatcher has 2 vs 6 drivers.</li>
+      <li>Linehaul per roster driver, average $/mi, delivery rate %, document compliance (POD + RC).</li>
+      <li>Driver utilization (% of roster with loads in period), low cancellation rate.</li>
+      <li>Each metric is normalized within the cohort; weighted sum = overall score (0–100).</li>
+    </ul>
+  </details>
+</div>
+{% endblock %}

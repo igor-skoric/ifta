@@ -1,0 +1,53 @@
+<section class="mb-8">
+  <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    <div class="border-b border-white/10 px-5 py-4">
+      <h2 class="text-base font-semibold text-white">Trip status history</h2>
+      <p class="mt-0.5 text-xs text-slate-500">Operational status changes for this trip (most recent first).</p>
+    </div>
+    {% if trip.status_history.all %}
+    <div class="overflow-x-auto">
+      <table class="min-w-[640px] w-full text-sm">
+        <thead class="bg-slate-900/60 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-5 py-3 text-left">When</th>
+            <th class="px-5 py-3 text-left">From</th>
+            <th class="px-5 py-3 text-left">To</th>
+            <th class="px-5 py-3 text-left">By</th>
+            <th class="px-5 py-3 text-left">Source</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for row in trip.status_history.all %}
+          <tr class="transition-colors hover:bg-white/[0.02]">
+            <td class="whitespace-nowrap px-5 py-3.5 text-xs text-slate-400">
+              {{ row.changed_at|date:"M j, Y" }}<br>
+              <span class="text-slate-600">{{ row.changed_at|date:"H:i" }}</span>
+            </td>
+            <td class="px-5 py-3.5">
+              {% if row.from_status %}
+              <span class="trip-status-badge {{ row.from_status_badge_css_class }}">{{ row.from_status_display }}</span>
+              {% else %}
+              <span class="text-slate-500">—</span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-3.5">
+              <span class="trip-status-badge {{ row.to_status_badge_css_class }}">{{ row.get_to_status_display }}</span>
+            </td>
+            <td class="px-5 py-3.5 text-slate-300">
+              {% if row.changed_by %}
+              {{ row.changed_by.get_full_name|default:row.changed_by.username }}
+              {% else %}
+              <span class="text-slate-600">—</span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-3.5 text-xs text-slate-500">{{ row.source_display }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="px-5 py-8 text-center text-sm text-slate-500">No status changes recorded yet.</p>
+    {% endif %}
+  </div>
+</section>

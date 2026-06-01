@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Samsara · Trips · {{ vehicle.name|default:vehicle.samsara_id }}{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Integrations</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Trips</h1>
+      <p class="mt-1 text-sm text-slate-300">
+        <span class="text-slate-200">{{ vehicle.name|default:"Vehicle" }}</span>
+        <span class="text-slate-500">·</span>
+        <span class="font-mono text-xs text-sky-300">{{ vehicle.samsara_id }}</span>
+      </p>
+      <p class="mt-1 text-xs text-slate-500">{{ total_trips }} trip{{ total_trips|pluralize }} in database for this vehicle (newest first, {{ page_obj.paginator.per_page }} per page).</p>
+    </div>
+    <a href="{% url 'samsara:vehicle_detail' vehicle.samsara_id %}" class="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">← Vehicle profile</a>
+  </div>
+
+  <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-4 py-3 text-left">Start</th>
+            <th class="px-4 py-3 text-left">End</th>
+            <th class="px-4 py-3 text-right">Distance</th>
+            <th class="px-4 py-3 text-left">Driver</th>
+            <th class="px-4 py-3 text-right w-28">Details</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for trip in page_obj %}
+          <tr class="hover:bg-white/[0.04]">
+            <td class="px-4 py-2.5 text-slate-300">{{ trip.start_time|default:"—" }}</td>
+            <td class="px-4 py-2.5 text-slate-300">{{ trip.end_time|default:"—" }}</td>
+            <td class="px-4 py-2.5 text-right text-slate-200">{{ trip.distance_km|floatformat:1 }} km</td>
+            <td class="px-4 py-2.5 font-mono text-xs">
+              {% if trip.driver_samsara_id %}
+              <a href="{% url 'samsara:driver_detail' trip.driver_samsara_id %}" class="text-sky-300 hover:text-indigo-200 hover:underline">{{ trip.driver_samsara_id }}</a>
+              {% else %}
+              <span class="text-slate-500">—</span>
+              {% endif %}
+            </td>
+            <td class="px-4 py-2.5 text-right">
+              <a href="{% url 'samsara:trip_detail' trip.samsara_id %}" class="text-sm font-semibold text-indigo-300 hover:text-indigo-200 hover:underline">Open</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="px-4 py-10 text-center text-slate-500">No trips stored for this vehicle. Run trip sync from the Samsara dashboard (trips are fetched per vehicle).</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3 text-sm text-slate-400">
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      <div class="flex gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if filter_querystring %}&amp;{{ filter_querystring }}{% endif %}"
+           class="rounded-lg border border-white/15 px-3 py-1.5 font-semibold text-slate-200 hover:bg-white/10">Previous</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if filter_querystring %}&amp;{{ filter_querystring }}{% endif %}"
+           class="rounded-lg border border-white/15 px-3 py-1.5 font-semibold text-slate-200 hover:bg-white/10">Next</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

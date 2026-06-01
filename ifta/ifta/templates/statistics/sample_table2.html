@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# TV u portrait: ?rotate=90 ili ?rotate=-90 — rotira ceo sadržaj da bude čitljiv #}
+<div id="rotateShell" class="min-h-screen w-screen bg-[#0F0F1A]">
+    <div id="rotateInner" class="min-h-screen w-screen px-6 py-5 text-lg sm:text-xl">
+    <div class="flex items-center justify-between mb-5 gap-4">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-100 tracking-wide uppercase">
+            Dispatchers Ranking
+        </h1>
+        <div class="text-lg sm:text-xl text-gray-300 shrink-0">
+            Total: <span id="rankCount" class="text-white font-bold">0</span>
+        </div>
+    </div>
+
+    <div class="rounded-2xl border-2 border-white/15 overflow-hidden shadow-2xl">
+        <table class="w-full text-gray-100">
+            <thead class="bg-[#1A1A2D] text-gray-200 uppercase tracking-wide text-base sm:text-lg">
+                <tr>
+                    <th class="px-4 sm:px-6 py-4 text-left">#</th>
+                    <th class="px-4 sm:px-6 py-4 text-left">Dispatcher</th>
+                    <th class="px-4 sm:px-6 py-4 text-right">DRPM</th>
+                    <th class="px-4 sm:px-6 py-4 text-right">RPM</th>
+                    <th class="px-4 sm:px-6 py-4 text-right">Gross</th>
+                    <th class="px-4 sm:px-6 py-4 text-right">GPU</th>
+                    <th class="px-4 sm:px-6 py-4 text-right">Miles</th>
+                </tr>
+            </thead>
+            <tbody id="rankingBody" class="divide-y divide-white/5 bg-[#121224]"></tbody>
+        </table>
+    </div>
+    </div>
+</div>
+
+<script>
+    (function applyPageRotation() {
+        const params = new URLSearchParams(window.location.search);
+        let deg = parseInt(params.get("rotate"), 10);
+        if (deg === 270) deg = -90;
+        if (deg !== 90 && deg !== -90) return;
+
+        const shell = document.getElementById("rotateShell");
+        const inner = document.getElementById("rotateInner");
+        if (!shell || !inner) return;
+
+        shell.className =
+            "fixed inset-0 z-[100] overflow-hidden bg-[#0F0F1A]";
+        inner.className =
+            "absolute overflow-auto bg-[#0F0F1A] px-6 py-5 text-lg sm:text-xl";
+        inner.style.width = "100vh";
+        inner.style.height = "100vw";
+        inner.style.top = "50%";
+        inner.style.left = "50%";
+        inner.style.transform = "translate(-50%, -50%) rotate(" + deg + "deg)";
+        inner.style.transformOrigin = "center center";
+
+        document.documentElement.classList.add("overflow-hidden", "h-full");
+        document.body.classList.add("overflow-hidden", "h-full", "m-0", "p-0");
+    })();
+
+    const STATISTICS_API_BASE_URL = "{{ statistics_api_base_url|default:'/api/statistic'|escapejs }}";
+    const DISPATCHER_API_URL = `${STATISTICS_API_BASE_URL}/dispatchers/`;
+
+    function statisticsFetch(url) {
+        const headers = { Accept: "application/json" };
+        const tvToken = new URLSearchParams(window.location.search).get("tv_token");
+        if (tvToken) headers["X-Statistics-TV-Token"] = tvToken;
+        return fetch(url, { credentials: "same-origin", headers });
+    }
+
+    const elBody = document.getElementById("rankingBody");
+    const elCount = document.getElementById("rankCount");
+
+    function safeStr(v) {
+        return (v === null || v === undefined) ? "" : String(v).trim();
+    }
+
+    function parseNumber(v) {
+        const s = String(v ?? "").replace(",", ".").replace(/[^0-9.\-]/g, "");
+        const num = parseFloat(s);
+        return Number.isFinite(num) ? num : 0;
+    }
+
+    function money2(v) {
+        return `$${parseNumber(v).toFixed(2)}`;
+    }
+
+    function intNumber(v) {
+        return Math.round(parseNumber(v)).toLocaleString();
+    }
+
+    const RPM_GOOD = 2.8;
+    const GPU_GOOD = 8000;
+
+    function thresholdColorClass(value, goodAbove) {
+        const n = parseNumber(value);
+        if (n > goodAbove) return "text-green-400";
+        if (n < goodAbove) return "text-red-400";
+        return "text-gray-200";
+    }
+
+    async function loadRanking() {
+        try {
+            const res = await statisticsFetch(DISPATCHER_API_URL);
+            const data = await res.json();
+            const rows = Array.isArray(data) ? data : (data.data || []);
+
+            const filtered = rows.filter(r => parseNumber(r.gross) > 0 && safeStr(r.dispatcher) !== "");
+
+            filtered.sort((a, b) => parseNumber(b.rpm) - parseNumber(a.rpm));
+
+            elCount.textContent = filtered.length;
+
+            if (!filtered.length) {
+                elBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-xl text-gray-400">
+                            No dispatcher data found.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            elBody.innerHTML = "";
+            filtered.forEach((r, idx) => {
+                const rpmClass = thresholdColorClass(r.rpm, RPM_GOOD);
+                const gpuClass = thresholdColorClass(r.gpu, GPU_GOOD);
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-white/5 text-xl sm:text-2xl";
+                tr.innerHTML = `
+                    <td class="px-4 sm:px-6 py-4 font-bold text-gray-300">${idx + 1}</td>
+                    <td class="px-4 sm:px-6 py-4 font-bold text-white">${safeStr(r.dispatcher)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${money2(r.drpm)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold ${rpmClass}">${parseNumber(r.rpm).toFixed(2)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${money2(r.gross)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold ${gpuClass}">${money2(r.gpu)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${intNumber(r.miles)}</td>
+                `;
+                elBody.appendChild(tr);
+            });
+        } catch (e) {
+            elBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-xl text-red-300">
+                        Failed to load dispatcher ranking.
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    loadRanking();
+    setInterval(loadRanking, 120000);
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+
+{% block title %}Report · IFTA{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="mx-auto max-w-[100vw] px-2 py-4 sm:px-4 sm:py-6 lg:px-6">
+
+{% if totals_per_vehicle %}
+
+  <div class="mb-4 px-1 sm:px-2">
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Pivot</p>
+    <h1 class="text-xl font-bold tracking-tight text-white sm:text-2xl">Miles &amp; fuel by jurisdiction</h1>
+    <p class="mt-1 text-sm text-slate-400">Sticky columns on small screens — scroll horizontally</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] shadow-xl">
+    <div class="max-h-[calc(100vh-8rem)] overflow-auto sm:max-h-[calc(100vh-6rem)]">
+      <table class="min-w-full border-collapse text-left text-sm">
+        <thead class="sticky top-0 z-50 bg-slate-900/95 text-xs font-semibold uppercase tracking-wider text-slate-400 backdrop-blur-md">
+          <tr>
+            <th class="sticky left-0 z-40 min-w-[3rem] border border-white/10 bg-slate-900/95 px-2 py-2 text-center shadow-[4px_0_12px_-4px_rgba(0,0,0,0.5)]">
+              ID
+            </th>
+            <th class="sticky left-[3.25rem] z-30 min-w-[5.5rem] border border-white/10 bg-slate-900/95 px-2 py-2 text-center shadow-[4px_0_12px_-4px_rgba(0,0,0,0.5)]">
+              Total<br><span class="font-normal normal-case text-slate-500">mi / gal</span>
+            </th>
+            <th class="sticky left-[9.25rem] z-30 min-w-[10rem] border border-white/10 bg-slate-900/95 px-2 py-2 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.5)] sm:left-[9rem] sm:min-w-[12rem]">
+              Vehicle
+            </th>
+            {% for jurisdiction in jurisdiction_codes %}
+            {% with total=totals_per_jurisdiction|get_item:jurisdiction %}
+            <th class="border border-white/10 px-2 py-2 text-center font-semibold normal-case text-slate-200">
+              <div>{{ jurisdiction }}</div>
+              <div class="mt-0.5 text-xs font-normal text-sky-400">
+                {% if total.0 != 0 %}{{ total.0|floatformat:0 }}{% endif %}
+                {% if total.1 != 0 %}<span class="text-emerald-400/90"> {{ total.1|floatformat:1 }}</span>{% endif %}
+              </div>
+            </th>
+            {% endwith %}
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for vehicle, jurisdictions in pivot.items %}
+          <tr class="transition hover:bg-white/[0.03]">
+            <td class="sticky left-0 z-20 min-w-[3rem] border border-white/10 bg-slate-950/95 px-3 py-2 text-center font-semibold text-slate-300 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.4)]">
+              {{ forloop.counter }}
+            </td>
+            {% with total=totals_per_vehicle|get_item:vehicle %}
+            <td class="sticky left-[3.25rem] z-20 min-w-[5.5rem] border border-white/10 bg-slate-950/95 px-2 py-2 text-right text-xs shadow-[4px_0_12px_-4px_rgba(0,0,0,0.4)]">
+              <div class="text-sky-400">{% if total.0 != 0 %}{{ total.0|floatformat:0 }}{% endif %}</div>
+              <div class="text-emerald-400/90">{% if total.1 != 0 %}{{ total.1|floatformat:1 }}{% endif %}</div>
+            </td>
+            {% endwith %}
+            <td class="sticky left-[9.25rem] z-20 min-w-[10rem] border border-white/10 bg-slate-950/95 px-2 py-2 text-sm font-medium text-slate-100 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.4)] sm:left-[9rem] sm:min-w-[12rem]">
+              {{ vehicle }}
+            </td>
+            {% for jurisdiction in jurisdiction_codes %}
+            {% with data=jurisdictions|get_item:jurisdiction %}
+            <td class="border border-white/10 px-2 py-2 text-right text-xs">
+              <div class="text-sky-400">{% if data.0 != 0 %}{{ data.0|floatformat:0 }}{% endif %}</div>
+              <div class="text-emerald-400/90">{% if data.1 != 0 %}{{ data.1|floatformat:1 }}{% endif %}</div>
+            </td>
+            {% endwith %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% else %}
+
+  <div class="mx-auto max-w-lg rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-center shadow-xl backdrop-blur-sm sm:p-10">
+    <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-200">
+      <i class="fa-solid fa-circle-info text-xl" aria-hidden="true"></i>
+    </div>
+    <h2 class="text-lg font-semibold text-white">No data available</h2>
+    <p class="mt-2 text-sm text-slate-400">Import data using Upload.</p>
+    <a href="{% url 'ifta:upload' %}"
+       class="mt-6 inline-flex items-center justify-center rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition hover:bg-indigo-400">
+      Upload files
+    </a>
+  </div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

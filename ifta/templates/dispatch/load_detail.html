@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {{ load.load_id_display|default:load.pk }}{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="load-detail-page w-full px-4 py-6 sm:px-6 lg:px-8">
+  {% if load.notes %}
+  <p class="load-detail-notes">{{ load.notes|linebreaksbr }}</p>
+  {% endif %}
+
+  <div class="load-detail__layout">
+    <article class="load-detail-panel">
+      <div class="load-detail-card__head">
+        <div class="load-detail-card__head-main">
+          <div class="load-detail-card__id-row">
+            <div class="load-detail-card__doc-icon" aria-hidden="true">
+              <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <div class="min-w-0">
+              <p class="load-detail-kicker">Load ID</p>
+              <p class="load-detail-card__id-value">
+                {% if load.load_id_display %}{{ load.load_id_display }}{% else %}#{{ load.pk }}{% endif %}
+              </p>
+              {% if can_manage_dispatch %}
+              <a href="{% url 'dispatch:load_edit' load.pk %}" data-dispatch-entity-modal class="load-detail-card__edit">
+                <i class="fa-solid fa-pen text-[0.65rem]" aria-hidden="true"></i>
+                Edit load
+              </a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="min-w-0">
+            <p class="load-detail-kicker">Driver</p>
+            {% if load.driver %}
+            <a href="{% url 'dispatch:driver_detail' load.driver.pk %}" class="load-detail-link mt-0.5 inline-flex items-center gap-1.5 text-lg">
+              <i class="fa-solid fa-user text-sm load-detail-subtle" aria-hidden="true"></i>
+              {{ load.driver.display_name }}
+            </a>
+            {% if driver_truck or driver_trailers %}
+            <p class="mt-1 text-xs load-detail-subtle">
+              Equipment:
+              {% if driver_truck %}<span class="font-mono load-detail-muted">{{ driver_truck.unit_number }}</span>{% endif %}
+              {% if driver_trailers %} · {% for t in driver_trailers %}<span class="font-mono load-detail-muted">{{ t.unit_number }}</span>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}
+            </p>
+            {% endif %}
+            {% else %}
+            <p class="mt-0.5 text-sm load-detail-subtle">—</p>
+            {% endif %}
+            {% if load.planner_date %}
+            <p class="mt-1.5 text-xs load-detail-subtle">
+              <i class="fa-regular fa-calendar mr-1 opacity-80" aria-hidden="true"></i>
+              Planner: <span class="font-mono load-detail-muted">{{ load.planner_date|date:"M j, Y" }}</span>
+            </p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="load-detail-card__status">
+          <p class="load-detail-kicker">Status</p>
+          {% if can_manage_dispatch %}
+          <div class="trip-status-quick-wrap trip-status-badge--{{ load.status }} min-w-[10rem]">
+            <select class="trip-status-quick trip-status-quick-input trip-status-badge--{{ load.status }} w-full min-w-[10rem]" data-load-id="{{ load.pk }}" aria-label="Load status">
+              {% for value, label in load_status_choices %}
+              <option value="{{ value }}"{% if load.status == value %} selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <p class="load-status-feedback text-[10px] load-detail-subtle" data-load-id="{{ load.pk }}" aria-live="polite"></p>
+          {% else %}
+          {% include "dispatch/includes/_load_status_badge.html" %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="load-detail-lane" aria-label="Pickup to delivery">
+        <div class="load-detail-stop load-detail-stop--pickup">
+          <div class="load-detail-stop__icon" aria-hidden="true">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i>
+          </div>
+          <div class="load-detail-stop__body">
+            <p class="load-detail-stop__label">Pick up</p>
+            <p class="load-detail-stop__place">{{ load.pickup_display|default:"—" }}</p>
+            <p class="load-detail-stop__when">
+              {% with pickup_at=load.pickup_datetime_display %}
+              {% if pickup_at %}{{ pickup_at|date:"M j, Y H:i" }}{% else %}Not scheduled{% endif %}
+              {% endwith %}
+            </p>
+          </div>
+        </div>
+        <div class="load-detail-lane__arrow" aria-hidden="true">
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </div>
+        <div class="load-detail-stop load-detail-stop--delivery">
+          <div class="load-detail-stop__icon" aria-hidden="true">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <div class="load-detail-stop__body">
+            <p class="load-detail-stop__label">Delivery</p>
+            <p class="load-detail-stop__place">{{ load.delivery_display|default:"—" }}</p>
+            <p class="load-detail-stop__when">{% if load.delivery_datetime %}{{ load.delivery_datetime|date:"M j, Y H:i" }}{% else %}Not scheduled{% endif %}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 border-t load-detail-divider pt-4">
+        <div class="load-detail-stats" aria-label="Miles, linehaul, rate per mile, RC and POD">
+          <div class="load-detail-stat load-detail-stat--miles">
+            <span class="load-detail-stat__label">Miles</span>
+            <span class="load-detail-stat__value">{% if load.loaded_miles %}{{ load.loaded_miles }} mi{% else %}—{% endif %}</span>
+          </div>
+          <div class="load-detail-stat">
+            <span class="load-detail-stat__label">Linehaul</span>
+            <span class="load-detail-stat__value">{% if load.linehaul_amount is not None %}${{ load.linehaul_amount }}{% else %}—{% endif %}</span>
+          </div>
+          <div class="load-detail-stat load-detail-stat--rpm">
+            <span class="load-detail-stat__label">RPM</span>
+            <span class="load-detail-stat__value">{% if load.rate_per_mile_display %}{{ load.rate_per_mile_display }}{% else %}—{% endif %}</span>
+          </div>
+          <div class="load-detail-stat">
+            <span class="load-detail-stat__label">RC</span>
+            {% if can_manage_dispatch %}
+            <div class="doc-status-quick-wrap {{ load.rc_status_badge_css_class }} mt-0.5">
+              <select class="doc-status-quick doc-status-quick--rc" data-field="rc_status" data-load-id="{{ load.pk }}" aria-label="RC status">
+                {% for value, label in rc_status_choices %}
+                <option value="{{ value }}"{% if load.rc_status == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            {% else %}
+            <span class="load-detail-stat__value mt-0.5">{% include "dispatch/includes/_load_rc_status_badge.html" %}</span>
+            {% endif %}
+          </div>
+          <div class="load-detail-stat">
+            <span class="load-detail-stat__label">POD</span>
+            {% if can_manage_dispatch %}
+            <div class="doc-status-quick-wrap {{ load.pod_status_badge_css_class }} mt-0.5">
+              <select class="doc-status-quick doc-status-quick--pod" data-field="pod_status" data-load-id="{{ load.pk }}" aria-label="POD status">
+                {% for value, label in pod_status_choices %}
+                <option value="{{ value }}"{% if load.pod_status == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            {% else %}
+            <span class="load-detail-stat__value mt-0.5">{% include "dispatch/includes/_load_pod_status_badge.html" %}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% include "dispatch/includes/_load_status_stepper.html" %}
+    </article>
+
+    <article class="load-detail-panel load-detail__comments-card">
+      {% include "dispatch/includes/_load_comments.html" %}
+    </article>
+  </div>
+
+  <p class="mt-6 text-xs load-detail-subtle">
+    <a href="{% url 'dispatch:load_list' %}" class="load-detail-link">← All loads</a>
+  </p>
+</div>
+
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+<form id="load-detail-csrf" class="hidden" aria-hidden="true">{% csrf_token %}</form>
+<script>
+(function () {
+  var statusUrl = "{{ load_status_update_url|escapejs }}";
+  var csrfInput = document.querySelector("#load-detail-csrf input[name=csrfmiddlewaretoken]");
+  function getCsrf() { return csrfInput ? csrfInput.value : ""; }
+  function setStyle(sel, slug) {
+    sel.className = "trip-status-quick trip-status-quick-input trip-status-badge--" + slug + " w-full min-w-[10rem]";
+    var wrap = sel.closest(".trip-status-quick-wrap");
+    if (wrap) wrap.className = "trip-status-quick-wrap trip-status-badge--" + slug + " min-w-[10rem]";
+  }
+  function showFeedback(loadId, text) {
+    var el = document.querySelector(".load-status-feedback[data-load-id=\"" + loadId + "\"]");
+    if (el) el.textContent = text;
+  }
+  document.querySelectorAll(".trip-status-quick[data-load-id]").forEach(function (sel) {
+    sel.addEventListener("focus", function () { sel.setAttribute("data-prev-status", sel.value); });
+    sel.addEventListener("change", function () {
+      var loadId = parseInt(sel.getAttribute("data-load-id"), 10);
+      var prev = sel.getAttribute("data-prev-status") || sel.value;
+      var next = sel.value;
+      if (!loadId || prev === next) return;
+      sel.disabled = true;
+      showFeedback(loadId, "Saving…");
+      var body = new URLSearchParams();
+      body.set("status", next);
+      body.set("source", "load_detail");
+      fetch(statusUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "X-CSRFToken": getCsrf(), "X-Requested-With": "XMLHttpRequest" },
+        body: body.toString(),
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (!result.ok || !result.data.ok) throw new Error((result.data && result.data.error) || "Save failed");
+          window.location.reload();
+        })
+        .catch(function (err) {
+          sel.value = prev;
+          setStyle(sel, prev);
+          showFeedback(loadId, err.message || "Save failed");
+        })
+        .finally(function () { sel.disabled = false; });
+    });
+  });
+
+  var docsUrl = "{{ load_docs_status_update_url|escapejs }}";
+  function setDocStyle(sel, kind, slug) {
+    var wrap = sel.closest(".doc-status-quick-wrap");
+    if (wrap) wrap.className = "doc-status-quick-wrap doc-status-badge--" + kind + "-" + slug + " mt-0.5";
+  }
+  document.querySelectorAll(".doc-status-quick").forEach(function (sel) {
+    sel.addEventListener("focus", function () {
+      sel.setAttribute("data-prev-status", sel.value);
+    });
+    sel.addEventListener("change", function () {
+      var field = sel.getAttribute("data-field");
+      var kind = field === "rc_status" ? "rc" : "pod";
+      var prev = sel.getAttribute("data-prev-status") || sel.value;
+      var next = sel.value;
+      if (!field || prev === next) return;
+      sel.disabled = true;
+      var body = new URLSearchParams();
+      body.set(field, next);
+      fetch(docsUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "X-CSRFToken": getCsrf(), "X-Requested-With": "XMLHttpRequest" },
+        body: body.toString(),
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (result) {
+          if (!result.ok || !result.data.ok) throw new Error((result.data && result.data.error) || "Save failed");
+          window.location.reload();
+        })
+        .catch(function (err) {
+          sel.value = prev;
+          setDocStyle(sel, kind, prev);
+        })
+        .finally(function () { sel.disabled = false; });
+    });
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

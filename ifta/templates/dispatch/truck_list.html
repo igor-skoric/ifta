@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · Trucks{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Trucks</h1>
+    </div>
+    {% if can_manage_dispatch %}
+    <a href="{% url 'dispatch:truck_create' %}" data-dispatch-entity-modal class="app-btn app-btn--primary">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+      New truck
+    </a>
+    {% endif %}
+  </div>
+
+  {% url 'dispatch:truck_list' as truck_list_clear_url %}
+  <form method="get" action="{% url 'dispatch:truck_list' %}" class="mb-6 flex flex-wrap items-end gap-3">
+    <div class="w-full max-w-[14rem] shrink-0">
+      <label for="truck-search-q" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Search</label>
+      <input id="truck-search-q" type="search" name="q" value="{{ search_q }}" placeholder="Unit #, driver, notes…"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40" />
+    </div>
+    <div class="w-full min-w-[6.5rem] max-w-[9rem] shrink-0 sm:w-auto">
+      <label for="truck-filter-active" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Active</label>
+      <select id="truck-filter-active" name="active"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+        <option value="" {% if not filter_active %}selected{% endif %}>Any</option>
+        <option value="yes" {% if filter_active == "yes" %}selected{% endif %}>Yes</option>
+        <option value="no" {% if filter_active == "no" %}selected{% endif %}>No</option>
+      </select>
+    </div>
+    <div class="w-full min-w-[8rem] max-w-[12rem] shrink-0 sm:w-auto">
+      <label for="truck-filter-assignment" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Driver</label>
+      <select id="truck-filter-assignment" name="assignment"
+        class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2 text-sm text-white focus:border-indigo-400/50 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+        <option value="" {% if not filter_assignment %}selected{% endif %}>Any</option>
+        <option value="assigned" {% if filter_assignment == "assigned" %}selected{% endif %}>Assigned</option>
+        <option value="unassigned" {% if filter_assignment == "unassigned" %}selected{% endif %}>Unassigned</option>
+      </select>
+    </div>
+    {% include "dispatch/includes/_dispatch_filter_buttons.html" with clear_url=truck_list_clear_url %}
+  </form>
+
+  {% if page_obj.paginator.count == 0 %}
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-12 text-center">
+    <p class="text-sm text-slate-400">{% if filters_active %}No trucks match your search or filters.{% else %}No trucks yet.{% endif %}</p>
+    {% if can_manage_dispatch and not filters_active %}
+    <a href="{% url 'dispatch:truck_create' %}" data-dispatch-entity-modal class="app-btn app-btn--accent-outline mt-4">Add first truck</a>
+    {% endif %}
+  </div>
+  {% else %}
+  {% with n=page_obj.paginator.count %}
+  <div class="dispatch-entity-list rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    {% include "dispatch/includes/_dispatch_list_meta.html" with position="top" n=n entity_singular="truck" filters_active=filters_active page_obj=page_obj %}
+    <div class="overflow-x-auto">
+      <table class="min-w-[720px] w-full text-sm">
+        <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-4 py-3 text-left">Unit</th>
+            <th class="px-4 py-3 text-left">Driver</th>
+            <th class="px-4 py-3 text-left">Trailers</th>
+            <th class="px-4 py-3 text-center">Active</th>
+            <th class="px-4 py-3 text-left">Notes</th>
+            {% if can_manage_dispatch %}
+            <th class="dispatch-list-actions-cell w-12 px-2 py-3 text-right"><span class="sr-only">Actions</span></th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for t in page_obj %}
+          <tr class="hover:bg-white/[0.03]">
+            <td class="px-4 py-3 font-mono font-medium text-slate-200">
+              <a href="{% url 'dispatch:truck_detail' t.pk %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ t.unit_number }}</a>
+            </td>
+            <td class="px-4 py-3 text-slate-300">
+              {% if t.driver %}<a href="{% url 'dispatch:driver_detail' t.driver.pk %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ t.driver.display_name }}</a>{% else %}<span class="text-slate-600">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-slate-300">
+              {% if t.trailers %}
+              {% for tr in t.trailers %}<a href="{% url 'dispatch:trailer_detail' tr.pk %}" class="font-mono text-indigo-300 hover:text-indigo-200 hover:underline">{{ tr.unit_number }}</a>{% if not forloop.last %}<span class="text-slate-600">, </span>{% endif %}{% endfor %}
+              {% else %}<span class="text-slate-600">—</span>{% endif %}
+            </td>
+            <td class="px-4 py-3 text-center text-slate-300">{% if t.is_active %}Yes{% else %}<span class="text-amber-400/90">No</span>{% endif %}</td>
+            <td class="max-w-md truncate px-4 py-3 text-xs text-slate-500">{{ t.notes|default:"—" }}</td>
+            {% if can_manage_dispatch %}
+            {% url 'dispatch:truck_edit' t.pk as truck_edit_url %}
+            {% include "dispatch/includes/_dispatch_row_actions.html" with edit_url=truck_edit_url use_entity_modal=True %}
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "dispatch/includes/_dispatch_list_pagination.html" %}
+    {% include "dispatch/includes/_dispatch_list_meta.html" with position="bottom" n=n entity_singular="truck" filters_active=filters_active page_obj=page_obj %}
+  </div>
+  {% endwith %}
+  {% endif %}
+
+  <p class="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
+    <a href="{% url 'dispatch:planner' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Load planner</a>
+    {% if user.is_staff %}
+    <a href="{% url 'admin:dispatch_dispatchtruck_changelist' %}" class="font-semibold text-indigo-300 hover:text-indigo-200">Admin →</a>
+    {% endif %}
+  </p>
+</div>
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% include "dispatch/includes/_dispatch_row_actions_script.html" %}
+{% endif %}
+{% endblock %}

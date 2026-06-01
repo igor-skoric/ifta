@@ -1,0 +1,7 @@
+<div data-dispatch-entity-modal-panel data-modal-title="{% if is_create %}New trailer{% else %}Edit trailer · {{ trailer.unit_number }}{% endif %}" data-modal-submit-label="Save">
+  <form method="post" action="{{ form_action }}" class="dispatch-entity-modal-form space-y-4">
+    {% csrf_token %}
+    <p class="text-sm load-detail-muted">A driver can have multiple trailers; each change is stored in assignment history.</p>
+    {% include "dispatch/_trailer_form_fields.html" %}
+  </form>
+</div>

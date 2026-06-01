@@ -1,0 +1,23 @@
+{% if form.non_field_errors %}
+<div class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-100">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<div>
+  <label for="id_unit_number" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Unit number</label>
+  {{ form.unit_number }}
+  {% if form.unit_number.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.unit_number.errors.0 }}</p>{% endif %}
+</div>
+<div>
+  <label for="id_driver" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Driver</label>
+  {{ form.driver }}
+  {% if form.driver.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.driver.errors.0 }}</p>{% endif %}
+</div>
+<div class="flex items-center gap-2">
+  {{ form.is_active }}
+  <label for="id_is_active" class="text-sm text-slate-300">Active</label>
+</div>
+<div>
+  <label for="id_notes" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Notes</label>
+  {{ form.notes }}
+  {% if form.notes.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.notes.errors.0 }}</p>{% endif %}
+</div>

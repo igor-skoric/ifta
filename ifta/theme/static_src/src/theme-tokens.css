@@ -1,0 +1,212 @@
+/**
+ * TAKE OFF — paleta tema (jedino mesto za promenu boja).
+ *
+ * Menjaj vrednosti ispod za dark / light. Sve komponente koriste var(--app-*).
+ * html[data-theme] se postavlja iz podešavanja korisnika (accounts → Settings).
+ */
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Pozadina aplikacije */
+  --app-shell-from: #020617;
+  --app-shell-via: #0f172a;
+  --app-shell-to: #1e1b4b;
+
+  /* Tipografija */
+  --app-text: #f1f5f9;
+  --app-text-muted: #94a3b8;
+  --app-text-subtle: #64748b;
+  --app-heading: #f8fafc;
+
+  /* Površine i okviri */
+  --app-border-subtle: rgb(255 255 255 / 0.1);
+  --app-border-strong: rgb(255 255 255 / 0.15);
+  --app-surface: rgb(15 23 42 / 0.88);
+  --app-surface-elevated: rgb(15 23 42 / 0.96);
+  --app-surface-hover: rgb(255 255 255 / 0.08);
+  --app-surface-inset-bg: rgb(2 6 23 / 0.35);
+  --app-overlay: rgb(0 0 0 / 0.6);
+
+  /* Kartice / paneli */
+  --app-card-bg: rgb(255 255 255 / 0.05);
+  --app-card-border: rgb(255 255 255 / 0.1);
+  --app-breadcrumb-pill-bg: rgb(255 255 255 / 0.1);
+  --app-settings-card-shadow: rgb(0 0 0 / 0.35);
+  --app-panel-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.35), 0 8px 10px -6px rgb(0 0 0 / 0.25);
+
+  /* Shell delovi */
+  --app-sidebar-bg: rgb(15 23 42 / 0.88);
+  --app-sidebar-border: rgb(255 255 255 / 0.1);
+  --app-topbar-bg: rgb(2 6 23 / 0.4);
+  --app-footer-bg: rgb(2 6 23 / 0.4);
+
+  /* Alert ticker */
+  --app-alert-ticker-bg-from: rgb(15 23 42 / 0.92);
+  --app-alert-ticker-bg-to: rgb(30 27 75 / 0.88);
+  --app-alert-ticker-fade: rgb(15 23 42);
+  --app-alert-ticker-text: #e2e8f0;
+  --app-alert-ticker-alert-border: rgb(244 63 94 / 0.45);
+  --app-alert-ticker-alert-bg: rgb(127 29 29 / 0.55);
+  --app-alert-ticker-alert-text: #fecdd3;
+  --app-alert-ticker-alert-glow: rgb(244 63 94 / 0.2);
+  --app-alert-ticker-warning-border: rgb(245 158 11 / 0.45);
+  --app-alert-ticker-warning-bg: rgb(120 53 15 / 0.5);
+  --app-alert-ticker-warning-text: #fde68a;
+  --app-alert-ticker-warning-glow: rgb(245 158 11 / 0.18);
+
+  /* Akcent (linkovi, primarni dugmad) */
+  --app-accent: #818cf8;
+  --app-accent-hover: #a5b4fc;
+  --app-focus-ring: rgb(129 140 248 / 0.45);
+  --app-link: #a5b4fc;
+  --app-link-hover: #c7d2fe;
+
+  /* Forme */
+  --app-input-bg: rgb(2 6 23 / 0.6);
+  --app-input-border: rgb(255 255 255 / 0.15);
+  --app-input-text: #f8fafc;
+  --app-input-placeholder: #64748b;
+
+  /* Dijalog */
+  --app-dialog-bg: rgb(15 23 42);
+  --app-dialog-border: rgb(255 255 255 / 0.12);
+  --app-dialog-text: #f8fafc;
+
+  /* Toast */
+  --app-toast-bg: rgb(15 23 42 / 0.96);
+  --app-toast-border: rgb(255 255 255 / 0.12);
+  --app-toast-text: #f1f5f9;
+
+  /* Status / semantičke */
+  --app-live-border: rgb(16 185 129 / 0.2);
+  --app-live-bg: rgb(16 185 129 / 0.04);
+  --app-alert-error-border: rgb(244 63 94 / 0.25);
+  --app-alert-error-bg: rgb(244 63 94 / 0.1);
+  --app-alert-error-text: rgb(255 228 230);
+  --app-alert-warning-border: rgb(245 158 11 / 0.25);
+  --app-alert-warning-bg: rgb(245 158 11 / 0.1);
+  --app-alert-warning-text: rgb(254 243 199);
+  --app-alert-success-border: rgb(52 211 153 / 0.35);
+  --app-alert-success-bg: rgb(6 78 59 / 0.92);
+  --app-alert-success-text: rgb(209 250 229);
+  --app-alert-info-border: rgb(129 140 248 / 0.35);
+  --app-alert-info-bg: rgb(30 27 75 / 0.94);
+  --app-alert-info-text: rgb(224 231 255);
+  --app-notes-border: rgb(245 158 11 / 0.2);
+  --app-notes-bg: rgb(245 158 11 / 0.08);
+  --app-notes-text: rgb(254 243 199 / 0.9);
+  --app-chip-sky-border: rgb(14 165 233 / 0.35);
+  --app-chip-sky-bg: rgb(14 165 233 / 0.1);
+  --app-chip-sky-text: rgb(224 242 254);
+  --app-chip-indigo-border: rgb(99 102 241 / 0.35);
+  --app-chip-indigo-bg: rgb(99 102 241 / 0.1);
+  --app-chip-indigo-text: rgb(224 231 255);
+  --app-badge-emerald-border: rgb(16 185 129 / 0.3);
+  --app-badge-emerald-bg: rgb(16 185 129 / 0.15);
+  --app-badge-emerald-text: rgb(167 243 208);
+  --app-badge-amber-border: rgb(245 158 11 / 0.3);
+  --app-badge-amber-bg: rgb(245 158 11 / 0.15);
+  --app-badge-amber-text: rgb(253 230 138);
+
+  /* Scrollbar */
+  --app-scrollbar-thumb: rgb(129 140 248 / 0.55);
+  --app-scrollbar-track: rgb(30 41 59 / 0.6);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --app-shell-from: #f8fafc;
+  --app-shell-via: #eef2ff;
+  --app-shell-to: #e0e7ff;
+
+  --app-text: #0f172a;
+  --app-text-muted: #475569;
+  --app-text-subtle: #64748b;
+  --app-heading: #020617;
+
+  --app-border-subtle: rgb(15 23 42 / 0.12);
+  --app-border-strong: rgb(15 23 42 / 0.18);
+  --app-surface: rgb(255 255 255 / 0.92);
+  --app-surface-elevated: #ffffff;
+  --app-surface-hover: rgb(15 23 42 / 0.06);
+  --app-surface-inset-bg: rgb(248 250 252 / 0.98);
+  --app-overlay: rgb(15 23 42 / 0.35);
+
+  --app-card-bg: rgb(255 255 255 / 0.92);
+  --app-card-border: rgb(15 23 42 / 0.12);
+  --app-breadcrumb-pill-bg: rgb(15 23 42 / 0.08);
+  --app-settings-card-shadow: rgb(15 23 42 / 0.08);
+  --app-panel-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.06);
+
+  --app-sidebar-bg: rgb(255 255 255 / 0.92);
+  --app-sidebar-border: rgb(15 23 42 / 0.12);
+  --app-topbar-bg: rgb(255 255 255 / 0.85);
+  --app-footer-bg: rgb(248 250 252 / 0.92);
+
+  --app-alert-ticker-bg-from: #fff7ed;
+  --app-alert-ticker-bg-to: #fef2f2;
+  --app-alert-ticker-fade: #fff7ed;
+  --app-alert-ticker-text: #334155;
+  --app-alert-ticker-alert-border: rgb(225 29 72 / 0.35);
+  --app-alert-ticker-alert-bg: rgb(255 228 230);
+  --app-alert-ticker-alert-text: #9f1239;
+  --app-alert-ticker-alert-glow: rgb(244 63 94 / 0.12);
+  --app-alert-ticker-warning-border: rgb(217 119 6 / 0.35);
+  --app-alert-ticker-warning-bg: rgb(254 243 199);
+  --app-alert-ticker-warning-text: #92400e;
+  --app-alert-ticker-warning-glow: rgb(245 158 11 / 0.12);
+
+  --app-accent: #4f46e5;
+  --app-accent-hover: #4338ca;
+  --app-focus-ring: rgb(79 70 229 / 0.35);
+  --app-link: #4338ca;
+  --app-link-hover: #312e81;
+
+  --app-input-bg: #ffffff;
+  --app-input-border: rgb(15 23 42 / 0.2);
+  --app-input-text: #0f172a;
+  --app-input-placeholder: #64748b;
+
+  --app-dialog-bg: #ffffff;
+  --app-dialog-border: rgb(15 23 42 / 0.14);
+  --app-dialog-text: #0f172a;
+
+  --app-toast-bg: #ffffff;
+  --app-toast-border: rgb(15 23 42 / 0.12);
+  --app-toast-text: #0f172a;
+
+  --app-live-border: rgb(16 185 129 / 0.28);
+  --app-live-bg: rgb(236 253 245 / 0.92);
+  --app-alert-error-border: rgb(225 29 72 / 0.22);
+  --app-alert-error-bg: rgb(255 241 242 / 0.98);
+  --app-alert-error-text: rgb(159 18 57);
+  --app-alert-warning-border: rgb(217 119 6 / 0.28);
+  --app-alert-warning-bg: rgb(255 251 235 / 0.98);
+  --app-alert-warning-text: rgb(120 53 15);
+  --app-alert-success-border: rgb(5 150 105 / 0.28);
+  --app-alert-success-bg: rgb(209 250 229 / 0.95);
+  --app-alert-success-text: rgb(4 120 87);
+  --app-alert-info-border: rgb(79 70 229 / 0.28);
+  --app-alert-info-bg: rgb(238 242 255 / 0.98);
+  --app-alert-info-text: rgb(67 56 202);
+  --app-notes-border: rgb(217 119 6 / 0.25);
+  --app-notes-bg: rgb(255 251 235 / 0.98);
+  --app-notes-text: rgb(120 53 15);
+  --app-chip-sky-border: rgb(2 132 199 / 0.28);
+  --app-chip-sky-bg: rgb(224 242 254 / 0.95);
+  --app-chip-sky-text: rgb(3 105 161);
+  --app-chip-indigo-border: rgb(79 70 229 / 0.28);
+  --app-chip-indigo-bg: rgb(238 242 255 / 0.95);
+  --app-chip-indigo-text: rgb(67 56 202);
+  --app-badge-emerald-border: rgb(5 150 105 / 0.28);
+  --app-badge-emerald-bg: rgb(209 250 229 / 0.95);
+  --app-badge-emerald-text: rgb(4 120 87);
+  --app-badge-amber-border: rgb(217 119 6 / 0.28);
+  --app-badge-amber-bg: rgb(254 243 199 / 0.95);
+  --app-badge-amber-text: rgb(146 64 14);
+
+  --app-scrollbar-thumb: rgb(79 70 229 / 0.5);
+  --app-scrollbar-track: rgb(226 232 240 / 0.95);
+}

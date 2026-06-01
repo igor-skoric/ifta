@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>USA wind gusts</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            color: #eee;
+            touch-action: none;
+            pointer-events: none;
+            -webkit-user-select: none;
+            user-select: none;
+            font-family: system-ui, sans-serif
+        }
+
+        #wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 56px;
+            background: #000
+        }
+
+        #iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            pointer-events: none
+        }
+
+        #bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 56px;
+            padding: 6px 10px;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+            font-size: clamp(13px, 2.2vw, 17px);
+            line-height: 1.25
+        }
+
+        #bar .main {
+            font-weight: 600;
+            color: #fff
+        }
+
+        #bar .sub {
+            font-size: clamp(11px, 1.8vw, 14px);
+            color: #9ca3af;
+            font-weight: 400
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <iframe id="iframe" title="Ventusky wind gusts — USA" loading="eager"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div id="bar" aria-live="polite">
+        <div class="main">US Central (this frame): <span id="frameCt">—</span></div>
+    </div>
+    <script>
+        (function () {
+            var TZ = 'America/Chicago';
+            var LAT = 38.5, LON = -98, ZOOM = 4;
+            var STEP_MS = 5e4;
+            var OFFSETS = [0, 1, 2, 3, 4, 6, 12];
+            var i = 0;
+            function pad2(n) { return (n < 10 ? '0' : '') + n; }
+            function chicagoWall(ms) {
+                var s = new Date(ms).toLocaleString('sv-SE', { timeZone: TZ, hour12: false });
+                var sp = s.split(' ');
+                var ymd = sp[0].split('-');
+                var hms = sp[1].split(':');
+                return { y: +ymd[0], m: +ymd[1], d: +ymd[2], H: +hms[0], M: +hms[1] };
+            }
+            function floorHourChicagoUtcMs() {
+                var t = Date.now(), w, n;
+                for (n = 0; n < 125; n++) {
+                    w = chicagoWall(t);
+                    if (w.M === 0) return t;
+                    t -= 60000;
+                }
+                return Date.now();
+            }
+            function ventuskyTUtc(ms) {
+                var d = new Date(ms);
+                return '&t=' + d.getUTCFullYear() + pad2(d.getUTCMonth() + 1) + pad2(d.getUTCDate()) + '/' + pad2(d.getUTCHours());
+            }
+            function forecastMs(offsetHours) {
+                return floorHourChicagoUtcMs() + offsetHours * 3600000;
+            }
+            function formatChicago(ms) {
+                return new Date(ms).toLocaleString('en-US', { timeZone: TZ, weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+            }
+            var iframe = document.getElementById('iframe');
+            var frameCt = document.getElementById('frameCt');
+            function show(n) {
+                i = n;
+                var h = OFFSETS[i];
+                var ms = forecastMs(h);
+                frameCt.textContent = formatChicago(ms);
+                iframe.src = 'https://embed.ventusky.com/?p=' + LAT + ';' + LON + ';' + ZOOM + '&l=gust&w=soft' + ventuskyTUtc(ms);
+            }
+            show(0);
+            setInterval(function () { show((i + 1) % OFFSETS.length); }, STEP_MS);
+        })();
+    </script>
+</body>
+
+</html>

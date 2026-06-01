@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {% if is_create %}New trailer{% else %}Edit trailer{% endif %}{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+    <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">{% if is_create %}New trailer{% else %}Edit trailer · {{ trailer.unit_number }}{% endif %}</h1>
+    <p class="mt-1 text-sm text-slate-400">A driver can have multiple trailers; each change is stored in assignment history (uses the driver’s current truck when set).</p>
+    {% if not is_create %}
+    <p class="mt-2 text-xs text-slate-500"><a href="{% url 'dispatch:trailer_detail' trailer.pk %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Trailer overview</a></p>
+    {% endif %}
+  </div>
+
+  <div class="max-w-xl rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl">
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {% include "dispatch/_trailer_form_fields.html" %}
+      <div class="flex flex-wrap gap-2 pt-2">
+        <button type="submit" class="app-btn app-btn--primary">Save</button>
+        <a href="{% url 'dispatch:trailer_list' %}" class="rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/10">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

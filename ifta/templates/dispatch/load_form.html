@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {% if is_create %}New load{% else %}Edit load{% endif %}{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+    <h1 class="text-2xl font-bold tracking-tight load-detail-heading sm:text-3xl">
+      {% if is_create %}New load{% else %}Edit load · {{ load.display_title }}{% endif %}
+    </h1>
+    {% if not is_create %}
+    <p class="mt-2 text-xs load-detail-subtle">
+      <a href="{% url 'dispatch:load_detail' load.pk %}" class="load-detail-link">← Load overview</a>
+    </p>
+    {% endif %}
+  </div>
+
+  <div class="load-detail-panel max-w-3xl">
+    {% include "dispatch/includes/_load_form_body.html" with is_modal=False submit_label=is_create|yesno:"Create load,Save changes" show_planner_hint=is_create %}
+  </div>
+</div>
+{% endblock %}

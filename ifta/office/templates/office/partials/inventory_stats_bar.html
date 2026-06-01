@@ -1,0 +1,18 @@
+{# Inventory stats as simple sequential cards #}
+<div class="mb-5 flex flex-wrap gap-2">
+  {% for row in office_inventory_by_state %}
+    <div class="w-40 rounded-xl border px-3 py-2
+      {% if row.state == 'active' %}border-emerald-300/30 bg-emerald-500/15 text-emerald-100
+      {% elif row.state == 'draft' %}border-slate-300/20 bg-slate-500/20 text-slate-100
+      {% elif row.state == 'broken' %}border-red-300/30 bg-red-500/15 text-red-100
+      {% elif row.state == 'in_service' %}border-cyan-300/30 bg-cyan-500/15 text-cyan-100
+      {% elif row.state == 'maintenance' %}border-amber-300/30 bg-amber-500/15 text-amber-100
+      {% else %}border-violet-300/30 bg-violet-500/15 text-violet-100{% endif %}">
+      <p class="text-[10px] font-semibold uppercase tracking-wider">Status</p>
+      <p class="truncate text-[11px] font-semibold uppercase tracking-wide">{{ row.state }}</p>
+      <p class="mt-0.5 text-lg font-bold leading-none tabular-nums text-white">{{ row.count }}</p>
+    </div>
+  {% empty %}
+    <span class="text-xs text-slate-500">No data</span>
+  {% endfor %}
+</div>

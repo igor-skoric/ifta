@@ -1,0 +1,40 @@
+<section class="load-comments" id="load-comments">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <h2 class="load-comments__title">Comments</h2>
+    <span class="text-xs load-detail-subtle">{{ comments|length }} total</span>
+  </div>
+
+  {% if comments %}
+  <ul class="load-comments__list mt-3 space-y-2">
+    {% for comment in comments %}
+    <li class="load-comments__item">
+      <p class="load-comments__body">{{ comment.body|linebreaksbr }}</p>
+      <p class="load-comments__meta">
+        <span class="load-comments__author">{% if comment.created_by %}{{ comment.created_by.get_full_name|default:comment.created_by.username }}{% else %}Unknown{% endif %}</span>
+        <span class="mx-1">·</span>
+        <time datetime="{{ comment.created_at|date:'c' }}">{{ comment.created_at|date:"M j, Y H:i" }}</time>
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="mt-3 text-sm load-detail-subtle">No comments yet.</p>
+  {% endif %}
+
+  <form method="post" action="{% url 'dispatch:load_comment_create' load.pk %}" class="load-comments__form mt-4">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+    <label for="load-comment-body" class="app-label">Add comment</label>
+    <textarea
+      id="load-comment-body"
+      name="body"
+      rows="3"
+      required
+      maxlength="5000"
+      class="app-input mt-1.5"
+      placeholder="Note for dispatch team…"></textarea>
+    <div class="mt-2 flex justify-end">
+      <button type="submit" class="load-comments__submit">Post comment</button>
+    </div>
+  </form>
+</section>

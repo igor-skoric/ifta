@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {{ driver.display_name }}{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  {# Profile header #}
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl sm:p-6">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+      <div class="flex gap-4 sm:gap-5">
+        <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500/30 to-indigo-700/20 text-lg font-bold text-indigo-100 ring-2 ring-indigo-400/20 sm:h-20 sm:w-20 sm:text-xl" aria-hidden="true">
+          {{ driver.first_name|slice:":1" }}{{ driver.last_name|slice:":1" }}
+        </div>
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">{{ driver.display_name }}</h1>
+            {% if driver.is_active %}
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-200">Active</span>
+            {% else %}
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-200">Inactive</span>
+            {% endif %}
+          </div>
+          <dl class="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <div>
+              <dt class="text-xs text-slate-500">Driver ID</dt>
+              <dd class="font-mono font-medium text-slate-200">{% if driver.legacy_driver_id %}{{ driver.legacy_driver_id }}{% else %}#{{ driver.pk }}{% endif %}</dd>
+            </div>
+            {% if driver.fleet_company %}
+            <div>
+              <dt class="text-xs text-slate-500">Company</dt>
+              <dd class="text-slate-200">{{ driver.get_fleet_company_display }}</dd>
+            </div>
+            {% endif %}
+            {% if driver.hire_date %}
+            <div>
+              <dt class="text-xs text-slate-500">Hire date</dt>
+              <dd class="text-slate-200">{{ driver.hire_date|date:"M j, Y" }}</dd>
+            </div>
+            {% endif %}
+            {% if driver.dispatcher %}
+            <div>
+              <dt class="text-xs text-slate-500">Dispatcher</dt>
+              <dd class="text-slate-200">{{ driver.dispatcher.first_name }} {{ driver.dispatcher.last_name }}</dd>
+            </div>
+            {% endif %}
+            {% with trailer=driver.trailers.all.0 %}
+            {% if current_assignments.0 %}
+            {% include "dispatch/_detail_meta_assignment.html" with self_kind="driver" assign_truck=driver.truck assign_trailer=trailer assign_driver=driver assigned_since=current_assignments.0.started_at %}
+            {% else %}
+            {% include "dispatch/_detail_meta_assignment.html" with self_kind="driver" assign_truck=driver.truck assign_trailer=trailer assign_driver=driver %}
+            {% endif %}
+            {% endwith %}
+          </dl>
+        </div>
+      </div>
+      {% if can_manage_dispatch %}
+      <a href="{% url 'dispatch:driver_edit' driver.pk %}" data-dispatch-entity-modal class="app-btn app-btn--primary shrink-0">
+        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+        Edit driver
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mt-6" data-entity-detail-tabs>
+    {% include "dispatch/_detail_tab_bar.html" %}
+
+    <div id="detail-tab-panel-overview" data-tab-panel="overview" class="mt-6" role="tabpanel" aria-labelledby="detail-tab-overview">
+  {# Cards grid — Contact, Work, Notes #}
+  <div class="grid gap-6 lg:grid-cols-3">
+    {# Contact #}
+    <div class="min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-white">Contact</h2>
+        {% if can_manage_dispatch %}
+        <a href="{% url 'dispatch:driver_edit' driver.pk %}" data-dispatch-entity-modal class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit</a>
+        {% endif %}
+      </div>
+      <dl class="divide-y divide-white/5 px-5">
+        <div class="flex items-center justify-between gap-4 py-3.5">
+          <dt class="flex items-center gap-2 text-sm text-slate-500"><i class="fa-solid fa-phone w-4 text-slate-600" aria-hidden="true"></i> Phone</dt>
+          <dd class="text-sm text-slate-200">{% if driver.phone %}{{ driver.phone }}{% else %}<span class="text-slate-600">—</span>{% endif %}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 py-3.5">
+          <dt class="flex items-center gap-2 text-sm text-slate-500"><i class="fa-solid fa-envelope w-4 text-slate-600" aria-hidden="true"></i> Email</dt>
+          <dd class="break-all text-sm text-slate-200">{% if driver.email %}{{ driver.email }}{% else %}<span class="text-slate-600">—</span>{% endif %}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-4 py-3.5">
+          <dt class="text-sm text-slate-500">Created</dt>
+          <dd class="text-sm text-slate-300">{{ driver.created_at|date:"M j, Y" }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    {# Work info #}
+    <div class="min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-white">Work information</h2>
+        {% if can_manage_dispatch %}
+        <a href="{% url 'dispatch:driver_edit' driver.pk %}" data-dispatch-entity-modal class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit</a>
+        {% endif %}
+      </div>
+      <dl class="divide-y divide-white/5 px-5">
+        <div class="flex justify-between gap-4 py-3.5">
+          <dt class="text-sm text-slate-500">Driveroo</dt>
+          <dd class="text-sm text-slate-200">{% if driver.driveroo_status %}{{ driver.get_driveroo_status_display }}{% else %}—{% endif %}</dd>
+        </div>
+        <div class="flex justify-between gap-4 py-3.5">
+          <dt class="text-sm text-slate-500">COMP / OO / LOCAL</dt>
+          <dd class="text-sm text-slate-200">{% if driver.comp_oo_local_legal %}{{ driver.get_comp_oo_local_legal_display }}{% else %}—{% endif %}</dd>
+        </div>
+        <div class="flex justify-between gap-4 py-3.5">
+          <dt class="text-sm text-slate-500">Fleet company</dt>
+          <dd class="text-sm text-slate-200">{% if driver.fleet_company %}{{ driver.get_fleet_company_display }}{% else %}—{% endif %}</dd>
+        </div>
+        <div class="flex justify-between gap-4 py-3.5">
+          <dt class="text-sm text-slate-500">RTS fuel card</dt>
+          <dd class="text-sm text-slate-200">
+            {% if driver.rts_fuel_card %}
+            <span class="inline-flex items-center gap-1 text-emerald-300"><i class="fa-solid fa-circle-check text-xs" aria-hidden="true"></i> Yes</span>
+            {% else %}No{% endif %}
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    {# Driver notes #}
+    <div class="min-w-0 rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-white">Driver notes</h2>
+        {% if can_manage_dispatch %}
+        <a href="{% url 'dispatch:driver_edit' driver.pk %}" data-dispatch-entity-modal class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit</a>
+        {% endif %}
+      </div>
+      <div class="px-5 py-4">
+        {% if driver.notes %}
+        <div class="rounded-xl border border-amber-500/20 bg-amber-500/[0.08] px-4 py-3 text-sm leading-relaxed text-amber-100/90">{{ driver.notes|linebreaksbr }}</div>
+        {% else %}
+        <p class="text-sm text-slate-600">No notes yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if can_manage_dispatch %}
+    <div class="min-w-0 rounded-2xl border border-indigo-500/25 bg-indigo-500/[0.06] shadow-xl lg:col-span-3">
+      <div class="border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-indigo-100">Manage equipment</h2>
+        <p class="mt-0.5 text-xs text-slate-400">Assign truck and/or trailer to this driver. Leave empty to unassign.</p>
+      </div>
+      <form method="post" action="{% url 'dispatch:driver_assign_equipment' driver.pk %}" class="px-5 py-4">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}" />
+        <input type="hidden" name="action" value="save_equipment" />
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="equip-truck" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">Truck</label>
+            <select id="equip-truck" name="truck" class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2.5 text-sm text-white">
+              <option value="">— None —</option>
+              {% for t in truck_choices %}
+              <option value="{{ t.pk }}" {% if driver.truck and driver.truck.pk == t.pk %}selected{% endif %}>{{ t.unit_number }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="equip-trailer" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">Trailer</label>
+            <select id="equip-trailer" name="trailer" class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2.5 text-sm text-white">
+              <option value="">— None —</option>
+              {% for tr in trailer_choices %}
+              <option value="{{ tr.pk }}" {% for at in driver.trailers.all %}{% if at.pk == tr.pk %}selected{% endif %}{% endfor %}>{{ tr.unit_number }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mt-4">
+          <button type="submit" class="app-btn app-btn--primary">Save equipment</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+
+    <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl lg:col-span-3">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
+        <div>
+          <h2 class="text-sm font-semibold text-white">Planner availability</h2>
+          <p class="mt-0.5 text-xs text-slate-400">Date ranges when this driver cannot be scheduled (vacation, sick, etc.).</p>
+        </div>
+        {% if can_manage_dispatch %}
+        <a href="{% url 'dispatch:driver_unavailability_create' driver.pk %}" class="app-btn app-btn--primary shrink-0 text-xs">+ Mark unavailable</a>
+        {% endif %}
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-900/60 text-left text-[11px] uppercase tracking-wider text-slate-500">
+            <tr>
+              <th class="px-4 py-2.5 font-semibold">Reason</th>
+              <th class="px-4 py-2.5 font-semibold">From</th>
+              <th class="px-4 py-2.5 font-semibold">To</th>
+              <th class="px-4 py-2.5 font-semibold">Note</th>
+              {% if can_manage_dispatch %}<th class="px-4 py-2.5 font-semibold text-right">Actions</th>{% endif %}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            {% for entry in unavailability_entries %}
+            <tr>
+              <td class="px-4 py-2.5 text-slate-200">{{ entry.get_reason_display }}</td>
+              <td class="px-4 py-2.5 font-mono text-xs text-slate-300">{{ entry.start_date|date:"Y-m-d" }}</td>
+              <td class="px-4 py-2.5 font-mono text-xs text-slate-300">{{ entry.end_date|date:"Y-m-d" }}</td>
+              <td class="px-4 py-2.5 text-slate-400">{% if entry.note %}{{ entry.note }}{% else %}<span class="text-slate-600">—</span>{% endif %}</td>
+              {% if can_manage_dispatch %}
+              <td class="px-4 py-2.5 text-right">
+                <a href="{% url 'dispatch:driver_unavailability_edit' driver.pk entry.pk %}" class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit</a>
+                <form method="post" action="{% url 'dispatch:driver_unavailability_delete' driver.pk entry.pk %}" class="ml-3 inline" onsubmit="return confirm('Remove this unavailability period?');">
+                  {% csrf_token %}
+                  <button type="submit" class="text-xs font-semibold text-rose-300 hover:text-rose-200">Delete</button>
+                </form>
+              </td>
+              {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="{% if can_manage_dispatch %}5{% else %}4{% endif %}" class="px-4 py-6 text-center text-slate-500">No unavailability periods. Driver is available on the planner unless marked here.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    </div>
+
+    <div id="detail-tab-panel-other" data-tab-panel="other" class="mt-6 hidden" role="tabpanel" aria-labelledby="detail-tab-other" hidden>
+      {% include "dispatch/_assignment_history.html" %}
+    </div>
+  </div>
+</div>
+{% include "dispatch/_detail_tabs_script.html" %}
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% endif %}
+{% endblock %}

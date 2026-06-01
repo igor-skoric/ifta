@@ -1,0 +1,174 @@
+<section class="space-y-6" aria-labelledby="truck-samsara-heading">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h2 id="truck-samsara-heading" class="flex items-center gap-2 text-sm font-semibold text-white">
+        <i class="fa-solid fa-satellite-dish text-sky-400" aria-hidden="true"></i>
+        Samsara
+      </h2>
+      <p class="mt-1 text-xs text-slate-500">
+        Matched by vehicle name = dispatch unit <span class="font-mono text-slate-400">{{ truck.unit_number }}</span>
+      </p>
+    </div>
+    <a href="{% url 'samsara:dashboard' %}" class="text-xs font-semibold text-slate-400 hover:text-indigo-200">Samsara module →</a>
+  </div>
+
+  <div class="grid gap-4 lg:grid-cols-2">
+    <section class="app-module-panel rounded-2xl p-4 sm:p-5" aria-labelledby="truck-dispatch-db-heading">
+      <h3 id="truck-dispatch-db-heading" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <i class="fa-solid fa-database text-indigo-400" aria-hidden="true"></i>
+        Dispatch (database)
+      </h3>
+      <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-xs text-slate-500">Unit number</dt>
+          <dd class="mt-0.5 font-mono text-sm font-semibold text-white">{{ truck.unit_number }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Dispatch ID</dt>
+          <dd class="mt-0.5 font-mono text-sm text-slate-200">#{{ truck.pk }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Status</dt>
+          <dd class="mt-0.5">
+            {% if truck.is_active %}
+            <span class="app-badge-emerald rounded-full px-2 py-0.5 text-xs font-semibold">Active</span>
+            {% else %}
+            <span class="app-badge-amber rounded-full px-2 py-0.5 text-xs font-semibold">Inactive</span>
+            {% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Created</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">{{ truck.created_at|date:"M j, Y g:i A" }}</dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt class="text-xs text-slate-500">Driver</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">
+            {% if samsara_dispatch_driver %}
+            <a href="{% url 'dispatch:driver_detail' samsara_dispatch_driver.pk %}" class="font-semibold text-indigo-300 hover:text-indigo-200">{{ samsara_dispatch_driver.display_name }}</a>
+            {% else %}
+            <span class="text-slate-500">—</span>
+            {% endif %}
+          </dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt class="text-xs text-slate-500">Trailer{% if samsara_dispatch_trailers|length > 1 %}s{% endif %}</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">
+            {% if samsara_dispatch_trailers %}
+            {% for tr in samsara_dispatch_trailers %}
+            <a href="{% url 'dispatch:trailer_detail' tr.pk %}" class="font-mono font-semibold text-indigo-300 hover:text-indigo-200">{{ tr.unit_number }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            {% else %}
+            <span class="text-slate-500">—</span>
+            {% endif %}
+          </dd>
+        </div>
+        {% if samsara_dispatch_assigned_since %}
+        <div class="sm:col-span-2">
+          <dt class="text-xs text-slate-500">Current assignment since</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">{{ samsara_dispatch_assigned_since|date:"M j, Y g:i A" }}</dd>
+        </div>
+        {% endif %}
+        <div class="sm:col-span-2">
+          <dt class="text-xs text-slate-500">Notes</dt>
+          <dd class="mt-0.5 text-sm text-slate-300">
+            {% if truck.notes %}
+            <span class="app-notes-callout block rounded-lg px-3 py-2">{{ truck.notes|linebreaksbr }}</span>
+            {% else %}
+            <span class="text-slate-500">—</span>
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+      {% if can_manage_dispatch %}
+      <p class="mt-4 border-t border-white/10 pt-3">
+        <a href="{% url 'dispatch:truck_edit' truck.pk %}" data-dispatch-entity-modal class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit dispatch truck →</a>
+      </p>
+      {% endif %}
+    </section>
+
+    <section class="app-module-panel rounded-2xl p-4 sm:p-5" aria-labelledby="truck-samsara-sync-heading">
+      <h3 id="truck-samsara-sync-heading" class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <i class="fa-solid fa-cloud text-sky-400" aria-hidden="true"></i>
+        Samsara (synced)
+      </h3>
+      {% if samsara_vehicle %}
+      <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-xs text-slate-500">Display name</dt>
+          <dd class="mt-0.5 text-sm font-semibold text-white">{{ samsara_vehicle.name|default:"—" }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Samsara ID</dt>
+          <dd class="mt-0.5 font-mono text-xs text-sky-200">{{ samsara_vehicle.samsara_id }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Engine / motion</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">{{ samsara_vehicle_status_display }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Last sync</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">{{ samsara_vehicle.last_synced_at|date:"M j, Y g:i A" }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-slate-500">Trips in DB</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">
+            {% if samsara_trips_count %}
+            <a href="{{ samsara_vehicle_trips_url }}" class="font-semibold tabular-nums text-indigo-300 hover:text-indigo-200">{{ samsara_trips_count }}</a>
+            {% else %}
+            <span class="text-slate-500">0</span>
+            {% endif %}
+          </dd>
+        </div>
+        {% if samsara_last_trip %}
+        <div class="sm:col-span-2">
+          <dt class="text-xs text-slate-500">Latest trip</dt>
+          <dd class="mt-0.5 text-sm text-slate-200">
+            {% if samsara_last_trip.start_time %}{{ samsara_last_trip.start_time|date:"M j, Y g:i A" }}{% else %}—{% endif %}
+            {% if samsara_last_trip.end_time %} → {{ samsara_last_trip.end_time|date:"M j, Y g:i A" }}{% endif %}
+            {% if samsara_last_trip.distance_meters %}
+            <span class="text-slate-500"> · {{ samsara_last_trip.distance_km|floatformat:1 }} km</span>
+            {% endif %}
+          </dd>
+        </div>
+        {% endif %}
+      </dl>
+      <div class="mt-4 flex flex-wrap gap-2 border-t border-white/10 pt-4">
+        <a href="{{ samsara_vehicle_detail_url }}"
+           class="app-chip-sky inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition">
+          <i class="fa-solid fa-truck text-sky-300" aria-hidden="true"></i>
+          Full Samsara page
+        </a>
+        <a href="{{ samsara_vehicle_trips_url }}"
+           class="app-chip-indigo inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition">
+          <i class="fa-solid fa-route text-indigo-300" aria-hidden="true"></i>
+          Trips
+        </a>
+      </div>
+      {% else %}
+      <p class="mt-4 text-sm text-slate-400">
+        No synced vehicle named <span class="font-mono text-slate-300">{{ truck.unit_number }}</span>.
+        Sync in Samsara module; name must match unit exactly.
+      </p>
+      <a href="{{ samsara_vehicle_list_url }}"
+         class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-indigo-300 hover:text-indigo-200">
+        <i class="fa-solid fa-magnifying-glass text-xs" aria-hidden="true"></i>
+        Search Samsara vehicles
+      </a>
+      {% endif %}
+    </section>
+  </div>
+
+  {% include "dispatch/_truck_detail_samsara_live.html" %}
+
+  {% if main_rows or gateway_rows or driver_rows or tags or extra_rows or external_id_rows %}
+  <div aria-labelledby="truck-samsara-payload-heading">
+    <h3 id="truck-samsara-payload-heading" class="mb-4 text-xs font-semibold uppercase tracking-wider text-slate-400">Synced payload details</h3>
+    {% include "samsara/_vehicle_payload_sections.html" with sections_compact=True %}
+  </div>
+  {% elif samsara_vehicle %}
+  <p class="app-module-panel rounded-2xl px-4 py-6 text-center text-sm text-slate-500">
+    No structured payload stored yet. Run <strong>Sync vehicles</strong> from the Samsara dashboard.
+  </p>
+  {% endif %}
+</section>

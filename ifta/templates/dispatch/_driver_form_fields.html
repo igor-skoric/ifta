@@ -1,0 +1,100 @@
+{% if form.non_field_errors %}
+<div class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-100">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<div>
+  <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Identity</p>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label for="id_first_name" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">First name</label>
+      {{ form.first_name }}
+      {% if form.first_name.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.first_name.errors.0 }}</p>{% endif %}
+    </div>
+    <div>
+      <label for="id_last_name" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Last name</label>
+      {{ form.last_name }}
+      {% if form.last_name.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.last_name.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="sm:col-span-2">
+      <label for="id_legacy_driver_id" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Legacy driver ID</label>
+      {{ form.legacy_driver_id }}
+      {% if form.legacy_driver_id.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.legacy_driver_id.errors.0 }}</p>{% endif %}
+      <p class="mt-1 text-[11px] text-slate-500">Imported key from your previous database (optional).</p>
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">HR &amp; apps</p>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label for="id_hire_date" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Hire date</label>
+      {{ form.hire_date }}
+      {% if form.hire_date.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.hire_date.errors.0 }}</p>{% endif %}
+    </div>
+    <div>
+      <label for="id_driveroo_status" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Driveroo</label>
+      {{ form.driveroo_status }}
+      {% if form.driveroo_status.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.driveroo_status.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="sm:col-span-2">
+      <label for="id_comp_oo_local_legal" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">COMP / OO / LOCAL / LEGAL</label>
+      {{ form.comp_oo_local_legal }}
+      {% if form.comp_oo_local_legal.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.comp_oo_local_legal.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="sm:col-span-2">
+      <label for="id_fleet_company" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Company</label>
+      {{ form.fleet_company }}
+      {% if form.fleet_company.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.fleet_company.errors.0 }}</p>{% endif %}
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Contact</p>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label for="id_phone" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Phone</label>
+      {{ form.phone }}
+      {% if form.phone.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.phone.errors.0 }}</p>{% endif %}
+    </div>
+    <div>
+      <label for="id_email" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Email</label>
+      {{ form.email }}
+      {% if form.email.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.email.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="sm:col-span-2 flex items-center gap-2 pb-1">
+      {{ form.rts_fuel_card }}
+      <label for="id_rts_fuel_card" class="text-sm text-slate-300">RTS fuel card</label>
+    </div>
+    {% if form.rts_fuel_card.errors %}<p class="sm:col-span-2 text-xs text-rose-300">{{ form.rts_fuel_card.errors.0 }}</p>{% endif %}
+    <div class="sm:col-span-2">
+      <label for="id_notes" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Notes</label>
+      {{ form.notes }}
+      {% if form.notes.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.notes.errors.0 }}</p>{% endif %}
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Planner</p>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <label for="id_dispatcher" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Dispatcher</label>
+      {{ form.dispatcher }}
+      {% if form.dispatcher.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.dispatcher.errors.0 }}</p>{% endif %}
+    </div>
+    <div>
+      <label for="id_sort_order" class="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-500">Sort order</label>
+      {{ form.sort_order }}
+      {% if form.sort_order.errors %}<p class="mt-1 text-xs text-rose-300">{{ form.sort_order.errors.0 }}</p>{% endif %}
+    </div>
+    <div class="flex items-end pb-1">
+      <div class="flex items-center gap-2">
+        {{ form.is_active }}
+        <label for="id_is_active" class="text-sm text-slate-300">Active</label>
+      </div>
+    </div>
+    {% if form.is_active.errors %}<p class="sm:col-span-2 text-xs text-rose-300">{{ form.is_active.errors.0 }}</p>{% endif %}
+  </div>
+</div>

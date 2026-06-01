@@ -1,0 +1,22 @@
+{# People stats as simple sequential cards #}
+<div class="mb-5 flex flex-wrap gap-2">
+  {% for row in office_people_by_department %}
+    <div class="w-40 rounded-xl border border-sky-300/20 bg-sky-500/15 px-3 py-2">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-sky-300/90">Department</p>
+      <p class="truncate text-[11px] font-semibold uppercase tracking-wide text-sky-100">{{ row.department__name }}</p>
+      <p class="mt-0.5 text-lg font-bold leading-none tabular-nums text-white">{{ row.count }}</p>
+    </div>
+  {% endfor %}
+
+  {% for row in office_people_by_login_type %}
+    <div class="w-40 rounded-xl border border-indigo-300/20 bg-indigo-500/15 px-3 py-2">
+      <p class="text-[10px] font-semibold uppercase tracking-wider text-indigo-300/90">Login type</p>
+      <p class="truncate text-[11px] font-semibold uppercase tracking-wide text-indigo-100">{{ row.login_type }}</p>
+      <p class="mt-0.5 text-lg font-bold leading-none tabular-nums text-white">{{ row.count }}</p>
+    </div>
+  {% endfor %}
+
+  {% if not office_people_by_department and not office_people_by_login_type %}
+    <span class="text-xs text-slate-500">No data</span>
+  {% endif %}
+</div>

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Email verification required{% endblock %}
+
+{% block content %}
+<div class="flex min-h-screen items-center justify-center px-4 py-12">
+  <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.06] p-8 shadow-2xl backdrop-blur-md sm:p-10">
+    <p class="text-center text-xs font-semibold uppercase tracking-widest text-amber-300/90">Verification required</p>
+    <h2 class="mt-2 text-center text-2xl font-bold tracking-tight text-white">Potvrdite email adresu</h2>
+    <p class="mt-4 text-center text-sm text-slate-300">
+      Pre prvog logovanja potrebno je da kliknete na link koji je poslat na email.
+    </p>
+    <div class="mt-6 flex justify-center gap-3">
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'accounts:resend_verification' %}" class="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400">
+        Posalji ponovo
+      </a>
+      {% endif %}
+      <a href="{% url 'accounts:login' %}" class="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">
+        Nazad na login
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,75 @@
+<section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+  <div class="border-b border-white/10 px-5 py-4">
+    <h2 class="text-base font-semibold text-white">Assignment history</h2>
+    <p class="mt-0.5 text-xs text-slate-500">Recent links between driver, truck, and trailer.</p>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="min-w-[720px] w-full text-sm">
+      <thead class="bg-slate-900/60 text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <tr>
+          <th class="px-5 py-3 text-left">Started</th>
+          <th class="px-5 py-3 text-left">Ended</th>
+          <th class="px-5 py-3 text-left">Driver</th>
+          <th class="px-5 py-3 text-left">Truck</th>
+          <th class="px-5 py-3 text-left">Trailer</th>
+          <th class="px-5 py-3 text-left">Notes</th>
+          {% if can_manage_dispatch %}<th class="px-5 py-3 text-right"></th>{% endif %}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-white/5">
+        {% for a in assignment_history %}
+        <tr class="transition-colors hover:bg-white/[0.02]">
+          <td class="whitespace-nowrap px-5 py-3.5 text-xs text-slate-400">{{ a.started_at|date:"M j, Y" }}<br><span class="text-slate-600">{{ a.started_at|date:"H:i" }}</span></td>
+          <td class="whitespace-nowrap px-5 py-3.5 text-xs">
+            {% if a.ended_at %}
+            <span class="text-slate-400">{{ a.ended_at|date:"M j, Y" }}<br><span class="text-slate-600">{{ a.ended_at|date:"H:i" }}</span></span>
+            {% else %}
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-200">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+              Current
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3.5 text-slate-200">
+            {% if a.driver %}
+            <a href="{% url 'dispatch:driver_detail' a.driver_id %}" class="font-medium hover:text-indigo-200 hover:underline">{{ a.driver.display_name }}</a>
+            {% else %}
+            <span class="text-slate-600">—</span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3.5 font-mono text-xs">
+            {% if a.truck %}<a href="{% url 'dispatch:truck_detail' a.truck_id %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ a.truck.unit_number }}</a>{% else %}<span class="text-slate-600">—</span>{% endif %}
+          </td>
+          <td class="px-5 py-3.5 font-mono text-xs">
+            {% if a.trailer %}<a href="{% url 'dispatch:trailer_detail' a.trailer_id %}" class="text-indigo-300 hover:text-indigo-200 hover:underline">{{ a.trailer.unit_number }}</a>{% else %}<span class="text-slate-600">—</span>{% endif %}
+          </td>
+          <td class="max-w-[12rem] truncate px-5 py-3.5 text-xs text-slate-500">
+            {% if not a.ended_at and not a.notes %}
+            <span class="text-emerald-300/90">Current assignment</span>
+            {% elif a.notes %}
+            {{ a.notes }}
+            {% else %}
+            —
+            {% endif %}
+          </td>
+          {% if can_manage_dispatch %}
+          <td class="px-5 py-3.5 text-right">
+            {% if not a.ended_at %}
+            <form method="post" action="{% url 'dispatch:assignment_end' a.pk %}" class="inline">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}" />
+              <button type="submit" class="text-xs font-semibold text-rose-300 hover:text-rose-200">End</button>
+            </form>
+            {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="{% if can_manage_dispatch %}7{% else %}6{% endif %}" class="px-5 py-8 text-center text-slate-500">No assignment history yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

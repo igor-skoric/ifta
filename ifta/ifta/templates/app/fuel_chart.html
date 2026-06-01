@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Fuel chart · IFTA{% endblock %}
+
+{% block content %}
+
+<div class="w-full px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-xl sm:p-6">
+    <button type="button" onclick="history.back()"
+            class="mb-4 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10">
+      <span aria-hidden="true">←</span> Back
+    </button>
+    <h2 class="text-lg font-semibold text-white sm:text-xl">
+      Fuel statistics · top {{ vehicle_count }} by MPG
+    </h2>
+    <p class="mt-1 text-sm text-slate-400">Miles, gallons, and MPG per vehicle</p>
+
+    <div class="mt-6 h-72 w-full sm:h-80">
+      <canvas id="mpgChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+    const labels = [{% for item in data %}"{{ item.vehicle|escapejs }}",{% endfor %}];
+    const milesData = [{% for item in data %}{{ item.miles }},{% endfor %}];
+    const gallonsData = [{% for item in data %}{{ item.gallons }},{% endfor %}];
+    const mpgData = [{% for item in data %}{{ item.mpg }},{% endfor %}];
+
+    const grid = { color: "rgba(148, 163, 184, 0.12)" };
+    const ticks = { color: "#94a3b8", font: { size: 11 } };
+
+    const ctx = document.getElementById("mpgChart").getContext("2d");
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Miles",
+                    data: milesData,
+                    backgroundColor: "rgba(56, 189, 248, 0.45)",
+                    borderColor: "rgb(56, 189, 248)",
+                    borderWidth: 1,
+                    borderRadius: 4,
+                },
+                {
+                    label: "Gallons",
+                    data: gallonsData,
+                    backgroundColor: "rgba(52, 211, 153, 0.45)",
+                    borderColor: "rgb(52, 211, 153)",
+                    borderWidth: 1,
+                    borderRadius: 4,
+                },
+                {
+                    label: "MPG",
+                    data: mpgData,
+                    type: "line",
+                    borderColor: "rgb(167, 139, 250)",
+                    backgroundColor: "rgba(167, 139, 250, 0.15)",
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    yAxisID: "y1",
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: "#cbd5e1", boxWidth: 12, font: { size: 11 } },
+                },
+                tooltip: {
+                    backgroundColor: "rgba(15, 23, 42, 0.95)",
+                    titleColor: "#e2e8f0",
+                    bodyColor: "#cbd5e1",
+                    borderColor: "rgba(255,255,255,0.1)",
+                    borderWidth: 1,
+                },
+            },
+            scales: {
+                x: { grid, ticks },
+                y: {
+                    beginAtZero: true,
+                    position: "left",
+                    grid,
+                    ticks,
+                    title: { display: true, text: "Miles / gal", color: "#64748b", font: { size: 10 } },
+                },
+                y1: {
+                    beginAtZero: true,
+                    position: "right",
+                    grid: { drawOnChartArea: false },
+                    ticks: { ...ticks, color: "#c4b5fd" },
+                    title: { display: true, text: "MPG", color: "#64748b", font: { size: 10 } },
+                },
+            },
+        },
+    });
+})();
+</script>
+
+{% endblock %}

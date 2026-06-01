@@ -1,0 +1,45 @@
+<button type="button" class="app-topbar-icon-btn relative" aria-label="Notifications" title="Notifications">
+  <i class="fa-regular fa-bell text-base" aria-hidden="true"></i>
+  {% if topbar_notification_count %}
+  <span class="app-topbar-badge" aria-hidden="true">{{ topbar_notification_count }}</span>
+  {% endif %}
+</button>
+
+<details class="app-topbar-dropdown app-topbar-user-menu hidden md:block">
+  <summary class="app-topbar-user-trigger" aria-label="Account menu">
+    <span class="app-topbar-user-avatar" aria-hidden="true">
+      {% if request.user.first_name %}{{ request.user.first_name|slice:":1" }}{% endif %}{% if request.user.last_name %}{{ request.user.last_name|slice:":1" }}{% elif request.user.email %}{{ request.user.email|slice:":1" }}{% else %}{{ request.user.username|slice:":1" }}{% endif %}
+    </span>
+    <span class="app-topbar-user-name hidden lg:inline">
+      {% if request.user.first_name or request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.get_full_name|default:request.user.username }}{% endif %}
+    </span>
+    <i class="fa-solid fa-chevron-down text-[10px] opacity-70" aria-hidden="true"></i>
+  </summary>
+  <div class="app-topbar-dropdown__panel app-topbar-user-menu__panel" role="menu">
+    <p class="app-topbar-user-menu__identity">
+      <span class="block truncate font-semibold text-[var(--app-heading)]">
+        {% if request.user.first_name or request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.get_full_name|default:request.user.username }}{% endif %}
+      </span>
+      <span class="block truncate text-xs load-detail-subtle">{{ request.user.email|default:request.user.username }}</span>
+    </p>
+    <a href="{% url 'accounts:user_settings' %}" role="menuitem" class="app-topbar-menu-link">
+      <i class="fa-solid fa-gear w-4 shrink-0 text-center text-xs opacity-70" aria-hidden="true"></i>
+      Settings
+    </a>
+    {% if request.user.is_staff and request.user.is_superuser %}
+    <a href="{% url 'accounts:admin_dashboard' %}" role="menuitem" class="app-topbar-menu-link">
+      <i class="fa-solid fa-users-gear w-4 shrink-0 text-center text-xs opacity-70" aria-hidden="true"></i>
+      Accounts admin
+    </a>
+    <a href="{% url 'admin:index' %}" role="menuitem" class="app-topbar-menu-link">
+      <i class="fa-solid fa-user-gear w-4 shrink-0 text-center text-xs opacity-70" aria-hidden="true"></i>
+      Admin
+    </a>
+    {% endif %}
+    <div class="my-1 border-t border-[color:var(--app-border-subtle)]" role="separator"></div>
+    <a href="{% url 'ifta:signout' %}" role="menuitem" class="app-topbar-menu-link app-topbar-menu-link--danger">
+      <i class="fa-solid fa-arrow-right-from-bracket w-4 shrink-0 text-center text-xs opacity-70" aria-hidden="true"></i>
+      Sign out
+    </a>
+  </div>
+</details>

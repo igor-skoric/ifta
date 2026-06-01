@@ -1,0 +1,46 @@
+<td class="min-w-0 px-1.5 py-1.5 text-center align-top planner-day-col{% if wd.is_today %} planner-day-col--today{% endif %}">
+  <div class="flex w-full min-w-0 flex-col items-stretch gap-0.5">
+    <button type="button"
+      class="day-cell day-cell--driver relative w-full min-w-0 rounded-lg border px-1.5 py-1.5 text-center text-xs font-semibold leading-tight{% if unavailable %} day-cell--unavailable {{ unavailable.planner_css_class }}{% elif cell_load %} {{ cell_load.load.planner_status_css_class }}{% else %} day-cell--empty{% endif %}{% if cell_load and cell_load.cell.mode == 'pickup' %} day-cell--pickup{% endif %}{% if cell_load and cell_load.cell.mode == 'transit' %} day-cell--transit{% endif %}{% if unavailable and cell_loads %} day-cell--unavailable-has-loads{% endif %}"
+      data-cell-key="{{ cell_key }}"
+      data-driver-id="{{ driver.pk }}"
+      data-planner-date="{{ wd.date|date:'Y-m-d' }}"
+      {% if unavailable %}disabled aria-disabled="true" title="{{ unavailable.get_reason_display }}{% if unavailable.note %} · {{ unavailable.note }}{% endif %}"{% elif cell_load %}data-load-id="{{ cell_load.load.pk }}" data-load-status="{{ cell_load.load.status }}" data-load-status-label="{{ cell_load.load.get_status_display }}"{% endif %}
+      data-day-label="{{ wd.short }}"
+      data-primary="{{ wd.short }} · {{ driver.display_name }}{% if unavailable %} · {{ unavailable.get_reason_display }}{% endif %}"
+      data-secondary="Grid date: {{ wd.date|date:'Y-m-d' }}">
+      {% if unavailable %}
+      <span class="block text-[10px] font-bold uppercase tracking-wider text-rose-200/95">{{ unavailable.planner_short_label }}</span>
+      {% endif %}
+      {% if cell_loads and cell_load %}
+          {% with ld=cell_load.load cell=cell_load.cell %}
+          {% if cell.mode == "delivery" %}
+          <span class="block truncate{% if unavailable %} opacity-50{% endif %}" title="Delivery · {{ ld.display_title }}">{{ cell.text }}</span>
+          {% elif cell.mode == "multi_delivery" %}
+          {% for d in cell.deliveries %}
+          <span class="block truncate{% if unavailable %} opacity-50{% endif %}" title="Delivery · {{ ld.display_title }}">{{ d }}</span>
+          {% endfor %}
+          {% elif cell.mode == "pickup" %}
+          <span class="block text-sm font-semibold leading-none tracking-wide{% if unavailable %} opacity-50{% endif %}" title="Pick up{% if ld.pickup_display %} · {{ ld.pickup_display }}{% endif %}">→</span>
+          {% elif cell.mode == "transit" %}
+          <span class="block min-h-[1.1rem] opacity-60" aria-hidden="true" title="In transit"></span>
+          {% elif cell.text %}
+          <span class="block truncate{% if unavailable %} opacity-50{% endif %}" title="{{ ld.display_title }}">{{ cell.text }}</span>
+          {% elif cell_loads|length > 1 %}
+          <span class="block truncate text-[10px] font-normal opacity-90{% if unavailable %} opacity-50{% endif %}" title="{% for item in cell_loads %}{{ item.display_title }}{% if not forloop.last %} · {% endif %}{% endfor %}">{{ cell_loads|length }} loads</span>
+          {% endif %}
+          {% endwith %}
+      {% elif not unavailable %}
+        <span class="block opacity-70">—</span>
+      {% endif %}
+      <span class="mt-0.5 block font-mono text-[10px] font-normal{% if unavailable %} text-rose-200/70{% else %} opacity-75{% endif %}">{{ wd.date|date:"M j" }}</span>
+    </button>
+    {% if can_manage_dispatch and not unavailable %}
+    <a href="{% url 'dispatch:load_create' %}?driver={{ driver.pk }}&planner_date={{ wd.date|date:'Y-m-d' }}"
+       data-dispatch-entity-modal
+       class="block w-full truncate text-center text-[10px] font-semibold load-detail-link">+ load</a>
+    {% elif can_manage_dispatch and unavailable %}
+    <span class="block w-full truncate text-center text-[10px] font-medium text-slate-600" title="Driver unavailable">unavailable</span>
+    {% endif %}
+  </div>
+</td>

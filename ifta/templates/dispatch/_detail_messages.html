@@ -1,0 +1,15 @@
+{% if messages %}
+<div class="app-toast-stack" aria-live="polite" aria-atomic="false">
+  {% for message in messages %}
+  <div
+    class="app-toast {% if 'error' in message.tags %}app-toast--error{% elif 'warning' in message.tags %}app-toast--warning{% elif 'success' in message.tags %}app-toast--success{% else %}app-toast--info{% endif %}"
+    data-app-toast
+    data-dismiss-ms="5500"
+    role="status"
+  >
+    <p class="app-toast__text">{{ message }}</p>
+    <button type="button" class="app-toast__dismiss" aria-label="Dismiss notification">&times;</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

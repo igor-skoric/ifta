@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}People & Inventory · Office{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Office</p>
+    <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">People & Inventory</h1>
+    <p class="mt-1 text-sm text-slate-400">Centralna evidencija zaposlenih i opreme u Office app-u.</p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <section class="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-xl">
+      <h2 class="text-lg font-semibold text-white">Dodaj zaposlenog</h2>
+      <form method="post" class="mt-4 space-y-3">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="employee">
+        {% for field in employee_form %}
+          <label class="block text-sm text-slate-300">
+            <span class="mb-1 block">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endfor %}
+        <button type="submit" class="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400">
+          Sacuvaj zaposlenog
+        </button>
+      </form>
+    </section>
+
+    <section class="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-xl">
+      <h2 class="text-lg font-semibold text-white">Dodaj uredjaj</h2>
+      <form method="post" class="mt-4 space-y-3">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="equipment">
+        {% for field in equipment_form %}
+          <label class="block text-sm text-slate-300">
+            <span class="mb-1 block">{{ field.label }}</span>
+            {{ field }}
+          </label>
+        {% endfor %}
+        <button type="submit" class="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-400">
+          Sacuvaj uredjaj
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="border-b border-white/10 px-4 py-3">
+        <h3 class="font-semibold text-white">Zaposleni</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+            <tr>
+              <th class="px-4 py-3 text-left">ID</th>
+              <th class="px-4 py-3 text-left">Ime i prezime</th>
+              <th class="px-4 py-3 text-left">Department</th>
+              <th class="px-4 py-3 text-left">Tip prijave</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            {% for emp in employees %}
+            <tr class="hover:bg-white/[0.04]">
+              <td class="px-4 py-2.5 text-sky-300">{{ emp.employee_id }}</td>
+              <td class="px-4 py-2.5 text-slate-200">{{ emp.first_name }} {{ emp.last_name }}</td>
+              <td class="px-4 py-2.5 text-slate-300">{{ emp.department.name|default:"-" }}</td>
+              <td class="px-4 py-2.5 text-slate-300">{{ emp.get_login_type_display }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">Nema zaposlenih.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="border-b border-white/10 px-4 py-3">
+        <h3 class="font-semibold text-white">Oprema</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+            <tr>
+              <th class="px-4 py-3 text-left">Asset ID</th>
+              <th class="px-4 py-3 text-left">Tip</th>
+              <th class="px-4 py-3 text-left">Model</th>
+              <th class="px-4 py-3 text-left">Dodeljeno</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            {% for item in equipment %}
+            <tr class="hover:bg-white/[0.04]">
+              <td class="px-4 py-2.5 text-sky-300">{{ item.asset_id }}</td>
+              <td class="px-4 py-2.5 text-slate-300">{{ item.get_equipment_type_display }}</td>
+              <td class="px-4 py-2.5 text-slate-200">{{ item.brand_model|default:"-" }}</td>
+              <td class="px-4 py-2.5 text-slate-300">
+                {% if item.assigned_employee %}
+                  {{ item.assigned_employee.first_name }} {{ item.assigned_employee.last_name }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="px-4 py-6 text-center text-slate-500">Nema opreme.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

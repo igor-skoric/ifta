@@ -1,38 +1,609 @@
 {% load static %}
 {% load static tailwind_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="{{ app_ui_theme|default:'dark' }}">
 
 <head>
+    <script>
+    (function () {
+      var THEME_KEY = "takeoff_ui_theme";
+      var theme = "{{ app_ui_theme|default:'dark'|escapejs }}";
+      if (theme === "light" || theme === "dark") {
+        document.documentElement.setAttribute("data-theme", theme);
+        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+      }
+    })();
+    </script>
+    <script>
+    (function () {
+      var KEY = "takeoff_sidebar_collapsed";
+      var root = document.documentElement;
+      root.classList.add("sidebar-no-transition");
+      try {
+        if (localStorage.getItem(KEY) === "1") {
+          root.classList.add("sidebar-collapsed");
+        }
+      } catch (e) {}
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {% endblock %}</title>
+    <title>{% block title %}TAKE OFF{% endblock %}</title>
     {% tailwind_css %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+      /* Sidebar / mobile menu: visible scrollbar when navigation overflows */
+      .app-sidebar-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(129 140 248 / 0.55) rgb(30 41 59 / 0.6);
+      }
+      .app-sidebar-scroll::-webkit-scrollbar {
+        width: 10px;
+      }
+      .app-sidebar-scroll::-webkit-scrollbar-track {
+        background: rgb(15 23 42 / 0.5);
+        border-radius: 9999px;
+        margin-block: 4px;
+      }
+      .app-sidebar-scroll::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgb(129 140 248 / 0.7), rgb(99 102 241 / 0.45));
+        border-radius: 9999px;
+        border: 2px solid rgb(15 23 42 / 0.35);
+        background-clip: padding-box;
+      }
+      .app-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, rgb(165 180 252 / 0.9), rgb(129 140 248 / 0.75));
+      }
+      html[data-theme="light"] .app-sidebar-scroll {
+        scrollbar-color: rgb(79 70 229 / 0.5) rgb(226 232 240 / 0.95);
+      }
+      html[data-theme="light"] .app-sidebar-scroll::-webkit-scrollbar-track {
+        background: rgb(241 245 249 / 0.95);
+      }
+      html[data-theme="light"] .app-sidebar-scroll::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgb(99 102 241 / 0.55), rgb(79 70 229 / 0.4));
+        border-color: rgb(226 232 240 / 0.95);
+      }
+      @media (min-width: 768px) {
+        html {
+          --sidebar-expanded-width: 18rem;
+          --sidebar-collapsed-width: 3.25rem;
+          --sidebar-icon-rail-width: 2.5rem;
+        }
+        html.sidebar-no-transition #app-sidebar,
+        html.sidebar-no-transition #layout-main.layout-main-offset {
+          transition: none !important;
+        }
+        #app-sidebar {
+          width: var(--sidebar-expanded-width);
+          min-width: var(--sidebar-expanded-width);
+          padding: 1rem 0.75rem 0.75rem 0.375rem;
+          overflow-x: hidden;
+        }
+        html:not(.sidebar-no-transition) #app-sidebar {
+          transition: width 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        #layout-main.layout-main-offset {
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 100%;
+          padding-left: var(--sidebar-expanded-width);
+        }
+        html:not(.sidebar-no-transition) #layout-main.layout-main-offset {
+          transition: padding-left 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+        @media (max-width: 767px) {
+          #layout-main.layout-main-offset {
+            padding-left: 0;
+          }
+        }
+        #app-sidebar .sidebar-icon-rail {
+          display: flex;
+          width: var(--sidebar-icon-rail-width);
+          min-width: var(--sidebar-icon-rail-width);
+          flex-shrink: 0;
+          align-items: center;
+          justify-content: center;
+        }
+        #app-sidebar .sidebar-apps-link,
+        #app-sidebar .sidebar-user-menu-trigger {
+          justify-content: flex-start;
+        }
+        #app-sidebar .sidebar-expandable {
+          min-width: 0;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        #app-sidebar .sidebar-apps-label {
+          display: block;
+          padding-left: 0.125rem;
+        }
+        html:not(.sidebar-no-transition) #app-sidebar .sidebar-expandable {
+          transition: opacity 0.18s ease;
+        }
+        html.sidebar-no-transition #app-sidebar .sidebar-expandable {
+          transition: none !important;
+        }
+        .sidebar-user-menu::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 100%;
+          height: 0.625rem;
+          z-index: 40;
+        }
+        .sidebar-user-menu.is-open .sidebar-user-menu-panel {
+          pointer-events: auto;
+          opacity: 1;
+          transform: scale(1);
+        }
+        .sidebar-user-menu.is-open .sidebar-user-chevron {
+          transform: rotate(180deg);
+        }
+        @media (min-width: 768px) {
+          .sidebar-user-menu:hover .sidebar-user-menu-panel,
+          .sidebar-user-menu.is-open .sidebar-user-menu-panel {
+            pointer-events: auto;
+            opacity: 1;
+            transform: scale(1);
+          }
+          .sidebar-user-menu:hover .sidebar-user-chevron,
+          .sidebar-user-menu.is-open .sidebar-user-chevron {
+            transform: rotate(180deg);
+          }
+        }
+        html.sidebar-collapsed #app-sidebar {
+          width: var(--sidebar-collapsed-width);
+          min-width: var(--sidebar-collapsed-width);
+          padding-right: 0.375rem;
+        }
+        html.sidebar-collapsed #layout-main.layout-main-offset {
+          padding-left: var(--sidebar-collapsed-width);
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-expandable {
+          opacity: 0;
+          pointer-events: none;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-module-panel {
+          display: none;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-user-menu-panel {
+          left: calc(100% + 0.5rem);
+          right: auto;
+          bottom: 0;
+          width: 12.5rem;
+          margin-bottom: 0;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-top-row-spacer,
+        html.sidebar-collapsed #app-sidebar .sidebar-top-row .sidebar-icon-rail {
+          display: none;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-top-row {
+          justify-content: flex-end;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-collapse-btn {
+          height: 2rem;
+          width: 2rem;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-collapse-btn .icon-when-expanded {
+          display: none;
+        }
+        html.sidebar-collapsed #app-sidebar .sidebar-collapse-btn .icon-when-collapsed {
+          display: inline-block;
+        }
+        html:not(.sidebar-collapsed) #app-sidebar .sidebar-collapse-btn .icon-when-collapsed {
+          display: none;
+        }
+      }
+    </style>
+    {% block head_extra %}{% endblock %}
 </head>
 
-
-<body >
+<body class="app-shell app-themed min-h-screen antialiased">
 
 {% if request.user.is_authenticated and not hide_header_and_footer %}
-    {% include 'header.html' %}
+  {% include 'header.html' %}
 {% endif %}
 
-
-<div class="min-h-screen">
-    {% block content %}{% endblock %}
+<div id="layout-main" class="{% if request.user.is_authenticated and not hide_header_and_footer %}min-h-screen layout-main-offset{% endif %}">
+  <main class="{% if request.user.is_authenticated and not hide_header_and_footer %}flex min-h-screen flex-col pt-16 md:pt-0{% else %}min-h-screen{% endif %}">
+    {% if request.user.is_authenticated and not hide_header_and_footer %}
+    <div class="app-page-chrome">
+      <header class="app-topbar shrink-0">
+        <div class="flex w-full items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
+          <div class="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <button type="button" onclick="window.history.back()" class="app-chrome-btn shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition">
+              Back
+            </button>
+            <nav class="flex min-w-0 items-center gap-1 overflow-x-auto text-xs whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Breadcrumb">
+              {% for crumb in breadcrumbs %}
+                {% if forloop.last %}
+                  <span class="app-breadcrumb-current shrink-0 rounded-md px-2 py-1">{{ crumb.label }}</span>
+                {% else %}
+                  <a href="{{ crumb.url }}" class="app-breadcrumb-link shrink-0 rounded-md px-2 py-1 transition">{{ crumb.label }}</a>
+                  <span class="app-breadcrumb-sep shrink-0">/</span>
+                {% endif %}
+              {% endfor %}
+            </nav>
+          </div>
+          <div class="flex shrink-0 items-center gap-2 sm:gap-4">
+            {% include "_app_central_clock.html" with clock_id="app-central-clock" clock_class="hidden sm:block text-right" %}
+            <div class="app-topbar-actions flex shrink-0 items-center gap-1.5 sm:gap-2">
+              {% block topbar_tools %}{% endblock %}
+              {% include "_app_topbar_actions.html" %}
+            </div>
+          </div>
+        </div>
+      </header>
+      {% include "_app_alert_ticker.html" %}
+    </div>
+    {% endif %}
+    <div class="{% if request.user.is_authenticated and not hide_header_and_footer %}flex-1{% endif %}">
+      {% include "dispatch/_detail_messages.html" %}
+      {% block content %}{% endblock %}
+    </div>
+    {% if request.user.is_authenticated and not hide_header_and_footer %}
+      {% include 'footer.html' %}
+    {% endif %}
+  </main>
 </div>
 
-
+{% block body_extra %}{% endblock %}
 {% if request.user.is_authenticated and not hide_header_and_footer %}
-    {% include 'footer.html' %}
+<script>
+(function () {
+  var KEY = "takeoff_sidebar_collapsed";
+  var root = document.documentElement;
+  function isCollapsed() {
+    return root.classList.contains("sidebar-collapsed");
+  }
+  function syncToggleButton() {
+    var collapsed = isCollapsed();
+    var btn = document.getElementById("sidebar-collapse-toggle");
+    if (!btn) return;
+    btn.setAttribute("aria-pressed", collapsed ? "true" : "false");
+    btn.setAttribute("aria-label", collapsed ? "Proširi bočni meni" : "Sužite bočni meni");
+    btn.title = collapsed ? "Proširi meni" : "Sužite meni";
+  }
+  function setCollapsed(v) {
+    root.classList.toggle("sidebar-collapsed", v);
+    try {
+      localStorage.setItem(KEY, v ? "1" : "0");
+    } catch (e) {}
+    syncToggleButton();
+  }
+  function enableSidebarTransitions() {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        root.classList.remove("sidebar-no-transition");
+      });
+    });
+  }
+  function init() {
+    syncToggleButton();
+    var btn = document.getElementById("sidebar-collapse-toggle");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        setCollapsed(!isCollapsed());
+      });
+    }
+    enableSidebarTransitions();
+    initSidebarUserMenu();
+  }
+  function initSidebarUserMenu() {
+    var menu = document.querySelector(".sidebar-user-menu");
+    if (!menu) return;
+    var trigger = menu.querySelector(".sidebar-user-menu-trigger");
+    var panel = document.getElementById("sidebar-user-menu-panel");
+    if (!trigger || !panel) return;
+    var hoverMq = window.matchMedia("(min-width: 768px)");
+    function setOpen(open) {
+      menu.classList.toggle("is-open", open);
+      trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) {
+        panel.removeAttribute("hidden");
+      } else {
+        panel.setAttribute("hidden", "");
+      }
+    }
+    trigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setOpen(!menu.classList.contains("is-open"));
+    });
+    panel.addEventListener("click", function (e) {
+      e.stopPropagation();
+    });
+    document.addEventListener("click", function () {
+      setOpen(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(false);
+    });
+    if (hoverMq.matches) {
+      menu.addEventListener("mouseenter", function () {
+        setOpen(true);
+      });
+      menu.addEventListener("mouseleave", function () {
+        setOpen(false);
+      });
+    }
+    hoverMq.addEventListener("change", function () {
+      if (!hoverMq.matches) setOpen(false);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+(function () {
+  var TZ = "{{ app_timezone_tz|default:'America/Chicago'|escapejs }}";
+  var timeEls = document.querySelectorAll("[data-clock-time]");
+  var dateEls = document.querySelectorAll("[data-clock-date]");
+  if (!timeEls.length) return;
+  var timeFmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  var dateFmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  function tick() {
+    var now = new Date();
+    var timeText = timeFmt.format(now);
+    var dateText = dateFmt.format(now);
+    timeEls.forEach(function (el) {
+      el.textContent = timeText;
+      el.setAttribute("datetime", now.toISOString());
+    });
+    dateEls.forEach(function (el) {
+      el.textContent = dateText;
+    });
+  }
+  tick();
+  window.setInterval(tick, 1000);
+})();
+</script>
 {% endif %}
+<script>
+(function () {
+  function dismissToast(el) {
+    if (!el || el.classList.contains("app-toast--leaving")) return;
+    el.classList.add("app-toast--leaving");
+    window.setTimeout(function () {
+      el.remove();
+      var stack = document.querySelector(".app-toast-stack");
+      if (stack && !stack.querySelector("[data-app-toast]")) stack.remove();
+    }, 220);
+  }
+  function bindToast(el) {
+    var btn = el.querySelector(".app-toast__dismiss");
+    if (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        dismissToast(el);
+      });
+    }
+    el.addEventListener("click", function () {
+      dismissToast(el);
+    });
+    var ms = parseInt(el.getAttribute("data-dismiss-ms") || "5500", 10);
+    window.setTimeout(function () {
+      if (el.isConnected) dismissToast(el);
+    }, ms);
+  }
+  function initToasts() {
+    document.querySelectorAll("[data-app-toast]").forEach(bindToast);
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initToasts);
+  } else {
+    initToasts();
+  }
+})();
+</script>
+<script>
+(function () {
+  var locked = false;
+  var scrollLockY = 0;
 
+  function countOpenDialogs() {
+    return document.querySelectorAll("dialog[open]").length;
+  }
+
+  function lockScroll() {
+    if (locked) return;
+    locked = true;
+    scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.documentElement.classList.add("app-scroll-locked");
+  }
+
+  function unlockScroll() {
+    if (!locked) return;
+    locked = false;
+    document.documentElement.classList.remove("app-scroll-locked");
+    if (Math.abs(window.scrollY - scrollLockY) > 1) {
+      window.scrollTo(0, scrollLockY);
+    }
+  }
+
+  function blockBackgroundScroll(e) {
+    if (!locked) return;
+    var dlg = topmostOpenDialog();
+    if (!dlg || typeof e.composedPath !== "function") {
+      e.preventDefault();
+      return;
+    }
+    var path = e.composedPath();
+    for (var i = 0; i < path.length; i++) {
+      if (path[i] === dlg) return;
+    }
+    e.preventDefault();
+  }
+
+  function syncScrollLock() {
+    if (countOpenDialogs() > 0) lockScroll();
+    else unlockScroll();
+  }
+
+  function closeAppDropdowns() {
+    document.querySelectorAll(".app-topbar-dropdown[open]").forEach(function (details) {
+      details.removeAttribute("open");
+    });
+  }
+
+  function bindAppDropdown(details) {
+    if (!details || details.__appDropdownBound) return;
+    details.__appDropdownBound = true;
+    var summary = details.querySelector(":scope > summary");
+    if (summary && !summary.__appSummaryDismissBound) {
+      summary.__appSummaryDismissBound = true;
+      summary.addEventListener(
+        "click",
+        function () {
+          var dlg = topmostOpenDialog();
+          if (dlg && !dlg.__appSuppressBackdropClose) {
+            dlg.close();
+            closeAppDropdowns();
+          }
+        },
+        true
+      );
+    }
+    details.addEventListener("toggle", function () {
+      if (!details.open) return;
+      var dlg = topmostOpenDialog();
+      if (dlg) {
+        details.removeAttribute("open");
+        dlg.close();
+        closeAppDropdowns();
+        return;
+      }
+      document.querySelectorAll(".app-topbar-dropdown[open]").forEach(function (other) {
+        if (other !== details) other.removeAttribute("open");
+      });
+    });
+  }
+
+  function watchAppDropdowns() {
+    document.querySelectorAll(".app-topbar-dropdown").forEach(bindAppDropdown);
+  }
+
+  function patchDialogPrototype() {
+    if (!window.HTMLDialogElement || HTMLDialogElement.prototype.__appScrollLockPatched) return;
+    HTMLDialogElement.prototype.__appScrollLockPatched = true;
+    var nativeShow = HTMLDialogElement.prototype.showModal;
+    var nativeClose = HTMLDialogElement.prototype.close;
+    if (nativeShow) {
+      HTMLDialogElement.prototype.showModal = function () {
+        var dlg = this;
+        closeAppDropdowns();
+        dlg.__appSuppressBackdropClose = true;
+        var ret = nativeShow.apply(dlg, arguments);
+        syncScrollLock();
+        setTimeout(function () {
+          dlg.__appSuppressBackdropClose = false;
+        }, 0);
+        return ret;
+      };
+    }
+    if (nativeClose) {
+      HTMLDialogElement.prototype.close = function () {
+        var ret = nativeClose.apply(this, arguments);
+        requestAnimationFrame(syncScrollLock);
+        return ret;
+      };
+    }
+  }
+
+  function dialogContentRoot(dlg) {
+    return (
+      dlg.querySelector(".app-dialog__shell") ||
+      dlg.querySelector(".dispatch-day-dialog__shell")
+    );
+  }
+
+  function topmostOpenDialog() {
+    var open = document.querySelectorAll("dialog[open]");
+    return open.length ? open[open.length - 1] : null;
+  }
+
+  function isClickInsideDialogShell(dlg, e) {
+    var shell = dialogContentRoot(dlg);
+    if (!shell) return false;
+    if (typeof e.composedPath === "function") {
+      var path = e.composedPath();
+      for (var i = 0; i < path.length; i++) {
+        if (path[i] === shell) return true;
+      }
+    }
+    return shell === e.target || shell.contains(e.target);
+  }
+
+  function handleGlobalDismissClick(e) {
+    document.querySelectorAll(".app-topbar-dropdown[open]").forEach(function (details) {
+      if (!details.contains(e.target)) details.removeAttribute("open");
+    });
+
+    var dlg = topmostOpenDialog();
+    if (!dlg || dlg.dataset.noBackdropClose === "true" || dlg.__appSuppressBackdropClose) return;
+
+    if (isClickInsideDialogShell(dlg, e)) return;
+
+    var dismissChrome = e.target.closest(
+      ".app-status-guide, .app-topbar-user-menu, .app-topbar-user-trigger, .app-topbar-icon-btn"
+    );
+    if (dismissChrome || dlg === e.target || !dlg.contains(e.target)) dlg.close();
+  }
+
+  function watchDialogs() {
+    document.querySelectorAll("dialog").forEach(function (dlg) {
+      if (dlg.__appScrollLockWatched) return;
+      dlg.__appScrollLockWatched = true;
+      dlg.addEventListener("close", function () {
+        closeAppDropdowns();
+        requestAnimationFrame(syncScrollLock);
+      });
+      if (typeof MutationObserver !== "undefined") {
+        new MutationObserver(function () {
+          syncScrollLock();
+        }).observe(dlg, { attributes: true, attributeFilter: ["open"] });
+      }
+    });
+  }
+
+  document.addEventListener("wheel", blockBackgroundScroll, { passive: false, capture: true });
+  document.addEventListener("touchmove", blockBackgroundScroll, { passive: false, capture: true });
+
+  patchDialogPrototype();
+  watchDialogs();
+  watchAppDropdowns();
+  document.addEventListener("click", handleGlobalDismissClick);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      watchDialogs();
+      watchAppDropdowns();
+    });
+  }
+  if (typeof MutationObserver !== "undefined") {
+    new MutationObserver(function () {
+      watchDialogs();
+      watchAppDropdowns();
+    }).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+  }
+  syncScrollLock();
+})();
+</script>
 </body>
 
-
-
 </html>
-
-

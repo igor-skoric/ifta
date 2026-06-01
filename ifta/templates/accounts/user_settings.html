@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Settings · TAKE OFF{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-lg">
+    <h1 class="text-2xl font-bold tracking-tight text-[color:var(--app-text)]">Account settings</h1>
+    <p class="mt-2 text-sm text-[color:var(--app-text-muted)]">
+      Tema se čuva na nalogu i primenjuje na celoj aplikaciji. Promena ispod je odmah vidljiva — kliknite Sačuvaj da ostane posle ponovnog učitavanja.
+    </p>
+
+    <div class="app-settings-card mt-8 rounded-2xl border p-6">
+      <h2 class="text-lg font-semibold text-[color:var(--app-text)]">Tema (noć / dan)</h2>
+      <p class="mt-1 text-xs text-[color:var(--app-text-muted)]">
+        Boje se menjaju u <code class="rounded px-1 py-0.5 text-[color:var(--app-accent)]">theme/static_src/src/theme-tokens.css</code>.
+      </p>
+
+      <form method="post" class="mt-6 space-y-6" id="user-theme-form">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="app-field-error-box">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% if form.ui_theme.errors %}
+        <div class="app-form-error">{{ form.ui_theme.errors }}</div>
+        {% endif %}
+
+        <fieldset>
+          <legend class="sr-only">Tema aplikacije</legend>
+          <div class="app-theme-radios">
+            {{ form.ui_theme }}
+          </div>
+        </fieldset>
+
+        <button type="submit" class="app-primary-btn rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition">
+          Sačuvaj
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var THEME_KEY = "takeoff_ui_theme";
+  var form = document.getElementById("user-theme-form");
+  if (!form) return;
+  form.querySelectorAll('input[name="ui_theme"]').forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      if (this.value !== "light" && this.value !== "dark") return;
+      document.documentElement.setAttribute("data-theme", this.value);
+      try { localStorage.setItem(THEME_KEY, this.value); } catch (e) {}
+    });
+  });
+})();
+</script>
+{% endblock %}

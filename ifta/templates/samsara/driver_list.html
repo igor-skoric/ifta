@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Samsara · Drivers{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Integrations</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Samsara drivers</h1>
+      <p class="mt-1 text-sm text-slate-300">
+        <span class="font-semibold text-white tabular-nums">{{ total_count }}</span>
+        driver{{ total_count|pluralize }}
+        {% if filters_active %}matching your filters{% else %}in your synced catalog{% endif %}.
+        {% if filters_active %}
+        <span class="text-slate-500">({{ catalog_total }} total in database.)</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <form method="get" class="mb-5 grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 lg:grid-cols-6">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search name, username, or Samsara ID…"
+           class="w-full rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-slate-100 lg:col-span-2">
+    <select name="name_filter" class="w-full rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-slate-100">
+      <option value="">Any name</option>
+      <option value="named" {% if name_filter == "named" %}selected{% endif %}>Has display name</option>
+      <option value="unnamed" {% if name_filter == "unnamed" %}selected{% endif %}>Name empty</option>
+    </select>
+    <select name="username_filter" class="w-full rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-slate-100">
+      <option value="">Username</option>
+      <option value="has" {% if username_filter == "has" %}selected{% endif %}>Has username</option>
+      <option value="missing" {% if username_filter == "missing" %}selected{% endif %}>Username empty</option>
+    </select>
+    <select name="sort" class="w-full rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2 text-sm text-slate-100">
+      {% for value, label in sort_choices %}
+      <option value="{{ value }}" {% if sort == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'samsara:driver_list' %}" class="inline-flex flex-1 items-center justify-center rounded-xl border border-white/15 px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">Reset</a>
+      <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/15">Apply</button>
+    </div>
+  </form>
+
+  <section class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+          <tr>
+            <th class="px-4 py-3 text-left">Samsara ID</th>
+            <th class="px-4 py-3 text-left">Name</th>
+            <th class="px-4 py-3 text-left">Username</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-right">Open</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          {% for row in page_obj %}
+          <tr class="hover:bg-white/[0.04]">
+            <td class="px-4 py-2.5 font-mono text-xs text-sky-300">
+              <a href="{% url 'samsara:driver_detail' row.samsara_id %}" class="hover:text-indigo-200 hover:underline">{{ row.samsara_id }}</a>
+            </td>
+            <td class="px-4 py-2.5 text-slate-200">
+              <a href="{% url 'samsara:driver_detail' row.samsara_id %}" class="hover:text-indigo-200 hover:underline">{{ row.name|default:"—" }}</a>
+            </td>
+            <td class="px-4 py-2.5 text-slate-300">{{ row.username|default:"—" }}</td>
+            <td class="max-w-xs px-4 py-2.5">
+              <div class="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-2">
+                <span class="inline-flex w-fit shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide
+                  {% if row.list_activity == 'active' %}bg-emerald-500/25 text-emerald-200
+                  {% elif row.list_activity == 'inactive' %}bg-slate-600/50 text-slate-300
+                  {% else %}bg-amber-500/20 text-amber-200{% endif %}">
+                  {% if row.list_activity == 'active' %}Active{% elif row.list_activity == 'inactive' %}Inactive{% else %}Unknown{% endif %}
+                </span>
+                <span class="text-xs leading-snug text-slate-300 break-words">{{ row.list_status_display }}</span>
+              </div>
+            </td>
+            <td class="px-4 py-2.5 text-right">
+              <a href="{% url 'samsara:driver_detail' row.samsara_id %}" class="rounded-lg border border-indigo-400/30 px-2.5 py-1 text-xs font-semibold text-indigo-200 hover:bg-indigo-500/10">Details</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="px-4 py-8 text-center text-slate-500">No drivers found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3 text-sm text-slate-400">
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      <div class="flex gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if filter_querystring %}&amp;{{ filter_querystring }}{% endif %}"
+           class="rounded-lg border border-white/15 px-3 py-1.5 font-semibold text-slate-200 hover:bg-white/10">Previous</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if filter_querystring %}&amp;{{ filter_querystring }}{% endif %}"
+           class="rounded-lg border border-white/15 px-3 py-1.5 font-semibold text-slate-200 hover:bg-white/10">Next</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

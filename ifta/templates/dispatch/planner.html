@@ -1,0 +1,781 @@
+﻿{% extends "base.html" %}
+{% load planner_tags %}
+
+{% block title %}Dispatch · Load planner{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Operations</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Load planner</h1>
+    </div>
+    <div class="planner-toolbar flex w-full min-w-0 flex-wrap items-center justify-end gap-1 sm:gap-1.5">
+      <nav class="flex flex-wrap items-center gap-1 sm:gap-1.5" aria-label="Week navigation">
+        <a href="?week={{ prev_week }}" class="app-btn app-btn--ghost app-btn--sm">← Previous week</a>
+        <a href="{% url 'dispatch:planner' %}" class="app-btn app-btn--ghost app-btn--sm">This week</a>
+        <a href="?week={{ next_week }}" class="app-btn app-btn--ghost app-btn--sm">Next week →</a>
+      </nav>
+      {% include "dispatch/includes/_planner_status_guide.html" %}
+    </div>
+  </div>
+
+  {% if not dispatchers %}
+  <div class="mb-8 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-6 text-sm text-amber-100">
+    No active dispatchers with active drivers for this week.
+  </div>
+  {% endif %}
+
+  {% for disp in dispatchers %}
+  <section class="dispatch-planner-section app-module-panel mb-8 overflow-hidden rounded-2xl border shadow-xl">
+    <div class="dispatch-planner-section__head border-b px-5 py-3">
+      <h2 class="text-lg font-semibold text-white">
+        <a href="{% url 'office:people_profile' disp.employee_id %}" class="text-white hover:text-indigo-200 hover:underline">{{ disp.first_name }} {{ disp.last_name }}</a>
+      </h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="planner-grid-table planner-driver-grid min-w-[920px] w-full text-sm leading-snug">
+        <colgroup>
+          <col class="w-[17%]" />
+          <col class="w-[8%]" />
+          <col class="w-[10%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+          <col class="w-[9.5%]" />
+        </colgroup>
+        <thead class="text-[11px] uppercase tracking-wider">
+          <tr>
+            <th class="planner-label-cell planner-label-cell--first min-w-0 text-left font-semibold tracking-wide text-slate-300">Driver</th>
+            <th class="planner-label-cell min-w-0 text-left">Truck</th>
+            <th class="planner-label-cell planner-label-cell--last min-w-0 text-left">Trailers</th>
+            {% for wd in week_days %}
+            <th class="min-w-0 text-center whitespace-nowrap planner-day-col{% if wd.is_today %} planner-day-col--today{% endif %}" title="{{ wd.full }}{% if wd.is_today %} · Today{% endif %}">{{ wd.short }}{% if wd.is_today %}<span class="sr-only"> (today)</span>{% endif %}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[color:var(--dispatch-grid-divider)]">
+          {% for driver in disp.dispatch_drivers.all %}
+          <tr>
+            <td class="planner-label-cell planner-label-cell--first min-w-0 truncate text-[13px] font-medium text-slate-100">
+              <a href="{% url 'dispatch:driver_detail' driver.pk %}" class="block truncate text-slate-100 hover:text-indigo-200 hover:underline">{{ driver.display_name }}</a>
+            </td>
+            <td class="planner-label-cell min-w-0 truncate text-slate-300">
+              {% if driver.truck %}
+                <a href="{% url 'dispatch:truck_detail' driver.truck.pk %}" class="font-mono text-xs tracking-tight text-slate-300 hover:text-indigo-200 hover:underline">{{ driver.truck.unit_number }}</a>
+                {% if not driver.truck.is_active %}<span class="text-xs text-amber-400">(inactive)</span>{% endif %}
+              {% else %}
+                <span class="text-slate-500">â€”</span>
+              {% endif %}
+            </td>
+            <td class="planner-label-cell planner-label-cell--last min-w-0 truncate text-xs text-slate-400">
+              {% for tr in driver.trailers.all %}
+                <a href="{% url 'dispatch:trailer_detail' tr.pk %}" class="font-mono text-slate-300 hover:text-indigo-200 hover:underline">{{ tr.unit_number }}</a>{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                â€”
+              {% endfor %}
+            </td>
+            {% for wd in week_days %}
+            {% planner_day_cell driver wd load_by_cell unavailability_by_cell can_manage_dispatch %}
+            {% endfor %}
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="10" class="px-4 py-6 text-center text-slate-500">No drivers assigned to this dispatcher yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endfor %}
+</div>
+
+<dialog id="dispatch-day-dialog" class="z-[200]" data-load-create-base="{% url 'dispatch:load_create' %}" data-load-status-url-sample="{{ load_status_url_sample }}" data-load-comments-url-sample="{{ load_comments_url_sample }}" data-can-manage="{% if can_manage_dispatch %}1{% else %}0{% endif %}">
+  <form id="planner-dialog-csrf" class="hidden" aria-hidden="true">{% csrf_token %}</form>
+  <div class="dispatch-day-dialog__shell">
+    <header class="dialog-header shrink-0 border-b">
+      <div class="dialog-header__top">
+        <div class="dialog-header__icon" aria-hidden="true">
+          <i class="fa-regular fa-calendar"></i>
+        </div>
+        <div class="dialog-header__title-block">
+          <h3 id="dialog-title" class="dialog-header__title">Day plan</h3>
+          <p class="dialog-header__meta">
+            <span id="dialog-sub"></span>
+            <span id="dialog-header-meta-sep" class="dialog-header__meta-sep hidden" aria-hidden="true">|</span>
+            <span id="dialog-header-extra" class="dialog-header__load-badge hidden"></span>
+          </p>
+        </div>
+      </div>
+      <div id="dialog-header-equip" class="dialog-header__equip-grid hidden" aria-label="Driver and equipment"></div>
+    </header>
+    <div id="dispatch-dialog-dynamic" class="planner-dialog-scroll min-h-0 flex-1 overflow-y-auto px-4 py-3 text-sm sm:px-5 sm:py-4"></div>
+    <footer class="app-dialog__footer dispatch-dialog-footer">
+      <div id="dispatch-dialog-actions" class="app-dialog__footer-actions"></div>
+      <button type="button" class="app-btn app-btn--secondary shrink-0" id="dispatch-dialog-close">Close</button>
+    </footer>
+  </div>
+</dialog>
+
+{{ planner_loads_dialog|json_script:"planner-loads-dialog" }}
+{{ load_status_choices_json|json_script:"planner-status-choices" }}
+
+<script>
+(function () {
+  var dlg = document.getElementById("dispatch-day-dialog");
+  if (!dlg) return;
+  var titleEl = document.getElementById("dialog-title");
+  var subEl = document.getElementById("dialog-sub");
+  var dyn = document.getElementById("dispatch-dialog-dynamic");
+  var headerExtra = document.getElementById("dialog-header-extra");
+  var headerMetaSep = document.getElementById("dialog-header-meta-sep");
+  var headerEquip = document.getElementById("dialog-header-equip");
+  var dialogActions = document.getElementById("dispatch-dialog-actions");
+  var loadDataEl = document.getElementById("planner-loads-dialog");
+  var statusChoicesEl = document.getElementById("planner-status-choices");
+  var loadCreateBase = dlg.getAttribute("data-load-create-base") || "";
+  var loadStatusUrlSample = dlg.getAttribute("data-load-status-url-sample") || "";
+  var loadCommentsUrlSample = dlg.getAttribute("data-load-comments-url-sample") || "";
+  var canManage = dlg.getAttribute("data-can-manage") === "1";
+  var statusChoices = [];
+  if (statusChoicesEl && statusChoicesEl.textContent) {
+    try {
+      statusChoices = JSON.parse(statusChoicesEl.textContent);
+    } catch (e) {
+      statusChoices = [];
+    }
+  }
+  var loadMap = {};
+  if (loadDataEl && loadDataEl.textContent) {
+    try {
+      loadMap = JSON.parse(loadDataEl.textContent);
+    } catch (e) {
+      loadMap = {};
+    }
+  }
+  function getCsrfToken() {
+    var input = document.querySelector("#planner-dialog-csrf input[name=csrfmiddlewaretoken]");
+    return input ? input.value : "";
+  }
+  function loadStatusUrl(loadId) {
+    if (!loadStatusUrlSample) return "";
+    return loadStatusUrlSample.replace("/0/", "/" + String(loadId) + "/");
+  }
+  function loadCommentsUrl(loadId) {
+    if (!loadCommentsUrlSample) return "";
+    return loadCommentsUrlSample.replace("/0/", "/" + String(loadId) + "/");
+  }
+  function loadCommentCreateUrl(loadId) {
+    var base = loadCommentsUrl(loadId);
+    if (!base) return "";
+    return base.replace(/comments\/?$/, "comments/add/");
+  }
+  function formatCommentTime(iso) {
+    if (!iso) return "";
+    try {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return "";
+      return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    } catch (e) {
+      return "";
+    }
+  }
+  function renderCommentItem(c) {
+    return (
+      "<div class=\"planner-dialog-comments__item\">" +
+      "<p class=\"planner-dialog-comments__body\">" + esc(c.body) + "</p>" +
+      "<p class=\"planner-dialog-comments__meta\">" +
+      esc(c.author) +
+      " Â· " +
+      esc(formatCommentTime(c.created_at)) +
+      "</p></div>"
+    );
+  }
+  function renderCommentsListHtml(comments, expanded) {
+    if (!comments.length) {
+      return "<p class=\"planner-dialog-comments__empty\">No comments yet.</p>";
+    }
+    var parts = [];
+    var toShow = expanded ? comments : comments.slice(0, 1);
+    parts.push(toShow.map(renderCommentItem).join(""));
+    if (comments.length > 1) {
+      var older = comments.length - 1;
+      if (expanded) {
+        parts.push(
+          "<button type=\"button\" class=\"planner-dialog-comments__toggle\" data-comments-toggle=\"collapse\">Hide older comments</button>"
+        );
+      } else {
+        parts.push(
+          "<button type=\"button\" class=\"planner-dialog-comments__toggle\" data-comments-toggle=\"expand\">Show " +
+            esc(String(older)) +
+            " older comment" +
+            (older === 1 ? "" : "s") +
+            "</button>"
+        );
+      }
+    }
+    return parts.join("");
+  }
+  function applyCommentsView(section, comments, expanded) {
+    var list = section.querySelector("[data-role=list]");
+    if (!list) return;
+    section._commentsCache = comments || [];
+    section.setAttribute("data-comments-expanded", expanded ? "1" : "0");
+    list.innerHTML = renderCommentsListHtml(section._commentsCache, expanded);
+    if (expanded) {
+      list.classList.add("planner-dialog-comments__list--expanded", "planner-dialog-scroll");
+    } else {
+      list.classList.remove("planner-dialog-comments__list--expanded", "planner-dialog-scroll");
+    }
+  }
+  function ensureCommentsToggleDelegation(section) {
+    if (section.getAttribute("data-toggle-bound") === "1") return;
+    section.setAttribute("data-toggle-bound", "1");
+    section.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-comments-toggle]");
+      if (!btn || !section.contains(btn)) return;
+      e.stopPropagation();
+      var expanded = section.getAttribute("data-comments-expanded") === "1";
+      applyCommentsView(section, section._commentsCache || [], !expanded);
+    });
+  }
+  function renderLoadCommentsShell(L) {
+    var count = L.comment_count != null ? L.comment_count : 0;
+    var countBadge =
+      count > 0
+        ? "<span class=\"planner-dialog-comments__count\">" + esc(String(count)) + "</span>"
+        : "";
+    return (
+      "<section class=\"planner-dialog-comments\" data-load-id=\"" +
+      esc(L.id) +
+      "\" data-comments-url=\"" +
+      esc(L.comments_url || loadCommentsUrl(L.id)) +
+      "\" data-comments-create-url=\"" +
+      esc(L.comments_create_url || loadCommentCreateUrl(L.id)) +
+      "\">" +
+      "<p class=\"planner-dialog-comments__title\">" +
+      "<span class=\"planner-dialog-comments__title-icon\" aria-hidden=\"true\"><i class=\"fa-regular fa-comments\"></i></span>" +
+      "<span>Comments</span>" +
+      countBadge +
+      "</p>" +
+      "<div class=\"planner-dialog-comments__list\" data-role=\"list\"><p class=\"planner-dialog-comments__loading\">Loading…</p></div>" +
+      "<form class=\"planner-dialog-comments__form\" data-role=\"form\">" +
+      "<textarea class=\"planner-dialog-comments__input\" name=\"body\" rows=\"2\" maxlength=\"5000\" placeholder=\"Add a comment...\" required></textarea>" +
+      "<p class=\"planner-dialog-comments__feedback hidden\" data-role=\"feedback\" aria-live=\"polite\"></p>" +
+      "<button type=\"submit\" class=\"planner-dialog-comments__submit\">Post</button>" +
+      "</form></section>"
+    );
+  }
+  function fetchLoadComments(section) {
+    var url = section.getAttribute("data-comments-url");
+    var list = section.querySelector("[data-role=list]");
+    if (!url || !list) return Promise.resolve();
+    return fetch(url, { credentials: "same-origin", headers: { Accept: "application/json" } })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        if (!result.ok || !result.data.ok) {
+          throw new Error((result.data && result.data.error) || "Could not load comments.");
+        }
+        var comments = result.data.comments || [];
+        applyCommentsView(section, comments, false);
+        var countEl = section.querySelector(".planner-dialog-comments__count");
+        if (countEl) countEl.textContent = String(comments.length);
+        else if (comments.length) {
+          var title = section.querySelector(".planner-dialog-comments__title");
+          if (title) {
+            title.insertAdjacentHTML(
+              "beforeend",
+              "<span class=\"planner-dialog-comments__count\">" + esc(String(comments.length)) + "</span>"
+            );
+          }
+        }
+        updateLoadInMap(parseInt(section.getAttribute("data-load-id"), 10), {
+          comment_count: comments.length,
+        });
+      })
+      .catch(function (err) {
+        list.innerHTML =
+          "<p class=\"planner-dialog-comments__empty\">" + esc(err.message || "Failed to load comments.") + "</p>";
+      });
+  }
+  function bindLoadCommentForm(section) {
+    var form = section.querySelector("[data-role=form]");
+    if (!form || form.getAttribute("data-bound") === "1") return;
+    form.setAttribute("data-bound", "1");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var createUrl = section.getAttribute("data-comments-create-url");
+      var feedback = section.querySelector("[data-role=feedback]");
+      var textarea = form.querySelector("textarea");
+      if (!createUrl || !textarea) return;
+      var body = (textarea.value || "").trim();
+      if (!body) {
+        if (feedback) {
+          feedback.textContent = "Enter a comment.";
+          feedback.classList.remove("hidden");
+        }
+        return;
+      }
+      if (feedback) feedback.classList.add("hidden");
+      var submitBtn = form.querySelector("button[type=submit]");
+      if (submitBtn) submitBtn.disabled = true;
+      var payload = new URLSearchParams();
+      payload.set("body", body);
+      fetch(createUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCsrfToken(),
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: payload.toString(),
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (!result.ok || !result.data.ok) {
+            throw new Error((result.data && result.data.error) || "Could not save comment.");
+          }
+          textarea.value = "";
+          return fetchLoadComments(section);
+        })
+        .catch(function (err) {
+          if (feedback) {
+            feedback.textContent = err.message || "Save failed.";
+            feedback.classList.remove("hidden");
+          }
+        })
+        .finally(function () {
+          if (submitBtn) submitBtn.disabled = false;
+        });
+    });
+  }
+  function initPlannerLoadComments(root) {
+    if (!root) return;
+    root.querySelectorAll(".planner-dialog-comments").forEach(function (section) {
+      ensureCommentsToggleDelegation(section);
+      bindLoadCommentForm(section);
+      fetchLoadComments(section);
+    });
+  }
+  function esc(s) {
+    if (s === null || s === undefined) return "";
+    var d = document.createElement("div");
+    d.textContent = String(s);
+    return d.innerHTML;
+  }
+  function parseIsoDate(iso) {
+    if (!iso) return null;
+    try {
+      var d = new Date(iso);
+      return isNaN(d.getTime()) ? null : d;
+    } catch (e) {
+      return null;
+    }
+  }
+  function fmtApptWhen(iso, windowText) {
+    var d = parseIsoDate(iso);
+    if (d) {
+      var short =
+        d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) +
+        " " +
+        d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      return "<span class=\"planner-dialog-stop__when planner-dialog-stop__when--compact\">" + esc(short) + "</span>";
+    }
+    if (windowText) {
+      return "<span class=\"planner-dialog-stop__when planner-dialog-stop__when--compact\">" + esc(windowText) + "</span>";
+    }
+    return "<span class=\"planner-dialog-stop__when text-slate-600\">Not scheduled</span>";
+  }
+  function renderLaneStop(kind, label, iconClass, place, iso, windowText) {
+    return (
+      "<div class=\"planner-dialog-stop planner-dialog-stop--" + kind + "\">" +
+      "<div class=\"planner-dialog-stop__icon\" aria-hidden=\"true\"><i class=\"" + iconClass + "\"></i></div>" +
+      "<div class=\"planner-dialog-stop__body\">" +
+      "<p class=\"planner-dialog-stop__label\">" + esc(label) + "</p>" +
+      "<p class=\"planner-dialog-stop__place\">" + esc(place || "\u2014") + "</p>" +
+      fmtApptWhen(iso, windowText) +
+      "</div></div>"
+    );
+  }
+  function renderDocStatusBadge(kind, slug, label) {
+    return (
+      "<span class=\"doc-status-badge doc-status-badge--" +
+      esc(kind) +
+      "-" +
+      esc(slug) +
+      "\">" +
+      esc(label) +
+      "</span>"
+    );
+  }
+  function renderLoadStatsBar(L) {
+    var milesVal =
+      L.loaded_miles != null && L.loaded_miles !== ""
+        ? Number(L.loaded_miles).toLocaleString() + " mi"
+        : "\u2014";
+    var rateVal = L.linehaul_display || (L.linehaul ? "$" + L.linehaul : "\u2014");
+    return (
+      "<div class=\"planner-dialog-load__stats\" aria-label=\"Miles, linehaul, RC and POD\">" +
+      "<div class=\"planner-dialog-stat-val planner-dialog-stat-val--miles\">" +
+      "<span class=\"planner-dialog-stat-val__label\">Miles</span>" +
+      "<span class=\"planner-dialog-stat-val__num\">" + esc(milesVal) + "</span>" +
+      "</div>" +
+      "<div class=\"planner-dialog-stat-val planner-dialog-stat-val--rate\">" +
+      "<span class=\"planner-dialog-stat-val__label\">Linehaul</span>" +
+      "<span class=\"planner-dialog-stat-val__num\">" + esc(rateVal) + "</span>" +
+      "</div>" +
+      "<div class=\"planner-dialog-stat-val planner-dialog-stat-val--rc\">" +
+      "<span class=\"planner-dialog-stat-val__label\">RC</span>" +
+      renderDocStatusBadge("rc", L.rc_status_slug || "not_sent", L.rc_status || "Not sent") +
+      "</div>" +
+      "<div class=\"planner-dialog-stat-val planner-dialog-stat-val--pod\">" +
+      "<span class=\"planner-dialog-stat-val__label\">POD</span>" +
+      renderDocStatusBadge("pod", L.pod_status_slug || "not_sent", L.pod_status || "Not sent") +
+      "</div></div>"
+    );
+  }
+  function renderLaneRow(L) {
+    var arrow =
+      "<div class=\"planner-dialog-lane__arrow\" aria-hidden=\"true\"><i class=\"fa-solid fa-arrow-right-long\"></i></div>";
+    return (
+      "<div class=\"planner-dialog-load__body\">" +
+      "<div class=\"planner-dialog-lane\">" +
+      renderLaneStop("pickup", "Pick up", "fa-solid fa-arrow-up-from-bracket", L.pickup, L.pickup_datetime, L.pickup_window) +
+      arrow +
+      renderLaneStop("delivery", "Delivery", "fa-solid fa-location-dot", L.delivery, L.delivery_datetime, L.delivery_window) +
+      "</div>" +
+      renderLoadStatsBar(L) +
+      "</div>"
+    );
+  }
+  function renderDialogEquipCol(label, iconClass, value) {
+    var display = (value || "").trim() || "\u2014";
+    return (
+      "<div class=\"dialog-header__equip-col\">" +
+      "<div class=\"dialog-header__equip-icon\" aria-hidden=\"true\"><i class=\"" + iconClass + "\"></i></div>" +
+      "<div class=\"dialog-header__equip-text\">" +
+      "<span class=\"dialog-header__equip-label\">" + esc(label) + "</span>" +
+      "<span class=\"dialog-header__equip-value\">" + esc(display) + "</span>" +
+      "</div></div>"
+    );
+  }
+  function renderDialogHeaderEquipGrid(L) {
+    if (!L) return "";
+    return (
+      renderDialogEquipCol("Driver", "fa-solid fa-user", L.driver_name) +
+      renderDialogEquipCol("Truck", "fa-solid fa-truck", L.truck) +
+      renderDialogEquipCol("Trailer", "fa-solid fa-trailer", L.trailers) +
+      renderDialogEquipCol("Dispatcher", "fa-solid fa-headset", L.dispatcher)
+    );
+  }
+  function setDialogHeader(dayLabel, gridDateText, loads) {
+    if (titleEl) titleEl.textContent = dayLabel || "Day plan";
+    if (subEl) subEl.textContent = gridDateText || "";
+    var loadCount = loads && loads.length ? loads.length : 0;
+    if (headerExtra) {
+      if (loadCount) {
+        headerExtra.classList.remove("hidden");
+        headerExtra.textContent = loadCount === 1 ? "1 load" : loadCount + " loads";
+      } else {
+        headerExtra.classList.add("hidden");
+        headerExtra.textContent = "";
+      }
+    }
+    if (headerMetaSep) {
+      if (loadCount && gridDateText) headerMetaSep.classList.remove("hidden");
+      else headerMetaSep.classList.add("hidden");
+    }
+    if (headerEquip) {
+      var equipHtml = loadCount ? renderDialogHeaderEquipGrid(loads[0]) : "";
+      if (!equipHtml) {
+        headerEquip.classList.add("hidden");
+        headerEquip.innerHTML = "";
+        return;
+      }
+      headerEquip.classList.remove("hidden");
+      headerEquip.innerHTML = equipHtml;
+    }
+  }
+  function renderLoadIdBlock(L, detailUrl) {
+    var value = L.load_id ? esc(L.load_id) : "#" + esc(L.id);
+    return (
+      "<div class=\"planner-dialog-load__head-start\">" +
+      "<div class=\"planner-dialog-load__doc-icon\" aria-hidden=\"true\"><i class=\"fa-solid fa-file-lines\"></i></div>" +
+      "<div class=\"planner-dialog-load__id-block\">" +
+      "<div class=\"planner-dialog-load__id-main\">" +
+      "<span class=\"planner-dialog-load__id-label\">Load ID</span>" +
+      "<span class=\"planner-dialog-load__id-value\">" + value + "</span>" +
+      "</div>" +
+      "<a href=\"" + detailUrl + "\" class=\"planner-dialog-load__open\">" +
+      "<i class=\"fa-solid fa-arrow-up-right-from-square text-[0.65rem]\" aria-hidden=\"true\"></i> View load</a>" +
+      "</div></div>"
+    );
+  }
+  function statusSelectClasses(slug) {
+    return "trip-status-quick trip-status-badge--" + slug;
+  }
+  function setStatusSelectStyle(sel, slug) {
+    if (!sel) return;
+    sel.className = statusSelectClasses(slug);
+    var wrap = sel.closest(".trip-status-quick-wrap");
+    if (wrap) {
+      wrap.className = "trip-status-quick-wrap trip-status-badge--" + slug;
+    }
+  }
+  function updateLoadInMap(loadId, patch) {
+    Object.keys(loadMap).forEach(function (key) {
+      loadMap[key] = loadMap[key].map(function (item) {
+        if (item.id === loadId) {
+          return Object.assign({}, item, patch);
+        }
+        return item;
+      });
+    });
+  }
+  function updatePlannerCellsForLoad(loadId, slug, label) {
+    document.querySelectorAll(".day-cell[data-load-id=\"" + loadId + "\"]").forEach(function (btn) {
+      btn.setAttribute("data-load-status", slug);
+      btn.setAttribute("data-load-status-label", label);
+      btn.classList.forEach(function (cls) {
+        if (cls.indexOf("day-cell--status-") === 0) {
+          btn.classList.remove(cls);
+        }
+      });
+      btn.classList.add("day-cell--status-" + slug);
+    });
+  }
+  function renderStatusInline(L) {
+    var slug = L.status_slug || "";
+    var opts = statusChoices
+      .map(function (c) {
+        var selected = c.value === slug ? " selected" : "";
+        return "<option value=\"" + esc(c.value) + "\"" + selected + ">" + esc(c.label) + "</option>";
+      })
+      .join("");
+    return (
+      "<div class=\"planner-dialog-status-row\">" +
+      "<div class=\"trip-status-quick-wrap trip-status-badge--" + esc(slug) + "\">" +
+      "<select class=\"" + statusSelectClasses(slug) + "\" data-load-id=\"" + esc(L.id) + "\" data-prev-status=\"" + esc(slug) + "\" aria-label=\"Load status\">" +
+      opts +
+      "</select></div>" +
+      "<span class=\"trip-status-feedback text-[10px] text-slate-500\" data-load-id=\"" + esc(L.id) + "\" aria-live=\"polite\"></span>" +
+      "</div>"
+    );
+  }
+  function renderLoadCard(L) {
+    var statusBlock = canManage
+      ? renderStatusInline(L)
+      : "<span class=\"trip-status-badge trip-status-badge--" + esc(L.status_slug || "") + "\">" + esc(L.status) + "</span>";
+    var detailUrl = L.detail_url.replace(/"/g, "");
+    var notes = L.notes
+      ? "<p class=\"planner-dialog-notes\"><i class=\"fa-solid fa-note-sticky mr-1 opacity-80\" aria-hidden=\"true\"></i> " + esc(L.notes) + "</p>"
+      : "";
+    return (
+      "<div class=\"planner-dialog-load-row\">" +
+      "<article class=\"planner-dialog-load\">" +
+      "<header class=\"planner-dialog-load__head\">" +
+      "<div class=\"planner-dialog-load__head-top\">" +
+      renderLoadIdBlock(L, detailUrl) +
+      "<div class=\"planner-dialog-load__head-status\">" + statusBlock + "</div>" +
+      "</div>" +
+      "</header>" +
+      renderLaneRow(L) +
+      notes +
+      "</article>" +
+      "<article class=\"planner-dialog-comments-card\">" +
+      renderLoadCommentsShell(L) +
+      "</article>" +
+      "</div>"
+    );
+  }
+  function saveLoadStatus(loadId, statusSlug, selectEl) {
+    var feedback = dyn ? dyn.querySelector(".trip-status-feedback[data-load-id=\"" + loadId + "\"]") : null;
+    if (selectEl) selectEl.disabled = true;
+    if (feedback) feedback.textContent = "Saving…";
+    var body = new URLSearchParams();
+    body.set("status", statusSlug);
+    return fetch(loadStatusUrl(loadId), {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCsrfToken(),
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: body.toString(),
+    })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        if (!result.ok || !result.data.ok) {
+          throw new Error((result.data && result.data.error) || "Could not save status.");
+        }
+        var d = result.data;
+        updateLoadInMap(loadId, {
+          status: d.status,
+          status_slug: d.status_slug,
+        });
+        updatePlannerCellsForLoad(loadId, d.status_slug, d.status);
+        if (selectEl) setStatusSelectStyle(selectEl, d.status_slug);
+        if (feedback) feedback.textContent = "Saved · " + d.status;
+        return d;
+      })
+      .catch(function (err) {
+        if (feedback) feedback.textContent = err.message || "Save failed.";
+        throw err;
+      })
+      .finally(function () {
+        if (selectEl) selectEl.disabled = false;
+      });
+  }
+  if (dyn) {
+    dyn.addEventListener("change", function (e) {
+      var sel = e.target.closest(".trip-status-quick");
+      if (!sel || !canManage) return;
+      var loadId = parseInt(sel.getAttribute("data-load-id"), 10);
+      if (!loadId) return;
+      var prev = sel.getAttribute("data-prev-status") || sel.value;
+      var next = sel.value;
+      if (prev === next) return;
+      saveLoadStatus(loadId, next, sel)
+        .then(function () {
+          sel.setAttribute("data-prev-status", next);
+        })
+        .catch(function () {
+          sel.value = prev;
+          setStatusSelectStyle(sel, prev);
+        });
+    });
+    dyn.addEventListener("focusin", function (e) {
+      var sel = e.target.closest(".trip-status-quick");
+      if (sel) sel.setAttribute("data-prev-status", sel.value);
+    });
+  }
+  function loadCreateHref(driverId, plannerDate) {
+    if (!loadCreateBase || !driverId || !plannerDate) return "";
+    return (
+      loadCreateBase +
+      "?driver=" +
+      encodeURIComponent(driverId) +
+      "&planner_date=" +
+      encodeURIComponent(plannerDate)
+    );
+  }
+  function renderDialogActions(driverId, plannerDate, loads) {
+    if (!dialogActions) return;
+    var parts = [];
+    var createHref = canManage ? loadCreateHref(driverId, plannerDate) : "";
+    if (createHref) {
+      parts.push(
+        "<a href=\"" +
+          esc(createHref) +
+          "\" data-dispatch-entity-modal class=\"app-btn app-btn--primary\">+ load</a>"
+      );
+    }
+    if (loads.length === 1 && loads[0].edit_url) {
+      parts.push(
+        "<a href=\"" +
+          esc(loads[0].edit_url) +
+          "\" data-dispatch-entity-modal class=\"app-btn app-btn--secondary\">Edit load</a>"
+      );
+    }
+    dialogActions.innerHTML = parts.join("");
+  }
+  var lastDayDialogContext = null;
+
+  function renderFromCellKey(cellKey, dayLabel, secondary, driverId, plannerDate) {
+    lastDayDialogContext = {
+      cellKey: cellKey || "",
+      dayLabel: dayLabel || "",
+      secondary: secondary || "",
+      driverId: driverId || "",
+      plannerDate: plannerDate || "",
+    };
+    setDialogHeader(dayLabel, secondary, []);
+    if (!cellKey) {
+      renderDialogActions(driverId, plannerDate, []);
+      if (dyn) dyn.innerHTML = "<p>" + esc(secondary || "No load data for equipment rows.") + "</p>";
+      return;
+    }
+    var loads = loadMap[cellKey] || [];
+    setDialogHeader(dayLabel, secondary, loads);
+    renderDialogActions(driverId, plannerDate, loads);
+    if (!loads.length) {
+      if (dyn) {
+        dyn.classList.remove("planner-dialog-dynamic--loads");
+        dyn.innerHTML = "<p class=\"text-slate-400\">No loads for this driver on this date.</p>";
+      }
+      return;
+    }
+    var multi = loads.length > 1;
+    var html = loads.map(renderLoadCard).join("");
+    if (dyn) {
+      dyn.classList.add("planner-dialog-dynamic--loads");
+      dyn.innerHTML = multi ? '<div class="planner-dialog-loads--multi">' + html + "</div>" : html;
+      initPlannerLoadComments(dyn);
+    }
+  }
+  document.querySelectorAll(".day-cell:not([disabled])").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var dayLabel = btn.getAttribute("data-day-label") || "";
+      var primary = btn.getAttribute("data-primary") || "";
+      if (!dayLabel && primary) {
+        dayLabel = primary.split("\u00b7")[0].split("·")[0].trim();
+      }
+      var secondary = btn.getAttribute("data-secondary") || "";
+      var cellKey = btn.getAttribute("data-cell-key");
+      var driverId = btn.getAttribute("data-driver-id") || "";
+      var plannerDate = btn.getAttribute("data-planner-date") || "";
+      renderFromCellKey(cellKey, dayLabel, secondary, driverId, plannerDate);
+      if (dlg.showModal) dlg.showModal();
+    });
+  });
+  function closeDialog() {
+    if (dlg) dlg.close();
+  }
+  var closeBtn = document.getElementById("dispatch-dialog-close");
+  if (closeBtn) closeBtn.addEventListener("click", closeDialog);
+
+  window.dispatchPlannerDayDialog = {
+    isOpen: function () {
+      return Boolean(dlg && dlg.open);
+    },
+    close: closeDialog,
+    getContext: function () {
+      return lastDayDialogContext;
+    },
+    restore: function (ctx) {
+      if (!ctx || !dlg) return;
+      renderFromCellKey(
+        ctx.cellKey,
+        ctx.dayLabel,
+        ctx.secondary,
+        ctx.driverId,
+        ctx.plannerDate
+      );
+      if (dlg.showModal) dlg.showModal();
+    },
+  };
+})();
+</script>
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% endif %}
+{% endblock %}

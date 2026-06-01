@@ -1,0 +1,52 @@
+<form method="post" action="{{ form_action }}" class="{% if is_modal %}dispatch-entity-modal-form {% endif %}space-y-5">
+  {% csrf_token %}
+  {% if is_create and assignment_driver %}
+  <input type="hidden" name="driver_id" value="{{ assignment_driver.pk }}">
+  {% endif %}
+  {% if is_create and pickup_date %}
+  <input type="hidden" name="grid_pickup_date" value="{{ pickup_date|date:'Y-m-d' }}">
+  {% endif %}
+  {% if form.non_field_errors %}
+  <div class="app-field-error-box">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  {% if assignment_driver or pickup_date %}
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm load-detail-muted">
+    {% if assignment_driver %}
+    <span class="inline-flex items-center gap-1.5">
+      <i class="fa-solid fa-user load-detail-subtle" aria-hidden="true"></i>
+      <span class="font-medium load-detail-heading">{{ assignment_driver.display_name }}</span>
+    </span>
+    {% endif %}
+    {% if pickup_date %}
+    <span class="inline-flex items-center gap-1.5">
+      <i class="fa-regular fa-calendar load-detail-subtle" aria-hidden="true"></i>
+      <span class="font-mono text-xs">Pick up day: {{ pickup_date|date:"M j, Y" }}</span>
+    </span>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if is_create and show_planner_hint %}
+  <p class="text-sm load-detail-subtle">
+    Delivery city appears on the planner grid on <strong class="font-medium load-detail-muted">delivery date &amp; time</strong>.
+  </p>
+  {% endif %}
+
+  <div class="dispatch-load-modal-form-grid dispatch-load-modal-form-grid--status">
+    {% include "dispatch/includes/_form_field.html" with field=form.status label="Status" only %}
+    {% include "dispatch/includes/_form_field.html" with field=form.rc_status label="RC status" only %}
+    {% include "dispatch/includes/_form_field.html" with field=form.pod_status label="POD status" only %}
+  </div>
+
+  {% include "dispatch/includes/_trip_load_form_fields.html" %}
+
+  {% if not is_modal %}
+  {% if is_create %}
+  {% url 'dispatch:load_list' as cancel_url %}
+  {% else %}
+  {% url 'dispatch:load_detail' load.pk as cancel_url %}
+  {% endif %}
+  {% include "dispatch/includes/_form_actions.html" with submit_label=submit_label cancel_url=cancel_url only %}
+  {% endif %}
+</form>

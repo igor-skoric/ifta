@@ -1,0 +1,102 @@
+<style>
+  #detail-tab-panel-samsara .truck-gps-map-embed {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: #1e293b;
+  }
+  @media (min-width: 1024px) {
+    #detail-tab-panel-samsara .truck-samsara-live-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
+    }
+    #detail-tab-panel-samsara .truck-samsara-live-map {
+      min-height: 100%;
+    }
+  }
+</style>
+<script>
+(function () {
+  var panel = document.getElementById("detail-tab-panel-samsara");
+  if (!panel) return;
+  var baseUrl = panel.getAttribute("data-samsara-panel-url");
+  if (!baseUrl) return;
+
+  var loader = panel.querySelector("[data-samsara-panel-loader]");
+  var content = panel.querySelector("[data-samsara-panel-content]");
+  var errorBox = panel.querySelector("[data-samsara-panel-error]");
+  var loaded = false;
+  var loading = false;
+
+  function setVisible(el, show) {
+    if (!el) return;
+    el.classList.toggle("hidden", !show);
+  }
+
+  function bindRefresh() {
+    panel.querySelectorAll("[data-samsara-panel-refresh]").forEach(function (btn) {
+      if (btn.dataset.samsaraRefreshBound === "1") return;
+      btn.dataset.samsaraRefreshBound = "1";
+      btn.addEventListener("click", function () {
+        loadPanel(true);
+      });
+    });
+  }
+
+  function loadPanel(force) {
+    if (loading) return;
+    if (loaded && !force) return;
+    loading = true;
+    setVisible(loader, true);
+    setVisible(content, false);
+    setVisible(errorBox, false);
+
+    var url = baseUrl;
+    if (force) {
+      url += (url.indexOf("?") >= 0 ? "&" : "?") + "refresh=1";
+    }
+
+    fetch(url, { credentials: "same-origin", headers: { Accept: "text/html" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("Could not load Samsara data (" + res.status + ").");
+        return res.text();
+      })
+      .then(function (html) {
+        if (!content) return;
+        content.innerHTML = html;
+        bindRefresh();
+        loaded = true;
+        setVisible(loader, false);
+        setVisible(content, true);
+      })
+      .catch(function (err) {
+        loaded = false;
+        setVisible(loader, false);
+        setVisible(content, false);
+        if (errorBox) {
+          errorBox.textContent = err && err.message ? err.message : "Failed to load Samsara data.";
+          setVisible(errorBox, true);
+        }
+      })
+      .finally(function () {
+        loading = false;
+      });
+  }
+
+  function onTabActivated(name) {
+    if (name === "samsara") loadPanel(false);
+  }
+
+  var tabsRoot = document.querySelector("[data-entity-detail-tabs]");
+  if (tabsRoot) {
+    tabsRoot.querySelectorAll("[data-tab-target]").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        onTabActivated(tab.getAttribute("data-tab-target"));
+      });
+    });
+    if (tabsRoot.hasAttribute("data-detail-tabs-url-sync")) {
+      var tabParam = new URLSearchParams(window.location.search).get("tab");
+      if (tabParam === "samsara") onTabActivated("samsara");
+    }
+  }
+})();
+</script>

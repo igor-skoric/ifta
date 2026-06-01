@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · Truck {{ truck.unit_number }}{% endblock %}
+
+{% block content %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-xl sm:p-6">
+    <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+      <div class="flex gap-4 sm:gap-5">
+        <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500/30 to-sky-700/20 text-sky-100 ring-2 ring-sky-400/20 sm:h-20 sm:w-20" aria-hidden="true">
+          <i class="fa-solid fa-truck text-2xl"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="font-mono text-2xl font-bold tracking-tight text-white sm:text-3xl">{{ truck.unit_number }}</h1>
+            {% if truck.is_active %}
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-200">Active</span>
+            {% else %}
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-200">Inactive</span>
+            {% endif %}
+          </div>
+          <dl class="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <div>
+              <dt class="text-xs text-slate-500">Unit ID</dt>
+              <dd class="font-mono font-medium text-slate-200">#{{ truck.pk }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs text-slate-500">Created</dt>
+              <dd class="text-slate-200">{{ truck.created_at|date:"M j, Y" }}</dd>
+            </div>
+            {% with trailer=truck.trailers.0 %}
+            {% if current_assignment %}
+            {% include "dispatch/_detail_meta_assignment.html" with self_kind="truck" assign_truck=truck assign_trailer=trailer assign_driver=truck.driver assigned_since=current_assignment.started_at %}
+            {% else %}
+            {% include "dispatch/_detail_meta_assignment.html" with self_kind="truck" assign_truck=truck assign_trailer=trailer assign_driver=truck.driver %}
+            {% endif %}
+            {% endwith %}
+          </dl>
+        </div>
+      </div>
+      {% if can_manage_dispatch %}
+      <a href="{% url 'dispatch:truck_edit' truck.pk %}" data-dispatch-entity-modal class="app-btn app-btn--primary shrink-0">
+        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+        Edit truck
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mt-6" data-entity-detail-tabs data-detail-tabs-url-sync>
+    {% include "dispatch/_detail_tab_bar_truck.html" %}
+
+    <div id="detail-tab-panel-overview" data-tab-panel="overview" class="mt-6" role="tabpanel" aria-labelledby="detail-tab-overview">
+
+  <div class="grid gap-6 lg:grid-cols-1">
+    <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-xl">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-white">Notes</h2>
+        {% if can_manage_dispatch %}
+        <a href="{% url 'dispatch:truck_edit' truck.pk %}" data-dispatch-entity-modal class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Edit</a>
+        {% endif %}
+      </div>
+      <div class="px-5 py-4">
+        {% if truck.notes %}
+        <div class="rounded-xl border border-amber-500/20 bg-amber-500/[0.08] px-4 py-3 text-sm leading-relaxed text-amber-100/90">{{ truck.notes|linebreaksbr }}</div>
+        {% else %}
+        <p class="text-sm text-slate-600">No notes yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if can_manage_dispatch %}
+    <div class="rounded-2xl border border-indigo-500/25 bg-indigo-500/[0.06] shadow-xl lg:col-span-2">
+      <div class="border-b border-white/10 px-5 py-4">
+        <h2 class="text-sm font-semibold text-indigo-100">Manage equipment</h2>
+        <p class="mt-0.5 text-xs text-slate-400">Driver optional. Pair trailer on this truck without a driver (yard).</p>
+      </div>
+      <form method="post" action="{% url 'dispatch:truck_assign_equipment' truck.pk %}" class="px-5 py-4">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}" />
+        <input type="hidden" name="action" value="save_equipment" />
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="truck-equip-driver" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">Driver</label>
+            <select id="truck-equip-driver" name="driver" class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2.5 text-sm text-white">
+              <option value="">— None —</option>
+              {% for d in driver_choices %}
+              <option value="{{ d.pk }}" {% if truck.driver and truck.driver.pk == d.pk %}selected{% endif %}>{{ d.display_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="truck-equip-trailer" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500">Trailer</label>
+            <select id="truck-equip-trailer" name="trailer" class="w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-2.5 text-sm text-white">
+              <option value="">— None —</option>
+              {% for tr in trailer_choices %}
+              <option value="{{ tr.pk }}" {% for at in truck.trailers %}{% if at.pk == tr.pk %}selected{% endif %}{% endfor %}>{{ tr.unit_number }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mt-4">
+          <button type="submit" class="app-btn app-btn--primary">Save equipment</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+    </div>
+
+    {% include "dispatch/_truck_detail_samsara_tab_shell.html" %}
+
+    <div id="detail-tab-panel-other" data-tab-panel="other" class="mt-6 hidden" role="tabpanel" aria-labelledby="detail-tab-other" hidden>
+      {% include "dispatch/_assignment_history.html" %}
+    </div>
+  </div>
+</div>
+{% include "dispatch/_detail_tabs_script.html" %}
+{% include "dispatch/_truck_detail_samsara_tab_script.html" %}
+{% if can_manage_dispatch %}
+{% include "dispatch/_dispatch_entity_modal.html" %}
+{% endif %}
+{% endblock %}

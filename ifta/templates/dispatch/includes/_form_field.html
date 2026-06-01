@@ -1,0 +1,6 @@
+<div class="{% if wrapper_class %}{{ wrapper_class }}{% endif %}">
+  <label for="{{ field.id_for_label }}" class="app-label">{{ label|default:field.label }}</label>
+  {{ field }}
+  {% if hint %}<p class="mt-1 text-[11px] load-detail-subtle">{{ hint }}</p>{% endif %}
+  {% if field.errors %}<p class="mt-1 text-xs" style="color: var(--app-alert-error-text);">{{ field.errors.0 }}</p>{% endif %}
+</div>

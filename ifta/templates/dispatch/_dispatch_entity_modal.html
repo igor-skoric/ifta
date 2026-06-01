@@ -1,0 +1,197 @@
+<dialog id="dispatch-entity-modal" class="app-dialog z-[200]">
+  <div class="app-dialog__shell">
+    <header class="app-dialog__header">
+      <h2 id="dispatch-entity-modal-title" class="app-dialog__title"></h2>
+      <button type="button" class="app-dialog__close" data-dispatch-entity-modal-close aria-label="Close">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </header>
+    <div id="dispatch-entity-modal-body" class="app-dialog__body dispatch-entity-modal__body"></div>
+    <footer id="dispatch-entity-modal-footer" class="app-dialog__footer" hidden>
+      <div class="app-dialog__footer-actions">
+        <button type="button" id="dispatch-entity-modal-submit" class="app-btn app-btn--primary">Save</button>
+        <button type="button" class="app-btn app-btn--secondary" data-dispatch-entity-modal-close>Cancel</button>
+      </div>
+    </footer>
+  </div>
+</dialog>
+<script>
+(function () {
+  var dialog = document.getElementById("dispatch-entity-modal");
+  var bodyEl = document.getElementById("dispatch-entity-modal-body");
+  var titleEl = document.getElementById("dispatch-entity-modal-title");
+  var footerEl = document.getElementById("dispatch-entity-modal-footer");
+  var submitBtn = document.getElementById("dispatch-entity-modal-submit");
+  if (!dialog || !bodyEl || !titleEl) return;
+
+  var plannerDayDialogRestore = null;
+  var closeRestorePlanner = true;
+
+  function closePlannerDayDialogForEntityModal() {
+    var planner = window.dispatchPlannerDayDialog;
+    if (!planner || !planner.isOpen || !planner.isOpen()) return;
+    plannerDayDialogRestore = planner.getContext ? planner.getContext() : null;
+    planner.close();
+  }
+
+  function maybeRestorePlannerDayDialog() {
+    if (!plannerDayDialogRestore) return;
+    var planner = window.dispatchPlannerDayDialog;
+    if (planner && planner.restore) planner.restore(plannerDayDialogRestore);
+    plannerDayDialogRestore = null;
+  }
+
+  function cleanupModal() {
+    bodyEl.innerHTML = "";
+    titleEl.textContent = "";
+    dialog.classList.remove("dispatch-entity-modal--wide");
+    if (footerEl) footerEl.hidden = true;
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.onclick = null;
+    }
+  }
+
+  function onEntityModalClosed() {
+    if (!bodyEl.innerHTML && !titleEl.textContent) return;
+    var restore = closeRestorePlanner;
+    cleanupModal();
+    if (restore) maybeRestorePlannerDayDialog();
+    else plannerDayDialogRestore = null;
+    closeRestorePlanner = true;
+  }
+
+  function closeModal(restorePlanner) {
+    closeRestorePlanner = restorePlanner !== false;
+    if (dialog.open) dialog.close();
+    else onEntityModalClosed();
+  }
+
+  dialog.addEventListener("close", onEntityModalClosed);
+
+  function syncModalWidth(panel) {
+    if (panel && panel.hasAttribute("data-dispatch-load-modal-panel")) {
+      dialog.classList.add("dispatch-entity-modal--wide");
+    } else {
+      dialog.classList.remove("dispatch-entity-modal--wide");
+    }
+  }
+
+  function syncFooter(panel) {
+    var form = panel && panel.querySelector(".dispatch-entity-modal-form");
+    if (!form || !footerEl || !submitBtn) {
+      if (footerEl) footerEl.hidden = true;
+      return;
+    }
+    footerEl.hidden = false;
+    submitBtn.textContent = panel.getAttribute("data-modal-submit-label") || "Save";
+    submitBtn.disabled = false;
+    submitBtn.onclick = function (e) {
+      e.preventDefault();
+      form.requestSubmit();
+    };
+  }
+
+  function bindPanel(panel) {
+    if (!panel) return;
+    syncFooter(panel);
+    var form = panel.querySelector(".dispatch-entity-modal-form");
+    if (!form || form.dataset.dispatchEntityModalBound === "1") return;
+    form.dataset.dispatchEntityModalBound = "1";
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (submitBtn) submitBtn.disabled = true;
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { "X-Dispatch-Entity-Modal": "1", "Accept": "application/json" },
+        credentials: "same-origin",
+      })
+        .then(function (res) {
+          var ct = (res.headers.get("Content-Type") || "").toLowerCase();
+          if (ct.indexOf("application/json") !== -1) {
+            return res.json().then(function (data) {
+              if (res.ok && data && data.redirect) {
+                plannerDayDialogRestore = null;
+                window.location.href = data.redirect;
+                return;
+              }
+              throw new Error((data && data.error) || "Save failed");
+            });
+          }
+          return res.text().then(function (html) {
+            bodyEl.innerHTML = html;
+            var next = bodyEl.querySelector("[data-dispatch-entity-modal-panel]");
+            if (next) {
+              titleEl.textContent = next.getAttribute("data-modal-title") || "";
+              syncModalWidth(next);
+              bindPanel(next);
+            } else if (submitBtn) {
+              submitBtn.disabled = false;
+            }
+          });
+        })
+        .catch(function () {
+          if (submitBtn) submitBtn.disabled = false;
+        });
+    });
+  }
+
+  function openModal(url) {
+    closePlannerDayDialogForEntityModal();
+    fetch(url, {
+      headers: { "X-Dispatch-Entity-Modal": "1" },
+      credentials: "same-origin",
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("load failed");
+        return res.text();
+      })
+      .then(function (html) {
+        bodyEl.innerHTML = html;
+        var panel = bodyEl.querySelector("[data-dispatch-entity-modal-panel]");
+        titleEl.textContent = (panel && panel.getAttribute("data-modal-title")) || "";
+        syncModalWidth(panel);
+        bindPanel(panel);
+        if (!dialog.open) dialog.showModal();
+      })
+      .catch(function () {
+        window.location.href = url;
+      });
+  }
+
+  function closeRowActionMenus() {
+    document.querySelectorAll("[data-dispatch-row-actions].is-open").forEach(function (root) {
+      root.classList.remove("is-open");
+      var menu = root.querySelector(".dispatch-row-actions__menu");
+      var btn = root.querySelector(".dispatch-row-actions__trigger");
+      if (menu) menu.classList.add("hidden");
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  /* Capture: row ⋮ menu calls stopPropagation, so bubble never reaches document */
+  document.addEventListener(
+    "click",
+    function (e) {
+      var closeBtn = e.target.closest("[data-dispatch-entity-modal-close]");
+      if (closeBtn && dialog.contains(closeBtn)) {
+        e.preventDefault();
+        closeModal(true);
+        return;
+      }
+      var link = e.target.closest("[data-dispatch-entity-modal]");
+      if (!link || !link.href) return;
+      e.preventDefault();
+      closeRowActionMenus();
+      openModal(link.href);
+    },
+    true
+  );
+
+  dialog.addEventListener("cancel", function (e) {
+    e.preventDefault();
+    closeModal();
+  });
+})();
+</script>

@@ -1,0 +1,35 @@
+<script>
+(function () {
+  var root = document.querySelector("[data-entity-detail-tabs]");
+  if (!root) return;
+  var tabs = root.querySelectorAll("[data-tab-target]");
+  var panels = root.querySelectorAll("[data-tab-panel]");
+  function activate(name) {
+    tabs.forEach(function (tab) {
+      var on = tab.getAttribute("data-tab-target") === name;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.classList.toggle("border-indigo-400", on);
+      tab.classList.toggle("text-white", on);
+      tab.classList.toggle("border-transparent", !on);
+      tab.classList.toggle("text-slate-400", !on);
+    });
+    panels.forEach(function (panel) {
+      var on = panel.getAttribute("data-tab-panel") === name;
+      panel.classList.toggle("hidden", !on);
+      panel.hidden = !on;
+    });
+  }
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      activate(tab.getAttribute("data-tab-target"));
+    });
+  });
+  if (root.hasAttribute("data-detail-tabs-url-sync")) {
+    var params = new URLSearchParams(window.location.search);
+    var tabParam = params.get("tab");
+    if (tabParam && root.querySelector('[data-tab-target="' + tabParam + '"]')) {
+      activate(tabParam);
+    }
+  }
+})();
+</script>

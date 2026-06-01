@@ -1,0 +1,7 @@
+<div
+  data-dispatch-entity-modal-panel
+  data-dispatch-load-modal-panel
+  data-modal-title="{% if is_create %}New load{% else %}Edit load · {{ load.display_title }}{% endif %}"
+  data-modal-submit-label="{% if is_create %}Create load{% else %}Save changes{% endif %}">
+  {% include "dispatch/includes/_load_form_body.html" with is_modal=True submit_label=is_create|yesno:"Create load,Save changes" show_planner_hint=is_create %}
+</div>

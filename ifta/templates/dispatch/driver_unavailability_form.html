@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {% if is_edit %}Edit{% else %}Add{% endif %} unavailability · {{ driver.display_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
+  <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch · Driver</p>
+  <h1 class="mt-1 text-2xl font-bold text-white">
+    {% if is_edit %}Edit unavailability{% else %}Mark driver unavailable{% endif %}
+  </h1>
+  <p class="mt-2 text-sm text-slate-400">
+    <span class="text-slate-200">{{ driver.display_name }}</span> will be blocked on the load planner for each day in this range (cells disabled, no new loads).
+  </p>
+
+  <form method="post" class="mt-6 space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    <div>
+      <label class="mb-1 block text-sm text-slate-300" for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<p class="mt-1 text-xs text-red-300">{{ field.errors|striptags }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="flex flex-wrap gap-2 pt-2">
+      <button type="submit" class="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400">Save</button>
+      <a href="{% url 'dispatch:driver_detail' driver.pk %}" class="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

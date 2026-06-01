@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Dispatch · {% if is_create %}New trip{% else %}Edit trip{% endif %}{% endblock %}
+
+{% block content %}
+{% include "dispatch/includes/_trip_status_styles.html" %}
+<div class="w-full px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300/90">Dispatch</p>
+    <h1 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+      {% if is_create %}New trip{% else %}Edit trip · {{ trip.display_title }}{% endif %}
+    </h1>
+    <p class="mt-1 text-sm text-slate-400">
+      {% if is_create %}Pick a planner day and driver, then add loads on the next screen.{% else %}Update planner day, driver, status, or notes.{% endif %}
+    </p>
+    {% if not is_create %}
+    <p class="mt-2 text-xs text-slate-500">
+      <a href="{% url 'dispatch:trip_detail' trip.pk %}" class="font-semibold text-indigo-300 hover:text-indigo-200">← Trip overview</a>
+    </p>
+    {% endif %}
+  </div>
+
+  <div class="w-full rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-xl">
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-sm text-rose-100">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+        {% include "dispatch/includes/_form_field.html" with field=form.planner_date label="Planner date" wrapper_class="lg:col-span-2" only %}
+        {% include "dispatch/includes/_form_field.html" with field=form.driver label="Driver" hint="Optional — assign later if needed." wrapper_class="lg:col-span-3" only %}
+        {% include "dispatch/includes/_form_field.html" with field=form.status label="Status" wrapper_class="lg:col-span-2" only %}
+        {% include "dispatch/includes/_form_field.html" with field=form.notes label="Trip notes" wrapper_class="sm:col-span-2 lg:col-span-5" only %}
+      </div>
+
+      {% if is_create %}
+      {% url 'dispatch:trip_list' as cancel_url %}
+      {% else %}
+      {% url 'dispatch:trip_detail' trip.pk as cancel_url %}
+      {% endif %}
+      {% include "dispatch/includes/_form_actions.html" with submit_label=is_create|yesno:"Create trip,Save changes" cancel_url=cancel_url only %}
+    </form>
+  </div>
+</div>
+{% endblock %}
