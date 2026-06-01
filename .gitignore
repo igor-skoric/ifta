@@ -1,5 +1,6 @@
 # --- Environment (never commit secrets; .env.example is the safe template) ---
 .env
+ifta/.env
 .env.*
 !.env.example
 **/.env

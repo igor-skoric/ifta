@@ -1,4 +1,5 @@
 from pathlib import Path
+import ipaddress
 import os
 import sys
 
@@ -45,14 +46,20 @@ if not DEBUG and SECRET_KEY.startswith("django-insecure"):
 
 ALLOWED_HOSTS = env_list(
     "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,ifta.rs.itbranch.rs,192.168.0.30",
+    "127.0.0.1,localhost,ifta.rs.itbranch.rs,www.ifta.rs.itbranch.rs,192.168.0.30",
 )
 
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS", "")
 if not CSRF_TRUSTED_ORIGINS and not DEBUG:
-    CSRF_TRUSTED_ORIGINS = [
-        f"https://{host}" for host in ALLOWED_HOSTS if host and not host.startswith(".")
-    ]
+    _csrf_hosts = []
+    for host in ALLOWED_HOSTS:
+        if not host or host.startswith("."):
+            continue
+        try:
+            ipaddress.ip_address(host)
+        except ValueError:
+            _csrf_hosts.append(f"https://{host}")
+    CSRF_TRUSTED_ORIGINS = _csrf_hosts
 
 
 # Application definition

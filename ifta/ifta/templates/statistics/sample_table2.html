@@ -3,56 +3,92 @@
 {% block content %}
 {# TV u portrait: ?rotate=90 ili ?rotate=-90 — rotira ceo sadržaj da bude čitljiv #}
 <div id="rotateShell" class="min-h-screen w-screen bg-[#0F0F1A]">
-    <div id="rotateInner" class="min-h-screen w-screen px-6 py-5 text-lg sm:text-xl">
-    <div class="flex items-center justify-between mb-5 gap-4">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-100 tracking-wide uppercase">
-            Dispatchers Ranking
-        </h1>
-        <div class="text-lg sm:text-xl text-gray-300 shrink-0">
-            Total: <span id="rankCount" class="text-white font-bold">0</span>
+    <div id="rotateInner" class="min-h-screen w-screen px-6 py-5 text-lg sm:text-xl flex flex-col">
+        <div id="rankingHeader" class="flex items-center justify-between mb-5 gap-4 shrink-0">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-100 tracking-wide uppercase">
+                Dispatchers Ranking
+            </h1>
+            <div id="rankTotalBlock" class="text-lg sm:text-xl text-gray-300 shrink-0">
+                Total: <span id="rankCount" class="text-white font-bold">0</span>
+            </div>
         </div>
-    </div>
 
-    <div class="rounded-2xl border-2 border-white/15 overflow-hidden shadow-2xl">
-        <table class="w-full text-gray-100">
-            <thead class="bg-[#1A1A2D] text-gray-200 uppercase tracking-wide text-base sm:text-lg">
-                <tr>
-                    <th class="px-4 sm:px-6 py-4 text-left">#</th>
-                    <th class="px-4 sm:px-6 py-4 text-left">Dispatcher</th>
-                    <th class="px-4 sm:px-6 py-4 text-right">DRPM</th>
-                    <th class="px-4 sm:px-6 py-4 text-right">RPM</th>
-                    <th class="px-4 sm:px-6 py-4 text-right">Gross</th>
-                    <th class="px-4 sm:px-6 py-4 text-right">GPU</th>
-                    <th class="px-4 sm:px-6 py-4 text-right">Miles</th>
-                </tr>
-            </thead>
-            <tbody id="rankingBody" class="divide-y divide-white/5 bg-[#121224]"></tbody>
-        </table>
-    </div>
+        <div id="tvRankingViewport" class="rounded-2xl border-2 border-white/15 overflow-hidden shadow-2xl flex-1 min-h-0">
+            <div id="tvRankingScroller">
+                <table class="w-full text-gray-100">
+                    <thead class="bg-[#1A1A2D] text-gray-200 uppercase tracking-wide text-base sm:text-lg sticky top-0 z-10">
+                        <tr>
+                            <th class="px-4 sm:px-6 py-4 text-left tv-th">#</th>
+                            <th class="px-4 sm:px-6 py-4 text-left tv-th">Dispatcher</th>
+                            <th class="px-4 sm:px-6 py-4 text-right tv-th">DRPM</th>
+                            <th class="px-4 sm:px-6 py-4 text-right tv-th">RPM</th>
+                            <th class="px-4 sm:px-6 py-4 text-right tv-th">Gross</th>
+                            <th class="px-4 sm:px-6 py-4 text-right tv-th">GPU</th>
+                            <th class="px-4 sm:px-6 py-4 text-right tv-th">Miles</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingBody" class="divide-y divide-white/5 bg-[#121224]"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
+<style>
+    #rotateInner.tv-ranking-rotate {
+        padding: 0.5rem 0.75rem;
+    }
+    #rotateInner.tv-ranking-rotate #rankingHeader {
+        margin-bottom: 0.35rem;
+    }
+    #rotateInner.tv-ranking-rotate h1 {
+        font-size: 1.1rem;
+        line-height: 1.25;
+    }
+    #rotateInner.tv-ranking-rotate .tv-th {
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+        font-size: 0.7rem;
+    }
+    #rotateInner.tv-ranking-rotate .tv-row td {
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+        font-size: 0.85rem;
+        line-height: 1.2;
+    }
+    #rotateInner.tv-ranking-rotate #tvRankingViewport {
+        border-width: 1px;
+    }
+</style>
+
 <script>
-    (function applyPageRotation() {
+    function isTvRotateMode() {
         const params = new URLSearchParams(window.location.search);
         let deg = parseInt(params.get("rotate"), 10);
         if (deg === 270) deg = -90;
-        if (deg !== 90 && deg !== -90) return;
+        return deg === 90 || deg === -90;
+    }
+
+    (function applyPageRotation() {
+        if (!isTvRotateMode()) return;
 
         const shell = document.getElementById("rotateShell");
         const inner = document.getElementById("rotateInner");
         if (!shell || !inner) return;
 
-        shell.className =
-            "fixed inset-0 z-[100] overflow-hidden bg-[#0F0F1A]";
+        shell.className = "fixed inset-0 z-[100] overflow-hidden bg-[#0F0F1A]";
         inner.className =
-            "absolute overflow-auto bg-[#0F0F1A] px-6 py-5 text-lg sm:text-xl";
+            "absolute overflow-hidden flex flex-col bg-[#0F0F1A] px-3 py-2 text-lg tv-ranking-rotate";
         inner.style.width = "100vh";
         inner.style.height = "100vw";
         inner.style.top = "50%";
         inner.style.left = "50%";
+        let deg = parseInt(new URLSearchParams(window.location.search).get("rotate"), 10);
+        if (deg === 270) deg = -90;
         inner.style.transform = "translate(-50%, -50%) rotate(" + deg + "deg)";
         inner.style.transformOrigin = "center center";
+
+        document.getElementById("rankTotalBlock")?.classList.add("hidden");
 
         document.documentElement.classList.add("overflow-hidden", "h-full");
         document.body.classList.add("overflow-hidden", "h-full", "m-0", "p-0");
@@ -70,6 +106,56 @@
 
     const elBody = document.getElementById("rankingBody");
     const elCount = document.getElementById("rankCount");
+    const tvViewport = document.getElementById("tvRankingViewport");
+
+    let tvScrollRaf = null;
+
+    function stopTvAutoScroll() {
+        if (tvScrollRaf !== null) {
+            cancelAnimationFrame(tvScrollRaf);
+            tvScrollRaf = null;
+        }
+    }
+
+    function startTvAutoScroll() {
+        if (!isTvRotateMode() || !tvViewport) return;
+        stopTvAutoScroll();
+
+        tvViewport.scrollTop = 0;
+
+        const maxScroll = tvViewport.scrollHeight - tvViewport.clientHeight;
+        if (maxScroll < 8) return;
+
+        const pauseMs = 2500;
+        const pxPerSec = 42;
+        let scrollY = 0;
+        let direction = 1;
+        let pauseUntil = performance.now() + pauseMs;
+        let lastTs = performance.now();
+
+        function tick(now) {
+            tvScrollRaf = requestAnimationFrame(tick);
+            if (now < pauseUntil) return;
+
+            const dt = Math.min(now - lastTs, 50);
+            lastTs = now;
+            scrollY += direction * (pxPerSec * dt) / 1000;
+
+            if (scrollY >= maxScroll) {
+                scrollY = maxScroll;
+                direction = -1;
+                pauseUntil = now + pauseMs;
+            } else if (scrollY <= 0) {
+                scrollY = 0;
+                direction = 1;
+                pauseUntil = now + pauseMs;
+            }
+
+            tvViewport.scrollTop = scrollY;
+        }
+
+        tvScrollRaf = requestAnimationFrame(tick);
+    }
 
     function safeStr(v) {
         return (v === null || v === undefined) ? "" : String(v).trim();
@@ -112,6 +198,7 @@
             elCount.textContent = filtered.length;
 
             if (!filtered.length) {
+                stopTvAutoScroll();
                 elBody.innerHTML = `
                     <tr>
                         <td colspan="7" class="px-6 py-12 text-center text-xl text-gray-400">
@@ -122,12 +209,15 @@
                 return;
             }
 
+            const tvMode = isTvRotateMode();
             elBody.innerHTML = "";
             filtered.forEach((r, idx) => {
                 const rpmClass = thresholdColorClass(r.rpm, RPM_GOOD);
                 const gpuClass = thresholdColorClass(r.gpu, GPU_GOOD);
                 const tr = document.createElement("tr");
-                tr.className = "hover:bg-white/5 text-xl sm:text-2xl";
+                tr.className = tvMode
+                    ? "tv-row text-gray-100"
+                    : "hover:bg-white/5 text-xl sm:text-2xl";
                 tr.innerHTML = `
                     <td class="px-4 sm:px-6 py-4 font-bold text-gray-300">${idx + 1}</td>
                     <td class="px-4 sm:px-6 py-4 font-bold text-white">${safeStr(r.dispatcher)}</td>
@@ -139,7 +229,16 @@
                 `;
                 elBody.appendChild(tr);
             });
+
+            if (tvMode) {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(startTvAutoScroll);
+                });
+            } else {
+                stopTvAutoScroll();
+            }
         } catch (e) {
+            stopTvAutoScroll();
             elBody.innerHTML = `
                 <tr>
                     <td colspan="7" class="px-6 py-12 text-center text-xl text-red-300">
@@ -152,5 +251,9 @@
 
     loadRanking();
     setInterval(loadRanking, 120000);
+
+    window.addEventListener("resize", () => {
+        if (isTvRotateMode()) startTvAutoScroll();
+    });
 </script>
 {% endblock %}
