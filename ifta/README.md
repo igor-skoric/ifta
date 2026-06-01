@@ -214,11 +214,18 @@ python -c "from django.conf import settings; print(settings.DATABASES['default']
 rm -f db.sqlite3 db.sqlite3-wal db.sqlite3-shm
 ```
 
-**3) Čist migrate:**
+**3) Čist migrate** (ako je migrate pukao na pola, ponovo obriši `db.sqlite3*` pa):
 
 ```bash
 python manage.py migrate
 python manage.py createsuperuser
+```
+
+Ako je `office.0006` ostao upisan u `django_migrations` a tabele nisu kreirane:
+
+```bash
+rm -f db.sqlite3 db.sqlite3-wal db.sqlite3-shm
+python manage.py migrate
 ```
 
 **Ne briši** foldere `*/migrations/` iz koda — to nisu podaci, to je šema aplikacije.
