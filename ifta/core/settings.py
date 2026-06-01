@@ -182,7 +182,10 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = int(os.getenv("DATA_UPLOAD_MAX_NUMBER_FIELDS", "
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv("DATA_UPLOAD_MAX_MEMORY_SIZE", str(10 * 1024 * 1024)))
 FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv("FILE_UPLOAD_MAX_MEMORY_SIZE", str(5 * 1024 * 1024)))
 TAILWIND_APP_NAME = 'theme'
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+_default_npm = (
+    r"C:\Program Files\nodejs\npm.cmd" if sys.platform == "win32" else "npm"
+)
+NPM_BIN_PATH = os.getenv("NPM_BIN_PATH", _default_npm)
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'

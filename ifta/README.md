@@ -134,6 +134,29 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 python manage.py check --deploy
 ```
 
+### Dizajn / CSS ne radi na produkciji (samo HTML)
+
+Uzrok: `DJANGO_DEBUG=false` — Django ne servira statiku kao na `runserver`-u. Treba **build Tailwind** + **collectstatic** (WhiteNoise servira iz `staticfiles/`).
+
+Proveri DEBUG:
+
+```bash
+python manage.py shell -c "from django.conf import settings; print('DEBUG=', settings.DEBUG)"
+grep DJANGO_DEBUG .env
+```
+
+Na serveru (iz foldera sa `manage.py`):
+
+```bash
+cd theme && npm ci && npm run build && cd ..
+python manage.py collectstatic --noinput
+# restart Python app u cPanel-u
+```
+
+U browseru (F12 → Network): da li `/static/css/dist/styles.css` vraća **200** ili **404**?
+
+Ako `python manage.py tailwind build` postoji, može i to umesto `npm run build`.
+
 Napomene:
 
 - `/api/statistic/` više nije javan — potreban login, TV IP/token, ili `statistics.view` permisija.
@@ -170,10 +193,19 @@ python manage.py createsuperuser
 
 | Polje | Vrednost |
 |--------|----------|
-| Application root | `/home/labvit/IFTA/ifta` |
-| Application startup | `core/wsgi.py` |
+| Application root | `/home/labvit/IFTA` |
+| Application startup file | `passenger_wsgi.py` |
 | Application entry point | `application` |
 | Python version | 3.11 |
+
+U repou je `passenger_wsgi.py` u korenu (pored foldera `ifta/`). **Ne koristi** stari obrazac:
+
+```python
+# POGREŠNO — izaziva "populate() isn't reentrant"
+wsgi = imp.load_source('wsgi', 'ifta/wsgi.py')
+```
+
+Posle deploya: **Restart** Python app u cPanel-u. Ako i dalje vidiš staru grešku, u File Manageru otvori `/home/labvit/IFTA/passenger_wsgi.py` i proveri da je zamenjen novim fajlom iz gita.
 
 **Česte greške posle deploya:**
 
