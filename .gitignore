@@ -1,9 +1,11 @@
-# --- Environment (never commit secrets) ---
+# --- Environment (never commit secrets; .env.example is the safe template) ---
 .env
 .env.*
 !.env.example
 **/.env
 **/.env.local
+**/.env.*
+!**/.env.example
 
 # --- Django runtime / data ---
 *.sqlite3

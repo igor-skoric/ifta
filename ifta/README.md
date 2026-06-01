@@ -109,7 +109,7 @@ TV ekrani (kratki linkovi):
 
 ## 8) Deploy na server (bezbednost)
 
-Kopiraj `.env.example` u `.env` na serveru i podesi vrednosti. Minimum:
+Kopiraj `ifta/.env.example` u `ifta/.env` na serveru (`.env` **ne ide u git**). Minimum u CMD (privremeno):
 
 ```cmd
 set DJANGO_DEBUG=false
