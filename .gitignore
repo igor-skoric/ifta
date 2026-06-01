@@ -1,12 +1,53 @@
-/ifta/statistic/secrets/
+# --- Environment (never commit secrets) ---
 .env
 .env.*
 !.env.example
-/ifta/db.sqlite3
-/ifta/logs/
-/ifta/staticfiles/
-/ifta/media/
+**/.env
+**/.env.local
+
+# --- Django runtime / data ---
+*.sqlite3
+**/db.sqlite3
+ifta/db.sqlite3
+
+# --- Logs ---
+*.log
+**/logs/
+ifta/logs/
+
+# --- Collected static & uploads (regenerate on server) ---
+**/staticfiles/
+ifta/staticfiles/
+**/media/
+ifta/media/
+
+# --- Google service account (credentials only here) ---
+**/statistic/secrets/
+ifta/statistic/secrets/
+ifta/statistic/secrets/*.json
+
+# --- Python ---
 __pycache__/
-*.pyc
+**/__pycache__/
+*.py[cod]
+*$py.class
+.Python
 .venv/
 venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# --- Node (Tailwind theme) ---
+**/node_modules/
+ifta/theme/static_src/node_modules/
+
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
