@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import RedirectView
 
-from .views import statistic, statistic2, statistic3, weekly_analytics
+from .views import statistic, statistic2, statistic3, tv_rotator, weekly_analytics
 
 app_name = "statistics"
 
@@ -21,8 +21,5 @@ urlpatterns = [
         "dispatchers-ranking/",
         RedirectView.as_view(url="/statistics/2/", permanent=True),
     ),
-    path(
-        "tv-rotator/",
-        RedirectView.as_view(url="/statistics/3/", permanent=True),
-    ),
+    path("tv-rotator/", tv_rotator, name="tv_rotator"),
 ]

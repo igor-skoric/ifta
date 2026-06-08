@@ -64,6 +64,14 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+Lokalno uvek koristi **http://** (ne `https://`). Ako u `.env` stoje `DJANGO_USE_HTTPS=true` i `SECURE_SSL_REDIRECT=true`, `runserver` automatski isključuje HTTPS redirect; ručno otvaranje `https://127.0.0.1:8000/` i dalje ne radi jer dev server nema TLS.
+
+Ako Chrome i dalje skače na `https://` (HSTS keš od ranijeg pokretanja sa produkcijskim `.env`):
+
+1. Otvori `http://127.0.0.1:8000/` u **običnom** Chrome/Edge prozoru (ne Cursor Simple Browser).
+2. Ili u Chrome: `chrome://net-internals/#hsts` → Delete domain security policies → `127.0.0.1`.
+3. Lokalno drži `TRUST_X_FORWARDED_FOR=false` u `.env`.
+
 App URL-ovi:
 
 - Dashboard: `http://127.0.0.1:8000/`

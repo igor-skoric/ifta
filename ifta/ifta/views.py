@@ -378,6 +378,16 @@ def statistic3(request):
     return render(request, "statistics/sample_table3.html")
 
 
+@xframe_options_sameorigin
+@statistics_tv_or_permission_required
+def tv_rotator(request):
+    return render(
+        request,
+        "statistics/tv_rotator.html",
+        {"hide_header_and_footer": True},
+    )
+
+
 @permission_required("statistics.view")
 def weekly_analytics(request):
     """Uporedjenje svih nedelja iz WeeklyDayData (grafikon + tabela)."""

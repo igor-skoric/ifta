@@ -168,7 +168,7 @@
     }
 
     function money2(v) {
-        return `$${parseNumber(v).toFixed(2)}`;
+        return `$${parseNumber(v)}`;
     }
 
     function intNumber(v) {
@@ -223,8 +223,8 @@
                     <td class="px-4 sm:px-6 py-4 font-bold text-white">${safeStr(r.dispatcher)}</td>
                     <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${money2(r.drpm)}</td>
                     <td class="px-4 sm:px-6 py-4 text-right font-semibold ${rpmClass}">${parseNumber(r.rpm).toFixed(2)}</td>
-                    <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${money2(r.gross)}</td>
-                    <td class="px-4 sm:px-6 py-4 text-right font-semibold ${gpuClass}">${money2(r.gpu)}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">$${r.gross}</td>
+                    <td class="px-4 sm:px-6 py-4 text-right font-semibold ${gpuClass}">$${r.gpu}</td>
                     <td class="px-4 sm:px-6 py-4 text-right font-semibold text-gray-200">${intNumber(r.miles)}</td>
                 `;
                 elBody.appendChild(tr);

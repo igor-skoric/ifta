@@ -88,6 +88,7 @@ DOMAIN_APPS = ("ifta", "statistics", "office", "dispatch", "leave", "samsara")
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.DevClearHstsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -247,8 +248,15 @@ if not os.path.exists(SERVICE_ACCOUNT_FILE):
         raise ImproperlyConfigured(msg)
 
 # --- Production / HTTPS hardening (enable via env on the server) ---
+_RUNNING_DEV_SERVER = any(arg == "runserver" for arg in sys.argv)
 USE_HTTPS = env_bool("DJANGO_USE_HTTPS", default=not DEBUG)
-TRUST_X_FORWARDED_FOR = env_bool("TRUST_X_FORWARDED_FOR", default=False)
+if _RUNNING_DEV_SERVER:
+    # runserver speaks HTTP only; SECURE_SSL_REDIRECT → broken https://127.0.0.1:8000/
+    USE_HTTPS = False
+    # Avoid treating proxied/local requests as HTTPS when testing with production .env
+    TRUST_X_FORWARDED_FOR = False
+else:
+    TRUST_X_FORWARDED_FOR = env_bool("TRUST_X_FORWARDED_FOR", default=False)
 if TRUST_X_FORWARDED_FOR:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

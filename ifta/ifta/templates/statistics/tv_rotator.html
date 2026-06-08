@@ -13,10 +13,16 @@
   const SWITCH_MS = 180000; // 3 min
   let idx = 0;
   const frame = document.getElementById("tvFrame");
+  // runserver is HTTP-only; never build iframe URLs from a failed https:// parent
+  const base =
+    (location.protocol === "https:" &&
+      (location.hostname === "127.0.0.1" || location.hostname === "localhost"))
+      ? "http://" + location.host
+      : location.origin;
 
   function show(i) {
     // cache bust da ne drži staru verziju u iframe-u
-    frame.src = pages[i] + "?t=" + Date.now();
+    frame.src = base + pages[i] + "?t=" + Date.now();
   }
 
   show(idx);
